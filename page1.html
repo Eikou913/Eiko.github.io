@@ -12,7 +12,16 @@
 <body>
 
   <div class="song-list">
-    <h1>Nekoa.mp3</h1>
+    <h1>Nekoa.mp3</h1><br>
+    <div class="search-container">
+      <i class="fa-solid fa-magnifying-glass search-icon"></i>
+      <input type="text" id="search-input" placeholder="曲名や番号で検索...">
+    </div>
+
+    <div>
+      <h3>Main</h3>
+    </div>
+
     <a href="" class="songall">
       <div class="jacket-icon"><i class="fa-solid fa-music"></i></div>
       <span class="song-title">0.With Lover</span>
@@ -437,6 +446,11 @@
       <div class="jacket-icon"><i class="fa-solid fa-music"></i></div>
       <span class="song-title">100</span>
     </a>
+
+    <div>
+      <h3>Main</h3>
+    </div>
+
     <a href="" class="songall">
       <div class="jacket-icon"><i class="fa-solid fa-music"></i></div>
       <span class="song-title">b1.主人公</span>
@@ -575,6 +589,31 @@
       <span class="song-title">校歌Remix</span>
     </a>
   </div>
+
+  <script>
+    // ① 画面上の「検索バー」と「130曲のボタン」をすべてコンピュータに覚えさせる
+    const searchInput = document.getElementById('search-input');
+    const songItems = document.querySelectorAll('.songall');
+
+    // ② 検索バーに文字が「入力（input）」されるたびに、以下の処理をループ発動する
+    searchInput.addEventListener('input', () => {
+      // 入力された文字を小文字に統一して取得（大文字小文字のズレで検索失敗するのを防ぐ）
+      const query = searchInput.value.toLowerCase();
+
+      songItems.forEach(item => {
+        // 各ボタンの中にある「曲名（song-title）」のテキストを取得
+        const songTitle = item.querySelector('.song-title').textContent.toLowerCase();
+
+        // もし曲名の中に、入力した文字が含まれている（includes）場合
+        if (songTitle.includes(query)) {
+          item.classList.remove('is-hidden'); // 復活させる（表示）
+        } else {
+          item.classList.add('is-hidden');    // 消し去る（非表示）
+        }
+      });
+    });
+  </script>
+
 </body>
 
 </html>

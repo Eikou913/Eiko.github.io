@@ -1,11 +1,77 @@
 @charset "UTF-8";
 
 body {
-  background-color:#2b2b2b
+  background-color: #2b2b2b
 }
 
 h1 {
   color: #ffffff;
+}
+
+h3 {
+  color: #ffffff;
+  font-family: "M PLUS Rounded 1c";
+}
+
+/* ===================================================
+   🔍 検索バーのスタイリッシュデザイン
+   =================================================== */
+
+/* 検索バーを包む外枠 */
+.search-container {
+  position: relative;
+  max-width: 460px;
+  margin: 20px auto;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
+/* 入力欄（インプット）本体 */
+#search-input {
+  width: 100%;
+  height: 48px;
+  padding: 0 16px 0 44px;
+  /* 左側にアイコンが入るスペースを空ける */
+  font-size: 12px;
+  font-weight: bold;
+  color: #ffffff;
+
+  /* ✨ 全体のテーマに合わせた、お洒落なすりガラス */
+  background-color: rgb(0, 0, 0);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  border: 2px solid rgb(255, 255, 255);
+  border-radius: 24px;
+  /* 丸みのあるカプセル形状 */
+  outline: none;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+/* 検索バーをカチッとクリックしたとき（フォーカス時） */
+#search-input:focus {
+  background-color: rgba(255, 255, 255, 0.8);
+  border-color: #ffffff;
+  /* 枠線をディープな夜空色にして目立たせる */
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* 🔍 虫眼鏡アイコンの位置 */
+.search-icon {
+  position: absolute;
+  left: 32px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #ffffff;
+  font-size: 16px;
+  pointer-events: none;
+  /* アイコンが邪魔をしてクリックできなくなるのを防ぐ */
+}
+
+/* 🥷 検索にヒットしなかった曲を「跡形もなく消す」ための鉄壁のクラス */
+.is-hidden {
+  display: none !important;
 }
 
 /* 📦 ①親の箱：曲のボタン自体を「上から下に縦1列」に1列の表として積む */
@@ -74,7 +140,7 @@ h1 {
 
 /* 🖱️ 触れたとき（ホバー）のエフェクト */
 .songall:hover {
-  background-color: #000000;
+  background-color: #464646;
   color: #ffffff !important;
   transform: translateX(10px);
   /* 右にスッ…と動く */
