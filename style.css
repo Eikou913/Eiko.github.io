@@ -17,39 +17,89 @@ body {
   z-index: 1;
 }
 
+/* 👑 スマホに最適化したコンパクトなタイトル */
 #title-ui {
   position: absolute;
-  top: 25px;
+  top: 20px;
   width: 100%;
   text-align: center;
   color: #ffffff;
   font-family: 'Orbitron', sans-serif;
-  font-size: 24px;
+  font-size: 16px;
   font-weight: bold;
   text-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
   pointer-events: none;
-  letter-spacing: 6px;
+  letter-spacing: 4px;
   z-index: 5;
 }
 
+/* ☰ 【新設】メニューを開く浮遊ボタン */
+#menu-toggle-btn {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(10, 15, 25, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(0, 210, 255, 0.3);
+  color: #00d2ff;
+  font-size: 18px;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: 0 0 15px rgba(0, 210, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+#menu-toggle-btn:active {
+  transform: scale(0.9);
+  background: rgba(0, 210, 255, 0.2);
+}
+
+/* 🛠️ 【大改造】左側からスライドインするスマホ用メニューパネル */
 #control-panel {
   position: absolute;
-  top: 80px;
-  left: 20px;
-  width: 320px;
-  z-index: 10;
-  padding: 20px;
-  border-radius: 16px;
+  top: 0;
+  left: 0;
+  width: 85vw; /* スマホ画面の85%を覆うドロワー */
+  max-width: 340px;
+  height: 100vh;
+  z-index: 100; /* 最前面に配置 */
+  padding: 24px 20px;
   color: #ffffff;
-  background: rgba(10, 15, 25, 0.6);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(0, 210, 255, 0.2);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-  max-height: 80vh;
+  background: rgba(8, 12, 20, 0.92); /* 3D空間が透ける美しい半透明の闇 */
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-right: 1px solid rgba(0, 210, 255, 0.2);
+  box-shadow: 20px 0 40px rgba(0, 0, 0, 0.8);
+  box-sizing: border-box;
   overflow-y: auto;
+  
+  /* 💡 アニメーション：初期状態は画面の左外側に隠す */
+  transform: translateX(-100%);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
-#control-panel::-webkit-scrollbar { width: 0; }
+
+/* 💡 このクラスがJSでついた瞬間、メニューがヌッと登場する */
+#control-panel.open {
+  transform: translateX(0);
+}
+
+/* ❌ 【新設】メニューを閉じるボタン */
+#panel-close-btn {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 28px;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition: color 0.2s;
+}
+#panel-close-btn:active { color: #00d2ff; }
 
 #control-panel h2 {
   font-family: 'Orbitron', sans-serif;
@@ -68,15 +118,12 @@ body {
   margin: 15px 0;
 }
 
-.input-group {
-  margin-bottom: 12px;
-}
-
+.input-group { margin-bottom: 12px; }
 .input-group label {
   display: block;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: bold;
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(255, 255, 255, 0.6);
   margin-bottom: 6px;
   letter-spacing: 1px;
 }
@@ -85,14 +132,15 @@ body {
 .input-group select,
 .input-group textarea {
   width: 100%;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 6px;
-  padding: 8px 12px;
+  padding: 10px;
   color: #fff;
   font-size: 13px;
   box-sizing: border-box;
   outline: none;
+  -webkit-appearance: none; /* iOS特有の丸みをリセット */
 }
 .input-group input:focus, .input-group select:focus, .input-group textarea:focus {
   border-color: #00d2ff;
@@ -103,7 +151,6 @@ body {
   font-size: 11px;
   color: #2ed573;
   margin-top: 4px;
-  min-height: 14px;
 }
 
 #input-picker-color {
@@ -112,20 +159,19 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 6px;
   background: rgba(0, 0, 0, 0.4);
-  cursor: pointer;
   padding: 2px;
   box-sizing: border-box;
 }
 
 .input-group input[type="range"] {
-  width: 80%;
+  width: 75%;
   vertical-align: middle;
 }
 #sat-val {
   font-family: 'Orbitron', sans-serif;
-  font-size: 12px;
+  font-size: 11px;
   color: #00d2ff;
-  margin-left: 8px;
+  margin-left: 6px;
 }
 
 .matrix-btn {
@@ -134,59 +180,53 @@ body {
   border: none;
   border-radius: 8px;
   color: white;
-  padding: 10px;
+  padding: 12px;
   font-size: 13px;
   font-weight: bold;
-  cursor: pointer;
   box-shadow: 0 4px 15px rgba(0, 210, 255, 0.3);
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-.matrix-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0, 210, 255, 0.5);
 }
 
+/* ⏳ スマホの親指にフィットする下部タイムラインシークバー */
 #timeline-scrollbar-container {
   position: absolute;
   bottom: 45px;
   left: 50%;
   transform: translateX(-50%);
-  width: 60vw;
-  min-width: 400px;
+  width: 88vw; /* スマホ画面幅いっぱいにフィット */
   z-index: 10;
-  padding: 12px 24px;
+  padding: 10px 16px;
   border-radius: 12px;
-  background: rgba(5, 8, 15, 0.75);
+  background: rgba(5, 8, 15, 0.7);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(0, 210, 255, 0.2);
-  box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+  border: 1px solid rgba(0, 210, 255, 0.15);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  box-sizing: border-box;
 }
 
 .scrollbar-label {
   font-family: 'Orbitron', sans-serif;
-  font-size: 11px;
+  font-size: 10px;
   color: #00d2ff;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   text-align: center;
-  letter-spacing: 2px;
 }
 
 #timeline-slider {
   width: 100%;
   -webkit-appearance: none;
   background: rgba(255, 255, 255, 0.1);
-  height: 6px;
-  border-radius: 3px;
+  height: 4px;
+  border-radius: 2px;
   outline: none;
 }
 #timeline-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
-  width: 30px;
-  height: 14px;
-  border-radius: 4px;
+  width: 24px;
+  height: 24px; /* スマホの指でタップしやすいように正方形の大きなネオンチップに */
+  border-radius: 50%;
   background: #00d2ff;
-  box-shadow: 0 0 10px #00a8ff;
+  box-shadow: 0 0 12px #00a8ff;
   cursor: pointer;
 }
 
@@ -194,121 +234,53 @@ body {
   display: flex;
   justify-content: space-between;
   font-family: 'Share Tech Mono', monospace;
-  font-size: 11px;
+  font-size: 9px;
   color: rgba(255, 255, 255, 0.4);
   margin-top: 6px;
 }
-#cam-z-val { color: #00d2ff; font-weight: bold; }
+#cam-z-val { color: #00d2ff; }
 
+/* 🧭 操作ガイド（画面最上部にコンパクトに配置） */
 #guide-ui {
   position: absolute;
-  bottom: 12px;
+  top: 75px;
   left: 50%;
   transform: translateX(-50%);
   color: rgba(255, 255, 255, 0.4);
   font-size: 10px;
   pointer-events: none;
   text-align: center;
+  width: 80vw;
   z-index: 5;
 }
 
+/* 付箋UI（スマホサイズに最適化） */
 #sticky-note {
   position: absolute;
   display: none;
   background: #ffffe0;
   color: #222;
-  padding: 15px;
+  padding: 12px;
   border-radius: 4px;
-  box-shadow: 8px 8px 24px rgba(0, 0, 0, 0.7);
-  width: 280px;
+  box-shadow: 8px 8px 24px rgba(0, 0, 0, 0.6);
+  width: 240px;
   pointer-events: auto;
   transform: translate(-50%, -100%); 
-  z-index: 100;
-  border-left: 8px solid #ffb300;
+  z-index: 1000;
+  border-left: 6px solid #ffb300;
   opacity: 0;
-  transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: opacity 0.2s, transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.15);
 }
 #sticky-note.active { opacity: 1; }
 #sticky-note h3 {
-  margin: 0 0 10px 0;
-  font-size: 14px;
+  margin: 0 0 8px 0;
+  font-size: 13px;
   color: #000;
   border-bottom: 2px dashed #cca000;
-  padding-bottom: 6px;
+  padding-bottom: 4px;
   display: flex;
   justify-content: space-between;
 }
-.log-events-container { font-size: 13px; line-height: 1.6; max-height: 200px; overflow-y: auto; }
-.event-item { margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px dashed rgba(0,0,0,0.1); }
-.close-btn { position: absolute; top: 5px; right: 10px; cursor: pointer; font-weight: bold; color: #999; font-size: 18px; }
-.close-btn:hover { color: #000; }
-
-/* ===================================================
-   📱 スマートフォン表示 (画面横幅 768px 以下) の最適化
-   =================================================== */
-@media (max-width: 768px) {
-  /* 👑 タイトルをスマホ用に少し小さく */
-  #title-ui {
-    font-size: 18px;
-    top: 15px;
-    letter-spacing: 3px;
-  }
-
-  /* 🛠️ コントロールパネルを画面下部に「ドック（引き出し）」として固定 */
-  #control-panel {
-    top: auto !important;
-    bottom: 0 !important;
-    left: 0 !important;
-    width: 100% !important;
-    max-height: 35vh !important; /* 画面の下側35%の高さに制限 */
-    
-    border-radius: 20px 20px 0 0 !important; /* 上の角だけ丸く */
-    border-left: none !important;
-    border-right: none !important;
-    border-bottom: none !important;
-    
-    padding: 16px !important;
-    box-sizing: border-box !important;
-    background: rgba(10, 15, 25, 0.8) !important; /* スマホで見やすいよう少し濃く */
-  }
-
-  /* パネル内の見出しの隙間を狭くしてコンパクトに */
-  #control-panel h2 {
-    font-size: 13px;
-    margin-bottom: 8px;
-  }
-  .input-group {
-    margin-bottom: 8px;
-  }
-  .section-divider {
-    margin: 10px 0;
-  }
-
-  /* ⏳ タイムラインスクロールバーをコントロールパネルの「すぐ上」にフロート配置 */
-  #timeline-scrollbar-container {
-    bottom: calc(35vh + 15px) !important; /* パネルの高さ(35vh) ＋ 15px の位置に自動計算 */
-    left: 50% !important;
-    transform: translateX(-50%) !important;
-    width: 90vw !important; /* スマホの画面幅いっぱいに広げる */
-    min-width: 0 !important;
-    padding: 8px 16px !important;
-  }
-
-  .scrollbar-label {
-    font-size: 10px;
-    margin-bottom: 4px;
-  }
-  .scrollbar-coords {
-    font-size: 9px;
-  }
-
-  /* 🧭 操作ガイドの文字を極小にして上部に退避 */
-  #guide-ui {
-    bottom: auto !important;
-    top: 50px !important;
-    font-size: 9px !important;
-    width: 85vw !important;
-    padding: 4px 10px !important;
-    background: rgba(0,0,0,0.5);
-  }
-}
+.log-events-container { font-size: 12px; line-height: 1.5; max-height: 150px; overflow-y: auto; }
+.event-item { margin-bottom: 6px; padding-bottom: 6px; border-bottom: 1px dashed rgba(0,0,0,0.1); }
+.close-btn { position: absolute; top: 4px; right: 8px; cursor: pointer; font-weight: bold; color: #999; font-size: 18px; }

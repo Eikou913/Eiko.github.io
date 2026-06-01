@@ -2,8 +2,8 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>3D Life Timeline - Creator Matrix</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>3D Life Timeline - Mobile Matrix</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,16 +13,22 @@
 </head>
 <body>
 
-  <div id="title-ui">3D TIMELINE BUILDER</div>
+  <div id="title-ui">3D TIMELINE</div>
+
+  <button id="menu-toggle-btn">
+    <i class="fa-solid fa-bars"></i>
+  </button>
 
   <div id="control-panel">
+    <span id="panel-close-btn">&times;</span>
+
     <h2><i class="fa-solid fa-compass-drafting"></i> TIMELINE SCALE</h2>
     <div class="input-group">
-      <label>📏 数直線の1マス（グリッド）の単位</label>
+      <label>📏 数直線の1マスの単位</label>
       <select id="timeline-scale">
-        <option value="day" selected>1日 = 1マス (詳細日記モード)</option>
-        <option value="week">1週間 = 1マス (週刊ライフログ)</option>
-        <option value="month">1ヶ月 = 1マス (長期年表モード)</option>
+        <option value="day" selected>1日 = 1マス (詳細日記)</option>
+        <option value="week">1週間 = 1マス (週刊ログ)</option>
+        <option value="month">1ヶ月 = 1マス (長期年表)</option>
       </select>
     </div>
 
@@ -54,7 +60,7 @@
       <select id="color-mode">
         <option value="auto" selected>満足度連動 (自動カラー)</option>
         <option value="white">ホワイト統一 (ミニマル)</option>
-        <option value="manual">カスタム手動 (個別カラー指定)</option>
+        <option value="manual">カスタム手動 (個別指定)</option>
       </select>
     </div>
 
@@ -80,16 +86,16 @@
   </div>
 
   <div id="timeline-scrollbar-container">
-    <div class="scrollbar-label"><i class="fa-solid fa-timeline"></i> TIMELINE NAVIGATOR (Z-AXIS)</div>
+    <div class="scrollbar-label"><i class="fa-solid fa-timeline"></i> TIMELINE NAVIGATOR</div>
     <input type="range" id="timeline-slider" min="-300" max="300" value="0">
     <div class="scrollbar-coords">
       <span id="coord-past">PAST</span>
-      <span id="coord-current">CURRENT CAMERA Z: <span id="cam-z-val">0.0</span></span>
+      <span id="coord-current">Z: <span id="cam-z-val">0.0</span></span>
       <span id="coord-future">FUTURE</span>
     </div>
   </div>
 
-  <div id="guide-ui">記録を入力すると、その期間の分だけ3D数直線が自動で生成されて伸びていきます。</div>
+  <div id="guide-ui">左上の ☰ から記録パネルを展開。下のバーで時間軸を移動。</div>
 
   <div id="canvas-container"></div>
 
