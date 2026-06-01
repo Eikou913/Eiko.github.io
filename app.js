@@ -87,11 +87,32 @@ timelineTicks.forEach(tick => {
     scene.add(labelSprite);
 });
 
-// --- 3. 人生記録プロット生成システム ---
+// --- 3. 【新機能】日付文字列(YYYY.MM.DD)から正確なZ座標を弾き出す計算機 ---
+function mapDateToZ(dateStr) {
+    const parts = dateStr.split('.');
+    if (parts.length < 2) return 0;
+    
+    const year = parseInt(parts[0]);
+    const month = parseInt(parts[1]);
+    const day = parts[2] ? parseInt(parts[2]) : 1;
+    
+    // 💡 基準点: 2024年1月1日 を Z = 30 とする。
+    // タイムラインの設計上、1年（365日）経過するごとに Z座標は 20 ずつ減少する（奥へ進む）。
+    const baseDate = new Date(2024, 0, 1);
+    const targetDate = new Date(year, month - 1, day);
+    
+    const diffTime = targetDate - baseDate;
+    const diffDays = diffTime / (1000 * 60 * 60 * 24); // 経過日数
+    
+    // Z座標の計算式
+    const zPos = 30 - (diffDays / 365) * 20;
+    return zPos;
+}
+
+// --- 4. 人生記録プロット生成システム ---
 const clickableObjects = [];
 const sphereGeometry = new THREE.SphereGeometry(0.4, 32, 32);
 
-// 共通マテリアル（タップ時にcloneして光を立てる用）
 const baseBeamMat = new THREE.MeshBasicMaterial({
     color: 0xffffff,
     transparent: true,
@@ -103,18 +124,20 @@ function mapSatisfactionToX(sat) {
     return ((sat / 100) * 16) - 8;
 }
 
-// 💡 満足度に応じて球体の色を自動生成する知能
 function getColorBySatisfaction(sat) {
     if (sat >= 80) return 0x2ed573; // 絶好調（緑）
     if (sat >= 40) return 0xffa500; // 普通（オレンジ）
     return 0xff4757;               // 低迷（赤）
 }
 
-// 💡 【重要】1つのデータから3Dオブジェクト一式を組み立てて空間へ配置する共通関数
+// 💡 1つのデータから3Dオブジェクト一式を組み立てて空間へ配置する関数
 function createPlotPoint(data) {
     const xPos = mapSatisfactionToX(data.x_sat);
     const color = getColorBySatisfaction(data.x_sat);
-
+    
+    // 💡 【修正点】ランダムを廃止し、入力された日付から1ミリのズレもない正確なZ座標を自動計算！
+    const zPos = mapDateToZ(data.date); 
+    
     // 1. 球体の生成
     const mat = new THREE.MeshStandardMaterial({
         color: color,
@@ -123,13 +146,8 @@ function createPlotPoint(data) {
         roughness: 0.1
     });
     const sphere = new THREE.Mesh(sphereGeometry, mat);
-    // 日付テキストからZ座標を簡易計算（プロトタイプ用に現在は現在時刻に基づくランダム、または固定設定用）
-    // ※今回はベースコードのまま、指定されたz座標（なければ直近の未来/過去）に配置
-    const zPos = data.z !== undefined ? data.z : (Math.random() * 40 - 20); 
-    
     sphere.position.set(xPos, 0, zPos);
     
-    // データ保持
     sphere.userData = {
         id: data.id,
         x_sat: data.x_sat,
@@ -152,29 +170,41 @@ function createPlotPoint(data) {
     sphere.userData.beam = yBeam;
     sphere.userData.beamHeight = beamHeight;
 
+    // 3. ✨【新機能】ポイントからZ軸（数直線）へ水平に伸びるガイドライン（補助線）の追加
+    const linePoints = [];
+    linePoints.push(new THREE.Vector3(0, 0, zPos));    // Z軸上のスタート地点
+    linePoints.push(new THREE.Vector3(xPos, 0, zPos)); // 球体のあるゴール地点
+    
+    const lineGeom = new THREE.BufferGeometry().setFromPoints(linePoints);
+    const lineMat = new THREE.LineBasicMaterial({
+        color: color,            // 💡 球体と同じ色にすることで直感的に紐づきが分かる
+        transparent: true,
+        opacity: 0.25             // 空間の邪魔をしないように程よい半透明に
+    });
+    const guideLine = new THREE.Line(lineGeom, lineMat);
+    scene.add(guideLine);
+
     scene.add(sphere);
     clickableObjects.push(sphere);
 }
 
-// 初期データの流し込み
+// 初期データの流し込み（日付だけでZ軸の位置がカチッと決まります）
 const initialRecords = [
-    { id: 1, z: 25, x_sat: 20, y_density: 1, date: "2024.04.12", events: ["【満足度20%: 低迷】プログラミングのエラーが解けず一日が終わる。密度は薄い。"] },
-    { id: 2, z: 5, x_sat: 85, y_density: 2, date: "2025.08.19", events: ["【満足度85%: 旅の日】京都の一人旅。予定していなかった隠れ家的なカフェを発見。"] },
-    { id: 3, z: -12, x_sat: 95, y_density: 3, date: "2026.06.02", events: ["【満足度95%: 最高の密度】新しい3Dライフログアプリの神UIロジックをひらめく！"] }
+    { id: 1, x_sat: 20, y_density: 1, date: "2024.04.12", events: ["【満足度20%: 低迷】プログラミングのエラーが解けず一日が終わる。密度は薄い。"] },
+    { id: 2, x_sat: 85, y_density: 2, date: "2025.08.19", events: ["【満足度85%: 旅の日】京都の一人旅。予定していなかった隠れ家的なカフェを発見。"] },
+    { id: 3, x_sat: 95, y_density: 3, date: "2026.06.02", events: ["【満足度95%: 最高の密度】新しい3Dライフログアプリの神UIロジックをひらめく！"] }
 ];
 initialRecords.forEach(rec => createPlotPoint(rec));
 
-// --- 4. 【新機能】入力フォームと3D空間の動的連動ロジック ---
+// --- 5. 入力フォームと3D空間の動的連動ロジック ---
 const satInput = document.getElementById('input-sat');
 const satValText = document.getElementById('sat-val');
 const addBtn = document.getElementById('add-btn');
 
-// スライダーを動かした時にパーセンテージ数値をリアルタイム更新
 satInput.addEventListener('input', () => {
     satValText.textContent = `${satInput.value}%`;
 });
 
-// ボタンを押したときに、入力されたデータから新しい3Dノードを錬成する
 addBtn.addEventListener('click', () => {
     const date = document.getElementById('input-date').value;
     const sat = parseInt(satInput.value);
@@ -183,27 +213,20 @@ addBtn.addEventListener('click', () => {
 
     if(!date) { alert("日付を入力してください！"); return; }
 
-    // 新しいデータオブジェクトの作成
     const newRecord = {
-        id: Date.now(), // 擬似的なユニークID
-        z: (Math.random() * 50 - 25), // プロトタイプ用にZ軸上のどこかにランダムプロット
+        id: Date.now(),
         x_sat: sat,
         y_density: density,
         date: date,
         events: [eventText]
     };
 
-    // 💡 魔法の発動：3D空間へ新しい記録の点を追加！
+    // 💡 フォームから追加した時も、日付計算と補助線生成が100%連動して発動！
     createPlotPoint(newRecord);
-
-    // 入力欄のクリア（日付とスライダーは残す）
     document.getElementById('input-event').value = "";
-    
-    // 演出：追加されたことが分かりやすいように、ちょっとカメラを揺らす等の処理をここに挟めます
-    console.log("新ノードが3Dタイムライン上にプロットされました:", newRecord);
 });
 
-// --- 5. タップイベントと付箋UIの制御 ---
+// --- 6. タップイベントと付箋UIの制御 ---
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 const stickyNote = document.getElementById('sticky-note');
@@ -288,7 +311,7 @@ window.addEventListener('resize', () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
-// --- 6. アニメーションループ ---
+// --- 7. アニメーションループ ---
 function animate() {
     requestAnimationFrame(animate);
     controls.update();
