@@ -27,10 +27,27 @@ body {
   transition: transform 1.0s cubic-bezier(0.66, 0, 0.34, 1), opacity 0.8s, pointer-events 1.0s;
 }
 
+/* 💡 スマホのタッチ妨害を防ぐため、1秒かけて開いた後に完全に存在を抹殺する設定 */
 #notebook-overlay.opened {
   transform: rotateY(-110deg);
   opacity: 0;
   pointer-events: none;
+  animation: fadeOutZero 1.0s forwards;
+}
+
+@keyframes fadeOutZero {
+  0% {
+    opacity: 1;
+  }
+
+  90% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 0;
+    display: none;
+  }
 }
 
 .notebook-cover {
