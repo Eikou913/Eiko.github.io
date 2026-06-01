@@ -3,37 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>3D Life Timeline - Mobile Matrix</title>
+  <title>3D Princess Timeline</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <div id="title-ui">3D TIMELINE</div>
+  <div id="title-ui">🌸 3D LIFE TRACKER 🌸</div>
 
   <button id="menu-toggle-btn">
-    <i class="fa-solid fa-bars"></i>
+    <i class="fa-solid fa-ribbon"></i>
   </button>
 
   <div id="control-panel">
     <span id="panel-close-btn">&times;</span>
 
-    <h2><i class="fa-solid fa-compass-drafting"></i> TIMELINE SCALE</h2>
+    <h2><i class="fa-solid fa-sliders"></i> TIMELINE SCALE</h2>
     <div class="input-group">
-      <label>📏 数直線の1マスの単位</label>
+      <label>📏 タイムラインの表示単位</label>
       <select id="timeline-scale">
-        <option value="day" selected>1日 = 1マス (詳細日記)</option>
-        <option value="week">1週間 = 1マス (週刊ログ)</option>
-        <option value="month">1ヶ月 = 1マス (長期年表)</option>
+        <option value="day" selected>🎀 1日 = 1マス (まいにち日記)</option>
+        <option value="week">🌸 1週間 = 1マス (しゅうかんログ)</option>
+        <option value="month">🦄 1ヶ月 = 1マス (おもいで年表)</option>
       </select>
     </div>
 
     <div class="section-divider"></div>
-    <h2><i class="fa-solid fa-satellite-dish"></i> LOG MATRIX</h2>
+    <h2><i class="fa-solid fa-heart"></i>🌸 DIARY LOG</h2>
     
     <div class="input-group">
       <label>📅 日付</label>
@@ -41,52 +41,52 @@
     </div>
 
     <div class="input-group">
-      <label>📊 満足度 (X軸: 0 〜 100%)</label>
+      <label>📊 きょうの満足度 (0 〜 100%)</label>
       <input type="range" id="input-sat" min="0" max="100" value="80">
       <span id="sat-val">80%</span>
     </div>
 
     <div class="input-group">
-      <label>⚡ 一日の密度 (Y軸: 1 〜 3)</label>
+      <label>⚡ いちにちの密度 (1 〜 3)</label>
       <select id="input-density">
-        <option value="1">1 (日常・薄め)</option>
-        <option value="2" selected>2 (充実・中面)</option>
-        <option value="3">3 (限界突破・濃密)</option>
+        <option value="1">🧸 1 (まったり日常)</option>
+        <option value="2" selected>✨ 2 (はっぴー充実)</option>
+        <option value="3">🚀 3 (限界突破イベント)</option>
       </select>
     </div>
 
     <div class="input-group">
-      <label>🎨 カラーシステムモード</label>
+      <label>🎨 カラーモード</label>
       <select id="color-mode">
-        <option value="auto" selected>満足度連動 (自動カラー)</option>
-        <option value="white">ホワイト統一 (ミニマル)</option>
-        <option value="manual">カスタム手動 (個別指定)</option>
+        <option value="auto" selected>ココロ連動 (パステル自動)</option>
+        <option value="white">ミルキーホワイト (一括)</option>
+        <option value="manual">お気に入りカラー (手動指定)</option>
       </select>
     </div>
 
     <div class="input-group" id="picker-group" style="display: none;">
-      <label>🖌️ プロットカラー選択</label>
-      <input type="color" id="input-picker-color" value="#00d2ff">
+      <label>🖌️ カラーセレクト</label>
+      <input type="color" id="input-picker-color" value="#ff758f">
     </div>
 
     <div class="input-group">
-      <label>📝 出来事メモ</label>
-      <textarea id="input-event" rows="2" placeholder="今日起きた出来事や感情を記録..."></textarea>
+      <label>📝 もよおし・おもいでメモ</label>
+      <textarea id="input-event" rows="2" placeholder="今日あった素敵なできごと、感情をメモ..."></textarea>
     </div>
 
-    <button id="add-btn" class="matrix-btn"><i class="fa-solid fa-plus"></i> 3D空間にプロット</button>
+    <button id="add-btn" class="matrix-btn"><i class="fa-solid fa-wand-magic-sparkles"></i> 3D空間にプロット</button>
 
     <div class="section-divider"></div>
-    <h2><i class="fa-solid fa-terminal"></i> TELEPORT CONSOLE</h2>
+    <h2><i class="fa-solid fa-wand-magic"></i> ✨ MAGIC TP</h2>
     <div class="input-group">
-      <label>⌨️ TPコマンド入力</label>
+      <label>⌨️ ワープコマンド入力</label>
       <input type="text" id="tp-command-input" placeholder="例: /tp 2026.06.02" style="font-family: 'Share Tech Mono', monospace;">
     </div>
     <div id="tp-status-msg"></div>
   </div>
 
   <div id="timeline-scrollbar-container">
-    <div class="scrollbar-label"><i class="fa-solid fa-timeline"></i> TIMELINE NAVIGATOR</div>
+    <div class="scrollbar-label"><i class="fa-solid fa-wand-magic-sparkles"></i> TIMELINE NAVIGATOR</div>
     <input type="range" id="timeline-slider" min="-300" max="300" value="0">
     <div class="scrollbar-coords">
       <span id="coord-past">PAST</span>
@@ -95,7 +95,7 @@
     </div>
   </div>
 
-  <div id="guide-ui">左上の ☰ から記録パネルを展開。下のバーで時間軸を移動。</div>
+  <div id="guide-ui">左上の 🎀 から日記パネルを展開。下のバーで時間軸をスライドできます。</div>
 
   <div id="canvas-container"></div>
 

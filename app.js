@@ -1,25 +1,18 @@
-// --- 📱 【新設】スマホ専用：メニュー開閉制御システム ---
+// --- 📱 スマホ専用：メニュー開閉制御システム ---
 const menuToggleBtn = document.getElementById('menu-toggle-btn');
 const controlPanel = document.getElementById('control-panel');
 const panelCloseBtn = document.getElementById('panel-close-btn');
 
-// ☰ ボタンを押したら、メニューに「open」クラスをつけて左から引っ張り出す
-menuToggleBtn.addEventListener('click', () => {
-    controlPanel.classList.add('open');
-});
-
-// ❌ ボタンを押したら、「open」クラスを外して左外へ格納する
+menuToggleBtn.addEventListener('click', () => { controlPanel.classList.add('open'); });
 panelCloseBtn.addEventListener('click', closeMenuPanel);
-
-function closeMenuPanel() {
-    controlPanel.classList.remove('open');
-}
+function closeMenuPanel() { controlPanel.classList.remove('open'); }
 
 // --- 1. 基本セットアップ ---
 const container = document.getElementById('canvas-container');
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x050608);
-scene.fog = new THREE.FogExp2(0x050608, 0.015);
+// 💡 漆黒を追放し、恋する薄ピンクの癒やし背景空間を錬成
+scene.background = new THREE.Color(0xfff0f3);
+scene.fog = new THREE.FogExp2(0xfff0f3, 0.015); // フォグもピンクホワイトに
 
 const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.set(12, 10, 25);
@@ -37,19 +30,19 @@ controls.target.set(0, 1, 0);
 controls.maxDistance = 1000;
 controls.minDistance = 1;
 
-// ライト設定
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+// 💡 空間を明るくふんわり見せるためにライトをマイルドに強化
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
 scene.add(ambientLight);
-const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+const dirLight = new THREE.DirectionalLight(0xffeef2, 0.8);
 dirLight.position.set(15, 25, 15);
 scene.add(dirLight);
 
-// --- 2. データの脳みそ（マスターデータバンク） ---
+// --- 2. データの脳みそ（パステル初期値） ---
 const masterLifeRecords = [
-    { id: 1, x_sat: 20, y_density: 1, date: "2026.04.12", events: ["低迷期。プログラミングのエラーが解けず一日が終わる。"] },
-    { id: 2, x_sat: 85, y_density: 2, date: "2026.05.19", events: ["京都の一人旅。予定していなかった隠れ家的なカフェを発見。"] },
-    { id: 3, x_sat: 95, y_density: 3, date: "2026.06.02", events: ["3Dライフログアプリのビルドシステムをひらめく！脳汁限界突破。"] },
-    { id: 4, x_sat: 60, y_density: 1, date: "2026.07.10", events: ["未来ログ。自分のタイムライン数直線がどんどん伸びていく。"] }
+    { id: 1, x_sat: 20, y_density: 1, date: "2026.04.12", events: ["ちょっと落ち込み気味な日。プログラミングのエラーが解けなかったの。"] },
+    { id: 2, x_sat: 85, y_density: 2, date: "2026.05.19", events: ["京都の一人旅。かわいい隠れ家カフェを見つけてテンションアップ🌸"] },
+    { id: 3, x_sat: 95, y_density: 3, date: "2026.06.02", events: ["3D日記アプリの最高に可愛いUIシステムをひらめいた日！天才かも✨"] },
+    { id: 4, x_sat: 60, y_density: 1, date: "2026.07.10", events: ["未来のわたしへ。数直線がどんどんパステル色に染まっていくよ。"] }
 ];
 
 function getBaseDate() {
@@ -80,15 +73,17 @@ function mapDateToZ(dateStr) {
 }
 
 function mapSatisfactionToX(sat) { return ((sat / 100) * 16) - 8; }
+
+// 💡 【大改造】トゲトゲしい色を廃止し、マカロンみたいなパステルカラーに変更！
 function getColorBySatisfaction(sat) {
-    if (sat >= 80) return 0x2ed573;
-    if (sat >= 40) return 0xffa500;
-    return 0xff4757;
+    if (sat >= 80) return 0xff758f; // 絶好調：ストロベリーピンク
+    if (sat >= 40) return 0xffca3a; // 普通：マイルドレモンイエロー
+    return 0x90e0ef;               // 低迷：ラムネソーダブルー
 }
 
-// --- 3. クッキリテキストシステム ---
+// --- 3. クッキリテキスト（可愛いフォントでCanvas生成） ---
 const textureCache = new Map();
-function createDateLabel(text, customColorHex = 0x00d2ff) {
+function createDateLabel(text, customColorHex = 0xff758f) {
     const cacheKey = `${text}_${customColorHex}`;
     if (textureCache.has(cacheKey)) return textureCache.get(cacheKey).clone();
 
@@ -96,10 +91,12 @@ function createDateLabel(text, customColorHex = 0x00d2ff) {
     canvas.width = 1024; canvas.height = 256;
     const ctx = canvas.getContext('2d');
     ctx.fillStyle = 'rgba(0,0,0,0)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.font = 'Bold 80px "Helvetica Neue", Arial, sans-serif';
+    
+    // 💡 フォントをまるっこい「Quicksand」に変更！
+    ctx.font = 'Bold 84px "Quicksand", Arial, sans-serif';
     const colorStr = `#${customColorHex.toString(16).padStart(6, '0')}`;
     ctx.fillStyle = colorStr; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    ctx.shadowColor = colorStr; ctx.shadowBlur = 20;
+    ctx.shadowColor = 'rgba(255, 117, 143, 0.3)'; ctx.shadowBlur = 15;
     ctx.fillText(text, canvas.width / 2, canvas.height / 2);
 
     const texture = new THREE.CanvasTexture(canvas);
@@ -133,8 +130,9 @@ function updateDynamicViewportChunks() {
     const lineLength = Math.abs(maxZ - minZ) + 10; 
     const lineCenterZ = (maxZ + minZ) / 2;
 
-    const lineGeom = new THREE.CylinderGeometry(0.05, 0.05, lineLength, 32).rotateX(Math.PI / 2);
-    const lineMat = new THREE.MeshStandardMaterial({ color: 0x00d2ff, emissive: 0x00a8ff, emissiveIntensity: 0.1, roughness: 0.2 });
+    const lineGeom = new THREE.CylinderGeometry(0.04, 0.04, lineLength, 32).rotateX(Math.PI / 2);
+    // 💡 数直線レール自体を、優しい「ミルキーピンクホワイト」にコーティング
+    const lineMat = new THREE.MeshStandardMaterial({ color: 0xffd6ba, emissive: 0xffb3c6, emissiveIntensity: 0.2, roughness: 0.3 });
     timelineLine = new THREE.Mesh(lineGeom, lineMat);
     timelineLine.position.set(0, 0, lineCenterZ);
     scene.add(timelineLine);
@@ -156,26 +154,31 @@ function updateDynamicViewportChunks() {
             if (mode === 'manual') origColor = parseInt(pickerColor.replace('#', '0x'));
             let displayColor = mode === 'white' ? 0xffffff : origColor;
 
-            const mat = new THREE.MeshStandardMaterial({ color: displayColor, emissive: displayColor, emissiveIntensity: 0.4, roughness: 0.1 });
+            // 1. 球体
+            const mat = new THREE.MeshStandardMaterial({ color: displayColor, emissive: displayColor, emissiveIntensity: 0.3, roughness: 0.2 });
             const sphere = new THREE.Mesh(sphereGeometry, mat);
             sphere.position.set(xPos, data.y_density * 1.5, tZ);
             group.add(sphere);
 
+            // 2. Y軸光の柱
             const beamHeight = data.y_density * 1.5; 
             const beamGeom = new THREE.CylinderGeometry(0.02, 0.02, beamHeight, 16).translate(0, beamHeight / 2, 0);
             const yBeam = new THREE.Mesh(beamGeom, baseBeamMat.clone());
             yBeam.position.set(xPos, 0, tZ); yBeam.scale.y = 0.001; 
             group.add(yBeam);
 
+            // 3. レーザー補助線（マイルドな半透明ピンク系に）
             const linePoints = [new THREE.Vector3(0, 0, tZ), new THREE.Vector3(xPos, 0, tZ)];
             const lineGeom = new THREE.BufferGeometry().setFromPoints(linePoints);
-            const lineMat = new THREE.LineBasicMaterial({ color: displayColor, transparent: true, opacity: 0.4 });
+            const lineMat = new THREE.LineBasicMaterial({ color: displayColor, transparent: true, opacity: 0.5 });
             group.add(new THREE.Line(lineGeom, lineMat));
 
+            // 4. 専用目盛り（ネオンリング ➔ 可愛いカラーリングに）
             const spotTick = new THREE.Mesh(spotTickGeom, new THREE.MeshBasicMaterial({ color: displayColor }));
             spotTick.position.set(0, 0, tZ);
             group.add(spotTick);
 
+            // 5. 目盛りの上の日付文字
             const dateLabel = createDateLabel(data.date, displayColor);
             dateLabel.position.set(0, 0.8, tZ);
             group.add(dateLabel);
@@ -215,7 +218,7 @@ function warpToZCoordinate(zPos) {
     closeNote();
 }
 
-// --- 6. スライダー ＆ スケール ＆ /tpコマンド連動 ---
+// --- 6. 各種コンソール連動 ---
 const timelineSlider = document.getElementById('timeline-slider');
 const camZValText = document.getElementById('cam-z-val');
 const tpInput = document.getElementById('tp-command-input');
@@ -235,7 +238,7 @@ timelineScaleSelect.addEventListener('change', () => {
     activeObjectsMap.clear(); clickableObjects.length = 0;
     updateDynamicViewportChunks();
     warpToZCoordinate(mapDateToZ(masterLifeRecords[0].date));
-    closeMenuPanel(); // 💡 ユーザーの親切心：スケールを変えたら自動でパネルを畳む
+    closeMenuPanel(); 
 });
 
 tpInput.addEventListener('keydown', (e) => {
@@ -246,16 +249,16 @@ tpInput.addEventListener('keydown', (e) => {
         if (match) {
             const arg = match[1];
             if (!isNaN(arg)) {
-                tpStatusMsg.style.color = "#2ed573"; tpStatusMsg.textContent = `[System] tp ${arg}`;
+                tpStatusMsg.style.color = "#ff758f"; tpStatusMsg.textContent = `[System] tp to coordinate ${arg}`;
                 warpToZCoordinate(parseFloat(arg));
             } else {
                 const targetZ = mapDateToZ(arg);
-                tpStatusMsg.style.color = "#2ed573"; tpStatusMsg.textContent = `[System] tp to ${arg}`;
+                tpStatusMsg.style.color = "#ff758f"; tpStatusMsg.textContent = `[System] tp to ${arg}`;
                 warpToZCoordinate(targetZ);
             }
-            setTimeout(closeMenuPanel, 800); // 💡 ワープを確認した後に自動で閉じる
+            setTimeout(closeMenuPanel, 800); 
         } else {
-            tpStatusMsg.style.color = "#ff4757"; tpStatusMsg.textContent = `Unknown command.`;
+            tpStatusMsg.style.color = "#ff4757"; tpStatusMsg.textContent = `Unknown command. /tp [date]`;
         }
         tpInput.value = "";
     }
@@ -275,7 +278,7 @@ document.getElementById('add-btn').addEventListener('click', () => {
     
     warpToZCoordinate(mapDateToZ(date));
     document.getElementById('input-event').value = "";
-    closeMenuPanel(); // 💡 プロットに成功したらメニューをシュッと自動で閉じて3Dを広く見せる！
+    closeMenuPanel(); 
 });
 
 document.getElementById('color-mode').addEventListener('change', () => {
@@ -307,7 +310,7 @@ function onPointerDown(event) {
         const data = activeSphere.userData;
         data.beam.material.opacity = 0.4;
         data.beam.userData.isExpanding = true;
-        noteTitle.innerHTML = `<span>📅 ${data.date}</span> <span style="font-size:10px; color:#666;">満足度: ${data.x_sat}%</span>`;
+        noteTitle.innerHTML = `<span>📅 ${data.date}</span> <span style="font-size:10px; color:#8a7a7f;">満足度: ${data.x_sat}%</span>`;
         let eventsHtml = "";
         data.events.forEach(evt => { eventsHtml += `<div class="event-item">${evt}</div>`; });
         noteEvents.innerHTML = eventsHtml;
