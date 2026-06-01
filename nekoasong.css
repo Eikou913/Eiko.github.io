@@ -4,9 +4,9 @@
 .song-list {
   display: grid !important;
   grid-template-columns: 1fr !important; /* 💡 絶対に1列！これで2列になるバグが完全に消滅します */
-  gap: 12px !important;                 /* ボタン同士の上下のすき間 */
+  gap: 2px !important;                 /* ボタン同士の上下のすき間 */
   max-width: 460px;                     /* スマホで見やすいスマートな横幅 */
-  margin: 15px auto !important;         /* 上下に余白を作り、H1タグを力強く押し返して重なりを防ぐ */
+  margin: 30px auto !important;         /* 上下に余白を作り、H1タグを力強く押し返して重なりを防ぐ */
   padding: 0 16px;
 }
 
@@ -58,7 +58,7 @@
 
 /* 🖱️ 触れたとき（ホバー）のエフェクト */
 .songall:hover {
-  background-color: #353535;
+  background-color: #1a0e2e;
   color: #ffffff !important;
   transform: translateX(6px); /* 右にスッ…と動く */
 }
