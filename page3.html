@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Life Timeline - Date Axis</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #050608;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            user-select: none;
+        }
+        #canvas-container {
+            width: 100vw;
+            height: 100vh;
+        }
+        /* タイトル */
+        #title-ui {
+            position: absolute;
+            top: 25px;
+            width: 100%;
+            text-align: center;
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(0, 210, 255, 0.5);
+            pointer-events: none;
+            letter-spacing: 6px;
+        }
+        /* 操作ガイド */
+        #guide-ui {
+            position: absolute;
+            bottom: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 12px;
+            pointer-events: none;
+            text-align: center;
+            background: rgba(0,0,0,0.7);
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 210, 255, 0.2);
+        }
+        /* 可変付箋UI */
+        #sticky-note {
+            position: absolute;
+            display: none;
+            background: #ffffe0;
+            color: #222;
+            padding: 15px;
+            border-radius: 4px;
+            box-shadow: 8px 8px 24px rgba(0, 0, 0, 0.7);
+            width: 280px;
+            pointer-events: auto;
+            transform: translate(-50%, -100%); 
+            z-index: 10;
+            border-left: 8px solid #ffb300;
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        #sticky-note.active {
+            opacity: 1;
+        }
+        #sticky-note h3 {
+            margin: 0 0 10px 0;
+            font-size: 15px;
+            color: #000;
+            border-bottom: 2px dashed #cca000;
+            padding-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .log-events-container {
+            font-size: 13px;
+            line-height: 1.6;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .event-item {
+            margin-bottom: 8px;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed rgba(0,0,0,0.1);
+        }
+        .event-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        .close-btn {
+            position: absolute;
+            top: 5px;
+            right: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #999;
+            font-size: 18px;
+        }
+        .close-btn:hover { color: #000; }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+</head>
+<body>
+
+    <div id="title-ui">3D TIMELINE MATRIX</div>
+    <div id="guide-ui">Z軸（時間数直線）上のポイントをタップすると、その日のY軸（密度）が立ち上がります</div>
+    <div id="canvas-container"></div>
+
+    <div id="sticky-note">
+        <span class="close-btn" onclick="closeNote()">&times;</span>
+        <h3 id="note-title">日付</h3>
+        <div class="log-events-container" id="note-events"></div>
+    </div>
+
+    <script>
+        // --- 1. 基本セットアップ ---
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x050608);
+        scene.fog = new THREE.FogExp2(0x050608, 0.025);
+
+        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.set(12, 10, 25); // 数直線の目盛りが見えやすいように少し右斜め上にカメラを配置
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(window.devicePixelRatio);
+        container.appendChild(renderer.domElement);
+
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.target.set(0, 1, 0);
+
+        // ライト
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+        scene.add(ambientLight);
+        const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        dirLight.position.set(15, 25, 15);
+        scene.add(dirLight);
+
+        // --- 2. 3D数直線（Z軸）の作成 ---
+        const zAxisLength = 60;
+        const zAxisGeom = new THREE.CylinderGeometry(0.1, 0.1, zAxisLength, 32).rotateX(Math.PI / 2);
+        const zAxisMat = new THREE.MeshStandardMaterial({ 
+            color: 0x00d2ff, 
+            emissive: 0x00a8ff, 
+            emissiveIntensity: 0.3 
+        });
+        const zAxis = new THREE.Mesh(zAxisGeom, zAxisMat);
+        scene.add(zAxis);
+
+        // --- 【新機能】数直線の目盛り（Tick）と日付ラベルの自動生成 ---
+        // Z座標に対応する日付の定義（手前+30＝過去、奥-30＝未来）
+        const timelineTicks = [
+            { z: 30,  label: "2024.01" },
+            { z: 20,  label: "2024.07" },
+            { z: 10,  label: "2025.01" },
+            { z: 0,   label: "2025.07" },
+            { z: -10, label: "2026.01" },
+            { z: -20, label: "2026.07" },
+            { z: -30, label: "2027.01" }
+        ];
+
+        // 目盛り線（X軸方向に伸びる小さな円柱）の形状定義
+        const majorTickGeom = new THREE.CylinderGeometry(0.04, 0.04, 1.2, 16).rotateZ(Math.PI / 2);
+        const minorTickGeom = new THREE.CylinderGeometry(0.02, 0.02, 0.6, 16).rotateZ(Math.PI / 2);
+        const tickMaterial = new THREE.MeshStandardMaterial({ color: 0x00d2ff, emissive: 0x00a8ff, emissiveIntensity: 0.2 });
+
+        // 1刻みで細かい目盛りを打ち、キリの良いところで大きな目盛りと日付を配置
+        for (let z = -30; z <= 30; z += 2) {
+            const isMajor = timelineTicks.some(t => t.z === z);
+            const tickMesh = new THREE.Mesh(isMajor ? majorTickGeom : minorTickGeom, tickMaterial);
+            tickMesh.position.set(0, 0, z);
+            scene.add(tickMesh);
+        }
+
+        // Canvasを使って動的に文字テクスチャ（スプライト）を作成する関数
+        function createDateLabel(text) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 256;
+            canvas.height = 64;
+            const ctx = canvas.getContext('2d');
+            
+            // 背景は透明
+            ctx.fillStyle = 'rgba(0,0,0,0)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // 文字のデザイン（サイバーネオン風）
+            ctx.font = 'Bold 26px "Helvetica Neue", Arial, sans-serif';
+            ctx.fillStyle = '#00d2ff';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.shadowColor = '#00a8ff';
+            ctx.shadowBlur = 6;
+            ctx.fillText(text, canvas.width / 2, canvas.height / 2);
+
+            const texture = new THREE.CanvasTexture(canvas);
+            const spriteMat = new THREE.SpriteMaterial({ map: texture, transparent: true });
+            const sprite = new THREE.Sprite(spriteMat);
+            sprite.scale.set(3.5, 0.875, 1); // アスペクト比4:1を維持
+            return sprite;
+        }
+
+        // 日付ラベルを数直線の「上」に配置
+        timelineTicks.forEach(tick => {
+            const labelSprite = createDateLabel(tick.label);
+            labelSprite.position.set(0, 0.8, tick.z); // 数直線の少し上(Y=0.8)に浮かせる
+            scene.add(labelSprite);
+        });
+
+
+        // --- 3. 人生記録データの設定 ---
+        const lifeRecords = [
+            { 
+                id: 1, z: 25, x_sat: 20, y_density: 1, color: 0xff4757, date: "2024.04.12",
+                events: ["【満足度20%: 低迷】プログラミングのエラーが解けず一日が終わる。何がダメなのか分からずただただ疲弊。密度は薄い。"]
+            },
+            { 
+                id: 2, z: 5, x_sat: 85, y_density: 2, color: 0x2ed573, date: "2025.08.19",
+                events: [
+                    "【満足度85%: 旅の日】京都の一人旅。予定していなかった隠れ家的なカフェを発見する。",
+                    "そこで読んだ本の内容が妙に腑に落ちて、今後の生き方のヒントを得た気がした。"
+                ]
+            },
+            { 
+                id: 3, z: -12, x_sat: 95, y_density: 3, color: 0xffa500, date: "2026.06.02",
+                events: [
+                    "【満足度95%: 最高の密度】新しい3Dライフログアプリの神UIロジックをひらめく！",
+                    "フロントのモックアップが完璧に動作。脳汁が止まらない素晴らしい開発体験。",
+                    "友人から連絡があり、今度新しいプロジェクトを一緒にやらないかと誘われる。一日の密度が限界突破。"
+                ]
+            }
+        ];
+
+        // 満足度(0~100)をX座標(-8 ~ +8)に変換
+        function mapSatisfactionToX(sat) {
+            return ((sat / 100) * 16) - 8;
+        }
+
+        const sphereGeometry = new THREE.SphereGeometry(0.4, 32, 32);
+        const clickableObjects = [];
+        const yBeamMat = new THREE.MeshBasicMaterial({
+            color: 0xffffff,
+            transparent: true,
+            opacity: 0,
+            blending: THREE.AdditiveBlending
+        });
+
+        lifeRecords.forEach(data => {
+            const xPos = mapSatisfactionToX(data.x_sat);
+            
+            // ポイント球体
+            const mat = new THREE.MeshStandardMaterial({
+                color: data.color,
+                emissive: data.color,
+                emissiveIntensity: 0.4,
+                roughness: 0.1
+            });
+            const sphere = new THREE.Mesh(sphereGeometry, mat);
+            sphere.position.set(xPos, 0, data.z);
+            sphere.userData = data;
+            scene.add(sphere);
+            clickableObjects.push(sphere);
+
+            // Y軸の光の柱（タップ時に立ち上がる）
+            const beamHeight = data.y_density * 2.5; 
+            const beamGeom = new THREE.CylinderGeometry(0.04, 0.04, beamHeight, 16);
+            beamGeom.translate(0, beamHeight / 2, 0); 
+            
+            const yBeam = new THREE.Mesh(beamGeom, yBeamMat.clone());
+            yBeam.position.set(xPos, 0, data.z);
+            yBeam.scale.y = 0.001; 
+            scene.add(yBeam);
+            
+            sphere.userData.beam = yBeam;
+            sphere.userData.beamHeight = beamHeight;
+        });
+
+        // --- 4. タップイベントとY軸・付箋の連動 ---
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+        const stickyNote = document.getElementById('sticky-note');
+        const noteTitle = document.getElementById('note-title');
+        const noteEvents = document.getElementById('note-events');
+        
+        let activeSphere = null;
+
+        window.addEventListener('click', onPointerDown, false);
+
+        function onPointerDown(event) {
+            if (event.target.id !== 'canvas-container' && event.target.tagName !== 'CANVAS') return;
+
+            mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects(clickableObjects);
+
+            if (intersects.length > 0) {
+                resetActiveEffects();
+
+                activeSphere = intersects[0].object;
+                const data = activeSphere.userData;
+
+                // 1. Y軸光の柱のアニメーション開始
+                data.beam.material.opacity = 0.4;
+                data.beam.userData.isExpanding = true;
+
+                // 2. 付箋UIのテキスト生成
+                noteTitle.innerHTML = `<span>📅 ${data.date}</span> <span style="font-size:11px; color:#666;">満足度: ${data.x_sat}%</span>`;
+                
+                let eventsHtml = "";
+                data.events.forEach(evt => {
+                    eventsHtml += `<div class="event-item">${evt}</div>`;
+                });
+                noteEvents.innerHTML = eventsHtml;
+
+                stickyNote.style.display = 'block';
+                updateNotePosition();
+                setTimeout(() => stickyNote.classList.add('active'), 10);
+            } else {
+                closeNote();
+            }
+        }
+
+        function resetActiveEffects() {
+            clickableObjects.forEach(obj => {
+                if (obj.userData.beam) {
+                    obj.userData.beam.scale.y = 0.001;
+                    obj.userData.beam.material.opacity = 0;
+                    obj.userData.beam.userData.isExpanding = false;
+                }
+            });
+        }
+
+        function updateNotePosition() {
+            if (!activeSphere || stickyNote.style.display === 'none') return;
+
+            const data = activeSphere.userData;
+            const targetPosition = new THREE.Vector3();
+            activeSphere.getWorldPosition(targetPosition);
+            
+            // Y軸の柱の頂点位置に付箋を合わせる
+            const currentBeamHeight = data.beamHeight * data.beam.scale.y;
+            targetPosition.y += currentBeamHeight + 0.3; 
+
+            targetPosition.project(camera);
+            const x = (targetPosition.x * .5 + .5) * window.innerWidth;
+            const y = (targetPosition.y * -.5 + .5) * window.innerHeight;
+
+            stickyNote.style.left = `${x}px`;
+            stickyNote.style.top = `${y}px`;
+        }
+
+        function closeNote() {
+            stickyNote.classList.remove('active');
+            setTimeout(() => { stickyNote.style.display = 'none'; }, 300);
+            resetActiveEffects();
+            activeSphere = null;
+        }
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // --- 5. アニメーションループ ---
+        function animate() {
+            requestAnimationFrame(animate);
+            controls.update();
+
+            clickableObjects.forEach(obj => {
+                obj.rotation.y += 0.01;
+                if (obj.userData.beam && obj.userData.beam.userData.isExpanding) {
+                    if (obj.userData.beam.scale.y < 1) {
+                        obj.userData.beam.scale.y += (1 - obj.userData.beam.scale.y) * 0.15;
+                    }
+                }
+            });
+
+            updateNotePosition();
+            renderer.render(scene, camera);
+        }
+        animate();
+    </script>
+</body>
+</html>
