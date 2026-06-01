@@ -3,10 +3,107 @@
 body {
   margin: 0;
   overflow: hidden;
-  background-color: #fff0f3; /* ✨ 漆黒から、ふわっと淡い恋ピンクの宇宙へ変更 */
+  background-color: #fff0f3;
   font-family: 'Quicksand', 'Helvetica Neue', Arial, sans-serif;
-  color: #5c4d51; /* チョコレートブラウンの優しい文字色 */
+  color: #5c4d51;
   user-select: none;
+  perspective: 1200px;
+}
+
+#notebook-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: #ffe5ec;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 30px;
+  transform-origin: left center;
+  transition: transform 1.0s cubic-bezier(0.66, 0, 0.34, 1), opacity 0.8s, pointer-events 1.0s;
+}
+
+#notebook-overlay.opened {
+  transform: rotateY(-110deg);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.notebook-cover {
+  width: 100%;
+  max-width: 320px;
+  height: 75vh;
+  background: #ffb3c6;
+  border-radius: 16px 24px 24px 16px;
+  box-shadow: 10px 15px 35px rgba(255, 117, 143, 0.3), inset 6px 0 0 rgba(0, 0, 0, 0.06);
+  border-left: 12px solid #ff85a2;
+  padding: 20px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.notebook-stitch {
+  width: 100%;
+  height: 100%;
+  border: 2px dashed rgba(255, 255, 255, 0.6);
+  border-radius: 12px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.notebook-seal {
+  font-size: 40px;
+  margin-bottom: 15px;
+}
+
+.notebook-title {
+  font-family: 'Quicksand', sans-serif;
+  color: white;
+  font-size: 24px;
+  margin: 0 0 5px 0;
+  text-shadow: 0 2px 4px rgba(255, 117, 143, 0.3);
+}
+
+.notebook-author {
+  color: #ffe5ec;
+  font-size: 13px;
+  margin: 0 0 60px 0;
+  letter-spacing: 2px;
+}
+
+.notebook-tap-guide {
+  font-size: 13px;
+  color: white;
+  font-weight: bold;
+  background: rgba(255, 255, 255, 0.25);
+  padding: 8px 16px;
+  border-radius: 20px;
+}
+
+.animate-pulse {
+  animation: pulse 1.2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.2);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
 #canvas-container {
@@ -18,7 +115,6 @@ body {
   z-index: 1;
 }
 
-/* 👑 メルヘンで可愛いタイトル */
 #title-ui {
   position: absolute;
   top: 20px;
@@ -34,7 +130,6 @@ body {
   z-index: 5;
 }
 
-/* 🎀 メニューを開くフローティングボタン（ピンクの真珠風） */
 #menu-toggle-btn {
   position: absolute;
   top: 15px;
@@ -56,13 +151,13 @@ body {
   justify-content: center;
   transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
+
 #menu-toggle-btn:active {
   transform: scale(0.9) rotate(-15deg);
   background: #ffb3c6;
   color: white;
 }
 
-/* 🛠️ 白と薄ピンクのすりガラス・ドロワーメニュー */
 #control-panel {
   position: absolute;
   top: 0;
@@ -73,20 +168,21 @@ body {
   z-index: 100;
   padding: 24px 20px;
   color: #5c4d51;
-  background: rgba(255, 255, 255, 0.9); /* 白基調のドリーミーな半透明 */
+  background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border-right: 1px solid rgba(255, 117, 143, 0.2);
   box-shadow: 15px 0 35px rgba(255, 117, 143, 0.1);
   box-sizing: border-box;
   overflow-y: auto;
-  
   transform: translateX(-100%);
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
-#control-panel.open { transform: translateX(0); }
 
-/* ❌ メニューを閉じるボタン */
+#control-panel.open {
+  transform: translateX(0);
+}
+
 #panel-close-btn {
   position: absolute;
   top: 15px;
@@ -95,7 +191,6 @@ body {
   color: #ffb3c6;
   cursor: pointer;
 }
-#panel-close-btn:hover { color: #ff758f; }
 
 #control-panel h2 {
   font-family: 'Quicksand', sans-serif;
@@ -107,13 +202,78 @@ body {
   padding-bottom: 6px;
 }
 
+.ranking-item {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 240, 243, 0.6);
+  border: 1px solid rgba(255, 117, 143, 0.15);
+  border-radius: 10px;
+  padding: 8px 12px;
+  margin-bottom: 6px;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.ranking-item:active {
+  transform: scale(0.97);
+  background: rgba(255, 182, 198, 0.3);
+}
+
+.rank-badge {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: bold;
+  color: white;
+  margin-right: 10px;
+  font-family: 'Quicksand', sans-serif;
+}
+
+.rank-1 {
+  background: #ff758f;
+  box-shadow: 0 0 6px #ff758f;
+}
+
+.rank-2 {
+  background: #ffb3c6;
+}
+
+.rank-3 {
+  background: #ffe5ec;
+  color: #ff758f;
+}
+
+.rank-other {
+  background: #d8cbd0;
+}
+
+.rank-date {
+  font-size: 11px;
+  font-weight: bold;
+  flex-grow: 1;
+}
+
+.rank-score {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 12px;
+  font-weight: bold;
+  color: #ff758f;
+}
+
 .section-divider {
   height: 2px;
-  background: linear-gradient(90deg, rgba(255,117,143,0.2), transparent);
+  background: linear-gradient(90deg, rgba(255, 117, 143, 0.2), transparent);
   margin: 15px 0;
 }
 
-.input-group { margin-bottom: 12px; }
+.input-group {
+  margin-bottom: 12px;
+}
+
 .input-group label {
   display: block;
   font-size: 11px;
@@ -122,7 +282,6 @@ body {
   margin-bottom: 6px;
 }
 
-/* 入力フォームの丸みをアップしてコロンとした見た目に */
 .input-group input[type="text"],
 .input-group select,
 .input-group textarea {
@@ -137,7 +296,10 @@ body {
   outline: none;
   font-family: inherit;
 }
-.input-group input:focus, .input-group select:focus, .input-group textarea:focus {
+
+.input-group input:focus,
+.input-group select:focus,
+.input-group textarea:focus {
   border-color: #ff758f;
   box-shadow: 0 0 8px rgba(255, 117, 143, 0.2);
 }
@@ -160,11 +322,11 @@ body {
   cursor: pointer;
 }
 
-/* かわいいピンクスライダー */
 .input-group input[type="range"] {
   width: 75%;
   vertical-align: middle;
 }
+
 #sat-val {
   font-family: 'Quicksand', sans-serif;
   font-size: 12px;
@@ -173,7 +335,6 @@ body {
   margin-left: 6px;
 }
 
-/* いちごミルクグラデーションボタン */
 .matrix-btn {
   width: 100%;
   background: linear-gradient(135deg, #ff9a9e, #fecfef);
@@ -186,12 +347,9 @@ body {
   font-family: inherit;
   cursor: pointer;
   box-shadow: 0 4px 15px rgba(255, 154, 158, 0.4);
-  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
-  transition: transform 0.2s;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
-.matrix-btn:active { transform: scale(0.98); }
 
-/* ⏳ いちごみるくシークバー */
 #timeline-scrollbar-container {
   position: absolute;
   bottom: 45px;
@@ -226,7 +384,7 @@ body {
   border-radius: 3px;
   outline: none;
 }
-/* スライダーのつまみをキャンディピンクの真珠に */
+
 #timeline-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   width: 24px;
@@ -245,7 +403,11 @@ body {
   color: #a39296;
   margin-top: 6px;
 }
-#cam-z-val { color: #ff758f; font-weight: bold; }
+
+#cam-z-val {
+  color: #ff758f;
+  font-weight: bold;
+}
 
 #guide-ui {
   position: absolute;
@@ -260,24 +422,27 @@ body {
   z-index: 5;
 }
 
-/* 📌 もっと本物の付箋っぽく可愛くしたメモUI */
 #sticky-note {
   position: absolute;
   display: none;
-  background: #fffbdf; /* ぽてっと可愛いハニーイエロー */
+  background: #fffbdf;
   color: #4a3f41;
   padding: 14px;
   border-radius: 8px;
   box-shadow: 5px 8px 20px rgba(92, 77, 81, 0.15);
   width: 230px;
   pointer-events: auto;
-  transform: translate(-50%, -100%); 
+  transform: translate(-50%, -100%);
   z-index: 1000;
-  border-left: 6px solid #ff758f; /* 左端をストロベリーピンクに */
+  border-left: 6px solid #ff758f;
   opacity: 0;
   transition: opacity 0.2s, transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.15);
 }
-#sticky-note.active { opacity: 1; }
+
+#sticky-note.active {
+  opacity: 1;
+}
+
 #sticky-note h3 {
   margin: 0 0 8px 0;
   font-size: 13px;
@@ -288,6 +453,25 @@ body {
   display: flex;
   justify-content: space-between;
 }
-.log-events-container { font-size: 12px; line-height: 1.5; max-height: 150px; overflow-y: auto; }
-.event-item { margin-bottom: 6px; padding-bottom: 6px; }
-.close-btn { position: absolute; top: 4px; right: 8px; cursor: pointer; font-weight: bold; color: #ffb3c6; font-size: 18px; }
+
+.log-events-container {
+  font-size: 12px;
+  line-height: 1.5;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.event-item {
+  margin-bottom: 6px;
+  padding-bottom: 6px;
+}
+
+.close-btn {
+  position: absolute;
+  top: 4px;
+  right: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  color: #ffb3c6;
+  font-size: 18px;
+}

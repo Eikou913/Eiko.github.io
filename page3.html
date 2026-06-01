@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>3D Princess Timeline</title>
+  <title>My 3D Chronology</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,7 +13,18 @@
 </head>
 <body>
 
-  <div id="title-ui">🌸 3D LIFE TRACKER 🌸</div>
+  <div id="notebook-overlay">
+    <div class="notebook-cover">
+      <div class="notebook-stitch">
+        <div class="notebook-seal">🌸</div>
+        <h1 class="notebook-title">Eiko's History</h1>
+        <p class="notebook-author">since 2008</p>
+        <div class="notebook-tap-guide"><i class="fa-solid fa-heart animate-pulse"></i> タップして年表をひらく</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="title-ui">🌸 3D CHRONOLOGY 🌸</div>
 
   <button id="menu-toggle-btn">
     <i class="fa-solid fa-ribbon"></i>
@@ -26,28 +37,44 @@
     <div class="input-group">
       <label>📏 タイムラインの表示単位</label>
       <select id="timeline-scale">
-        <option value="day" selected>🎀 1日 = 1マス (まいにち日記)</option>
+        <option value="custom" selected>🦄 出来事ごと = 1マス (カスタム年表)</option>
+        <option value="day">🎀 1日 = 1マス (まいにち日記)</option>
         <option value="week">🌸 1週間 = 1マス (しゅうかんログ)</option>
-        <option value="month">🦄 1ヶ月 = 1マス (おもいで年表)</option>
+        <option value="month">🧸 1ヶ月 = 1マス (おもいで長期モード)</option>
       </select>
     </div>
+
+    <div class="section-divider"></div>
+    <h2><i class="fa-solid fa-trophy"></i> 🏆 HAPPY RANKING</h2>
+    <div class="input-group">
+      <label>⏱️ あなれてぃくす集計期間</label>
+      <select id="ranking-period">
+        <option value="all" selected>✨ すべての期間</option>
+        <option value="2013">🚀 2013年</option>
+        <option value="2012">👾 2012年</option>
+        <option value="2011">💧 2011年</option>
+        <option value="2009">🎡 2009年</option>
+        <option value="2008">👶 2008年</option>
+      </select>
+    </div>
+    <div id="ranking-list-container"></div>
 
     <div class="section-divider"></div>
     <h2><i class="fa-solid fa-heart"></i>🌸 DIARY LOG</h2>
     
     <div class="input-group">
-      <label>📅 日付</label>
-      <input type="text" id="input-date" value="2026.06.02" placeholder="例: 2026.06.02">
+      <label>📅 日付・年</label>
+      <input type="text" id="input-date" value="2013" placeholder="例: 2013 や 2013.08.15">
     </div>
 
     <div class="input-group">
-      <label>📊 きょうの満足度 (0 〜 100%)</label>
-      <input type="range" id="input-sat" min="0" max="100" value="80">
-      <span id="sat-val">80%</span>
+      <label>📊 心の満足度 (0 〜 100%)</label>
+      <input type="range" id="input-sat" min="0" max="100" value="85">
+      <span id="sat-val">85%</span>
     </div>
 
     <div class="input-group">
-      <label>⚡ いちにちの密度 (1 〜 3)</label>
+      <label>⚡ できごとの密度 (1 〜 3)</label>
       <select id="input-density">
         <option value="1">🧸 1 (まったり日常)</option>
         <option value="2" selected>✨ 2 (はっぴー充実)</option>
@@ -70,8 +97,8 @@
     </div>
 
     <div class="input-group">
-      <label>📝 もよおし・おもいでメモ</label>
-      <textarea id="input-event" rows="2" placeholder="今日あった素敵なできごと、感情をメモ..."></textarea>
+      <label>📝 できごと・おもいでメモ</label>
+      <textarea id="input-event" rows="2" placeholder="新しく追加したいおもいでを記述..."></textarea>
     </div>
 
     <button id="add-btn" class="matrix-btn"><i class="fa-solid fa-wand-magic-sparkles"></i> 3D空間にプロット</button>
@@ -80,14 +107,14 @@
     <h2><i class="fa-solid fa-wand-magic"></i> ✨ MAGIC TP</h2>
     <div class="input-group">
       <label>⌨️ ワープコマンド入力</label>
-      <input type="text" id="tp-command-input" placeholder="例: /tp 2026.06.02" style="font-family: 'Share Tech Mono', monospace;">
+      <input type="text" id="tp-command-input" placeholder="例: /tp 2012" style="font-family: 'Share Tech Mono', monospace;">
     </div>
     <div id="tp-status-msg"></div>
   </div>
 
   <div id="timeline-scrollbar-container">
     <div class="scrollbar-label"><i class="fa-solid fa-wand-magic-sparkles"></i> TIMELINE NAVIGATOR</div>
-    <input type="range" id="timeline-slider" min="-300" max="300" value="0">
+    <input type="range" id="timeline-slider" min="-100" max="100" value="0">
     <div class="scrollbar-coords">
       <span id="coord-past">PAST</span>
       <span id="coord-current">Z: <span id="cam-z-val">0.0</span></span>
@@ -95,7 +122,7 @@
     </div>
   </div>
 
-  <div id="guide-ui">左上の 🎀 から日記パネルを展開。下のバーで時間軸をスライドできます。</div>
+  <div id="guide-ui">左上の 🎀 から年表を追加・確認。下のバーで時間軸をスライドできます。</div>
 
   <div id="canvas-container"></div>
 
