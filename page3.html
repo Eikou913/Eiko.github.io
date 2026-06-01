@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>3D Life Timeline - Matrix Control</title>
+  <title>3D Life Timeline - Quantum Stream</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="style.css">
 </head>
@@ -16,7 +16,7 @@
   <div id="title-ui">3D TIMELINE MATRIX</div>
 
   <div id="control-panel">
-    <h2><i class="fa-solid fa-pen-to-square"></i> LOG MATRIX</h2>
+    <h2><i class="fa-solid fa-satellite-dish"></i> LOG MATRIX</h2>
     
     <div class="input-group">
       <label>📅 日付</label>
@@ -39,14 +39,46 @@
     </div>
 
     <div class="input-group">
-      <label>📝 出来事メモ</label>
-      <textarea id="input-event" rows="3" placeholder="今日起きた出来事や感情を記録..."></textarea>
+      <label>🎨 カラーシステムモード</label>
+      <select id="color-mode">
+        <option value="auto" selected>満足度連動 (自動カラー)</option>
+        <option value="white">ホワイト統一 (ミニマル)</option>
+        <option value="manual">カスタム手動 (個別カラー指定)</option>
+      </select>
     </div>
 
-    <button id="add-btn"><i class="fa-solid fa-plus"></i> 3D空間にプロット</button>
+    <div class="input-group" id="picker-group" style="display: none;">
+      <label>🖌️ プロットカラー選択</label>
+      <input type="color" id="input-picker-color" value="#00d2ff">
+    </div>
+
+    <div class="input-group">
+      <label>📝 出来事メモ</label>
+      <textarea id="input-event" rows="2" placeholder="今日起きた出来事や感情を記録..."></textarea>
+    </div>
+
+    <button id="add-btn" class="matrix-btn"><i class="fa-solid fa-plus"></i> 3D空間にプロット</button>
+
+    <div class="section-divider"></div>
+    <h2><i class="fa-solid fa-terminal"></i> TELEPORT CONSOLE</h2>
+    <div class="input-group">
+      <label>⌨️ TPコマンド入力</label>
+      <input type="text" id="tp-command-input" placeholder="例: /tp 2026.06.02 または /tp -150" style="font-family: 'Share Tech Mono', monospace;">
+    </div>
+    <div id="tp-status-msg"></div>
   </div>
 
-  <div id="guide-ui">Z軸上のポイントをタップすると、その日のY軸（密度）が立ち上がります。ドラッグで3D回転。</div>
+  <div id="timeline-scrollbar-container">
+    <div class="scrollbar-label"><i class="fa-solid fa-timeline"></i> TIMELINE NAVIGATOR (Z-AXIS)</div>
+    <input type="range" id="timeline-slider" min="-1000" max="1000" value="25">
+    <div class="scrollbar-coords">
+      <span id="coord-past">PAST (Z: +1000)</span>
+      <span id="coord-current">CURRENT CAMERA Z: <span id="cam-z-val">25.0</span></span>
+      <span id="coord-future">FUTURE (Z: -1000)</span>
+    </div>
+  </div>
+
+  <div id="guide-ui">画面下のバーをスライドするか、/tp コマンドで無限の時間軸を高速移動できます。</div>
 
   <div id="canvas-container"></div>
 
