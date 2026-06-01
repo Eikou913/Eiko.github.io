@@ -2,9 +2,9 @@
 const container = document.getElementById('canvas-container');
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x050608);
-scene.fog = new THREE.FogExp2(0x050608, 0.012);
+scene.fog = new THREE.FogExp2(0x050608, 0.015);
 
-const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.set(12, 10, 25);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -17,189 +17,189 @@ controls.enableDamping = true;
 controls.dampingFactor = 0.05;
 controls.target.set(0, 1, 0);
 
-controls.maxDistance = 1000;
-controls.minDistance = 1;
-
-// ライト設定
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
-scene.add(ambientLight);
-const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
-dirLight.position.set(15, 25, 15);
-scene.add(dirLight);
-
-// --- 2. データの脳みそ（マスターデータバンク） ---
+// --- 2. データの脳みそ（マスターデータ） ---
 const masterLifeRecords = [
-    { id: 1, x_sat: 20, y_density: 1, date: "2024.04.12", events: ["プログラミングのエラーが解けず一日が終わる。密度は薄い。"] },
-    { id: 2, x_sat: 85, y_density: 2, date: "2025.08.19", events: ["京都の一人旅。予定していなかった隠れ家的なカフェを発見。"] },
-    { id: 3, x_sat: 95, y_density: 3, date: "2026.06.02", events: ["新しい3Dライフログアプリの神UIロジックをひらめく！脳汁限界突破。"] },
-    { id: 4, x_sat: 55, y_density: 1, date: "2030.12.25", events: ["【遥か未来】未来のクリスマス。自作アプリが世界中で稼働中。"] }
+    { id: 1, x_sat: 20, y_density: 1, date: "2026.04.12", events: ["低迷期。プログラミングのエラーが解けず一日が終わる。"] },
+    { id: 2, x_sat: 85, y_density: 2, date: "2026.05.19", events: ["京都の一人旅。予定していなかった隠れ家的なカフェを発見。"] },
+    { id: 3, x_sat: 95, y_density: 3, date: "2026.06.02", events: ["3Dライフログアプリのビルドシステムをひらめく！脳汁限界突破。"] },
+    { id: 4, x_sat: 60, y_density: 1, date: "2026.07.10", events: ["未来ログ。自分のタイムライン数直線がどんどん伸びていく。"] }
 ];
 
-// 日付文字列から無限のZ座標を弾き出す高精度計算機
+// 💡 タイムラインの「時間的な起点（Z=0の位置）」を、登録データの中の【最古の日付】に自動決定する知能
+function getBaseDate() {
+    if (masterLifeRecords.length === 0) return new Date(2026, 5, 2);
+    const dates = masterLifeRecords.map(r => {
+        const p = r.date.split('.');
+        return new Date(parseInt(p[0]), parseInt(p[1]) - 1, p[2] ? parseInt(p[2]) : 1);
+    });
+    return new Date(Math.min(...dates)); // 最古の日付を返す
+}
+
+// 💡 【超重要】1マスあたりの時間スケール（倍率倍数）を算出する関数
+// 1マスの幅を3ユニットとした時の、1日あたりのZ軸移動量を計算
+function getScaleMultiplier() {
+    const scaleMode = document.getElementById('timeline-scale').value;
+    if (scaleMode === 'week')  return 3.0 / 7.0;  // 1週間（7日）＝3ユニット
+    if (scaleMode === 'month') return 3.0 / 30.0; // 1ヶ月（30日）＝3ユニット
+    return 3.0;                                   // 1日＝3ユニット（デフォルト）
+}
+
+// 日付文字列から、カスタムスケールを適用した正確なZ座標を弾き出す計算機
 function mapDateToZ(dateStr) {
     const parts = dateStr.split('.');
     const year = parseInt(parts[0]);
-    const month = parts[1] ? parseInt(parts[1]) : 1;
+    const month = parseInt(parts[1]);
     const day = parts[2] ? parseInt(parts[2]) : 1;
     
-    if (isNaN(year)) return camera.position.z - 10; // 文字ラベルは目の前に
+    if (isNaN(year)) return camera.position.z - 10;
     
-    const baseDate = new Date(2024, 0, 1);
+    const baseDate = getBaseDate();
     const targetDate = new Date(year, month - 1, day);
     const diffDays = (targetDate - baseDate) / (1000 * 60 * 60 * 24);
     
-    return 30 - (diffDays / 365) * 20; // 1年で20ユニット進む
+    // 起点から未来に行くほど、Z軸のマイナス（奥）へ進む
+    return -diffDays * getScaleMultiplier();
 }
 
 function mapSatisfactionToX(sat) { return ((sat / 100) * 16) - 8; }
-// 満足度に応じたカラーコード
 function getColorBySatisfaction(sat) {
     if (sat >= 80) return 0x2ed573;
     if (sat >= 40) return 0xffa500;
     return 0xff4757;
 }
 
-// --- 3. クッキリテキスト（1024px超高解像度テクスチャ）生成システム ---
+// --- 3. クッキリテキスト（1024px超高解像度テクスチャ）システム ---
 const textureCache = new Map();
 function createDateLabel(text, customColorHex = 0x00d2ff) {
     const cacheKey = `${text}_${customColorHex}`;
     if (textureCache.has(cacheKey)) return textureCache.get(cacheKey).clone();
 
     const canvas = document.createElement('canvas');
-    canvas.width = 1024; 
-    canvas.height = 256;
+    canvas.width = 1024; canvas.height = 256;
     const ctx = canvas.getContext('2d');
-    ctx.fillStyle = 'rgba(0,0,0,0)';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.fillStyle = 'rgba(0,0,0,0)'; ctx.fillRect(0, 0, canvas.width, canvas.height);
     
-    ctx.font = 'Bold 84px "Helvetica Neue", Arial, sans-serif';
-    // カラーコードをCSSの文字列に変換
+    ctx.font = 'Bold 80px "Helvetica Neue", Arial, sans-serif';
     const colorStr = `#${customColorHex.toString(16).padStart(6, '0')}`;
-    ctx.fillStyle = colorStr;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.shadowColor = colorStr;
-    ctx.shadowBlur = 20;
+    ctx.fillStyle = colorStr; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    ctx.shadowColor = colorStr; ctx.shadowBlur = 20;
     ctx.fillText(text, canvas.width / 2, canvas.height / 2);
 
     const texture = new THREE.CanvasTexture(canvas);
     texture.minFilter = THREE.LinearMipmapLinearFilter;
-    
     const spriteMat = new THREE.SpriteMaterial({ map: texture, transparent: true });
     const sprite = new THREE.Sprite(spriteMat);
     sprite.scale.set(3.5, 0.875, 1);
-    
     textureCache.set(cacheKey, sprite);
     return sprite;
 }
 
-// --- 4. マインクラフト式・データ連動チャンク管理システム ---
+// --- 4. 【核心】人生の長さだけ線が伸びる「タイムライン・ビルディング」システム ---
 const activeObjectsMap = new Map(); 
 const clickableObjects = [];        
 
 const sphereGeometry = new THREE.SphereGeometry(0.4, 32, 32);
-// 点の真下のZ軸上に配置する「専用目盛り（光るネオンリング）」の形状定義
 const spotTickGeom = new THREE.TorusGeometry(0.2, 0.04, 8, 24).rotateX(Math.PI / 2);
-
 const baseBeamMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0, blending: THREE.AdditiveBlending });
 
 function updateDynamicViewportChunks() {
-    const camZ = camera.position.z;
-    const visibleRange = 150; // 描画距離
-    
-    const minZ = camZ - visibleRange;
-    const maxZ = camZ + visibleRange;
-
     const currentKeys = new Set();
+    
+    if (masterLifeRecords.length === 0) return;
 
-    // ── ① 無限の数直線本体（カメラ追従） ──
-    let infiniteLine = activeObjectsMap.get("infinite_line");
-    if (!infiniteLine) {
-        const lineGeom = new THREE.CylinderGeometry(0.04, 0.04, 600, 32).rotateX(Math.PI / 2);
-        const lineMat = new THREE.MeshStandardMaterial({ color: 0x555555, roughness: 0.5 }); // 線自体はシックな金属製に
-        infiniteLine = new THREE.Mesh(lineGeom, lineMat);
-        scene.add(infiniteLine);
-        activeObjectsMap.set("infinite_line", infiniteLine);
-    }
-    infiniteLine.position.z = camZ;
-    currentKeys.add("infinite_line");
+    // ── ① 【革命】データが存在する範囲（最古〜最新）の分だけ数直線をジャスト生成 ──
+    const zPositions = masterLifeRecords.map(r => mapDateToZ(r.date));
+    const maxZ = Math.max(...zPositions); // 数値的に大きい＝過去（手前）
+    const minZ = Math.min(...zPositions); // 数値的に小さい＝未来（奥）
 
-    // ── ② 【重要】無差別目盛りを廃止し、データがある位置のみに目盛りと日付を動的錬成 ──
+    let timelineLine = activeObjectsMap.get("built_line");
+    if (timelineLine) scene.remove(timelineLine); // スケール変更に対応するため毎回再生成
+
+    const lineLength = Math.abs(maxZ - minZ) + 10; // 前後に少しマージンを足す
+    const lineCenterZ = (maxZ + minZ) / 2;
+
+    const lineGeom = new THREE.CylinderGeometry(0.05, 0.05, lineLength, 32).rotateX(Math.PI / 2);
+    const lineMat = new THREE.MeshStandardMaterial({ 
+        color: 0x00d2ff, 
+        emissive: 0x00a8ff, 
+        emissiveIntensity: 0.1,
+        roughness: 0.2 
+    });
+    timelineLine = new THREE.Mesh(lineGeom, lineMat);
+    timelineLine.position.set(0, 0, lineCenterZ);
+    scene.add(timelineLine);
+    activeObjectsMap.set("built_line", timelineLine);
+    currentKeys.add("built_line");
+
+    // ── ② データがある位置だけにピンポイントで目盛りリングと日付テキストを設置 ──
     masterLifeRecords.forEach(data => {
         const tZ = mapDateToZ(data.date);
+        const nodeKey = `node_${data.id}`;
+        currentKeys.add(nodeKey);
         
-        // カメラの視界内に入っている時だけ3D化
-        if (tZ >= minZ && tZ <= maxZ) {
-            const nodeKey = `node_${data.id}`;
-            currentKeys.add(nodeKey);
+        if (!activeObjectsMap.has(nodeKey)) {
+            const group = new THREE.Group();
+            const xPos = mapSatisfactionToX(data.x_sat);
+            const mode = document.getElementById('color-mode').value;
+            const pickerColor = document.getElementById('input-picker-color').value;
             
-            if (!activeObjectsMap.has(nodeKey)) {
-                const group = new THREE.Group(); // 1つのデータに関連するオブジェクトをまとめるグループ
-                
-                const xPos = mapSatisfactionToX(data.x_sat);
-                const mode = document.getElementById('color-mode').value;
-                const pickerColor = document.getElementById('input-picker-color').value;
-                
-                let origColor = getColorBySatisfaction(data.x_sat);
-                if (mode === 'manual') origColor = parseInt(pickerColor.replace('#', '0x'));
-                let displayColor = mode === 'white' ? 0xffffff : origColor;
+            let origColor = getColorBySatisfaction(data.x_sat);
+            if (mode === 'manual') origColor = parseInt(pickerColor.replace('#', '0x'));
+            let displayColor = mode === 'white' ? 0xffffff : origColor;
 
-                // 1. 球体（満足度・密度プロット）
-                const mat = new THREE.MeshStandardMaterial({ color: displayColor, emissive: displayColor, emissiveIntensity: 0.4, roughness: 0.1 });
-                const sphere = new THREE.Mesh(sphereGeometry, mat);
-                sphere.position.set(xPos, data.y_density * 1.5, tZ); // Y軸（密度）の高さに浮かせます
-                group.add(sphere);
+            // 1. 球体
+            const mat = new THREE.MeshStandardMaterial({ color: displayColor, emissive: displayColor, emissiveIntensity: 0.4, roughness: 0.1 });
+            const sphere = new THREE.Mesh(sphereGeometry, mat);
+            sphere.position.set(xPos, data.y_density * 1.5, tZ);
+            group.add(sphere);
 
-                // 2. Y軸の光の柱
-                const beamHeight = data.y_density * 1.5; 
-                const beamGeom = new THREE.CylinderGeometry(0.02, 0.02, beamHeight, 16).translate(0, beamHeight / 2, 0);
-                const yBeam = new THREE.Mesh(beamGeom, baseBeamMat.clone());
-                yBeam.position.set(xPos, 0, tZ);
-                yBeam.scale.y = 0.001; 
-                group.add(yBeam);
+            // 2. Y軸光の柱
+            const beamHeight = data.y_density * 1.5; 
+            const beamGeom = new THREE.CylinderGeometry(0.02, 0.02, beamHeight, 16).translate(0, beamHeight / 2, 0);
+            const yBeam = new THREE.Mesh(beamGeom, baseBeamMat.clone());
+            yBeam.position.set(xPos, 0, tZ); yBeam.scale.y = 0.001; 
+            group.add(yBeam);
 
-                // 3. レーザー補助線（Z軸上の目盛りから球体の真下までを水平に結ぶ）
-                const linePoints = [new THREE.Vector3(0, 0, tZ), new THREE.Vector3(xPos, 0, tZ)];
-                const lineGeom = new THREE.BufferGeometry().setFromPoints(linePoints);
-                const lineMat = new THREE.LineBasicMaterial({ color: displayColor, transparent: true, opacity: 0.4 });
-                const guideLine = new THREE.Line(lineGeom, lineMat);
-                group.add(guideLine);
+            // 3. レーザー補助線
+            const linePoints = [new THREE.Vector3(0, 0, tZ), new THREE.Vector3(xPos, 0, tZ)];
+            const lineGeom = new THREE.BufferGeometry().setFromPoints(linePoints);
+            const lineMat = new THREE.LineBasicMaterial({ color: displayColor, transparent: true, opacity: 0.4 });
+            group.add(new THREE.Line(lineGeom, lineMat));
 
-                // 4. 📌【ご要望】Z軸上のジャスト位置に配置する「専用目盛り（リング）」
-                const tickMat = new THREE.MeshBasicMaterial({ color: displayColor });
-                const spotTick = new THREE.Mesh(spotTickGeom, tickMat);
-                spotTick.position.set(0, 0, tZ);
-                group.add(spotTick);
+            // 4. 専用目盛り（ネオンリング）
+            const spotTick = new THREE.Mesh(spotTickGeom, new THREE.MeshBasicMaterial({ color: displayColor }));
+            spotTick.position.set(0, 0, tZ);
+            group.add(spotTick);
 
-                // 5. 📌【ご要望】目盛りの真上（Y: 0.8）に浮かび上がる「超クッキリ日付テキスト」
-                const dateLabel = createDateLabel(data.date, displayColor);
-                dateLabel.position.set(0, 0.8, tZ);
-                group.add(dateLabel);
+            // 5. 目盛りの上のクッキリ日付文字
+            const dateLabel = createDateLabel(data.date, displayColor);
+            dateLabel.position.set(0, 0.8, tZ);
+            group.add(dateLabel);
 
-                // タップ判定のために球体側にデータを紐づけて保管
-                sphere.userData = { id: data.id, x_sat: data.x_sat, y_density: data.y_density, date: data.date, events: data.events, myColor: origColor, beam: yBeam, line: guideLine };
-                clickableObjects.push(sphere);
+            sphere.userData = { id: data.id, x_sat: data.x_sat, y_density: data.y_density, date: data.date, events: data.events, myColor: origColor, beam: yBeam };
+            clickableObjects.push(sphere);
 
-                scene.add(group);
-                activeObjectsMap.set(nodeKey, group);
-            }
+            scene.add(group);
+            activeObjectsMap.set(nodeKey, group);
         }
     });
 
-    // ── 🗑️ ③ 画面外に去った過去のデータを完全破壊（メモリ解放） ──
+    // ── 🗑️ ③ 削除されたノード等のクリーンアップ ──
     for (let [key, obj] of activeObjectsMap.entries()) {
         if (!currentKeys.has(key)) {
-            scene.remove(obj);
-            activeObjectsMap.delete(key);
-            
-            // タップ判定アレイからもグループ内の球体を確実に消去
+            scene.remove(obj); activeObjectsMap.delete(key);
             if (key.startsWith("node_")) {
-                const sphereMesh = obj.children[0];
-                const clickIdx = clickableObjects.indexOf(sphereMesh);
+                const clickIdx = clickableObjects.indexOf(obj.children[0]);
                 if (clickIdx > -1) clickableObjects.splice(clickIdx, 1);
             }
         }
     }
+
+    // ── ⚙️ ④ 横スクロールバー（Slider）の限界値をデータの長さに自動アジャスト ──
+    // スプレッドシートのスクロール領域が、データに応じて自動で広がる極上UX
+    const buffer = 40;
+    timelineSlider.min = Math.floor(minZ - buffer);
+    timelineSlider.max = Math.ceil(maxZ + buffer);
 }
 
 // --- 5. 次元ワープ（カメラの滑らかな高速移動）システム ---
@@ -208,95 +208,91 @@ let targetCameraZ = 0;
 let targetControlsTargetZ = 0;
 
 function warpToZCoordinate(zPos) {
-    targetCameraZ = zPos + 25;        // カメラ引き位置
-    targetControlsTargetZ = zPos;     // 注視対象位置
+    targetCameraZ = zPos + 25;
+    targetControlsTargetZ = zPos;
     isWarping = true;
     closeNote();
 }
 
-// --- 6. 【新機能】タイムラインシークバー ＆ /tpコマンド連動システム ---
+// --- 6. スライダー ＆ スケール ＆ /tpコマンド連動システム ---
 const timelineSlider = document.getElementById('timeline-slider');
 const camZValText = document.getElementById('cam-z-val');
 const tpInput = document.getElementById('tp-command-input');
 const tpStatusMsg = document.getElementById('tp-status-msg');
+const timelineScaleSelect = document.getElementById('timeline-scale');
 
-// A. 画面下のバーをスライドした時、カメラのZ軸をマニアックにダイレクト移動
+// A. 横シークバーのドラッグ移動
 timelineSlider.addEventListener('input', () => {
-    if (isWarping) isWarping = false; // 手動操作を最優先
+    if (isWarping) isWarping = false;
     const val = parseFloat(timelineSlider.value);
-    
     camera.position.z = val + 25;
     controls.target.z = val;
     camZValText.textContent = val.toFixed(1);
 });
 
-// B. 📟 マインクラフト完全準拠のテレポートコマンド判定エンジン
+// B. 📐 スケール（1マス＝1日/1週間/1ヶ月）が切り替わったときのリアルタイム空間伸縮処理
+timelineScaleSelect.addEventListener('change', () => {
+    // 一度すべての3Dオブジェクトを強制解体して、新スケールで再ビルドをかける
+    for(let [key, obj] of activeObjectsMap.entries()) { scene.remove(obj); }
+    activeObjectsMap.clear();
+    clickableObjects.length = 0;
+    
+    updateDynamicViewportChunks();
+    // 起点（最古のデータ位置）へカメラを優しく戻す
+    warpToZCoordinate(mapDateToZ(masterLifeRecords[0].date));
+});
+
+// C. 📟 /tp コマンド解析エンジン
 tpInput.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') {
-        const cmd = tpInput.value.trim();
-        if (!cmd) return;
-
-        // コマンド解析の正規表現（/tp [引数]）
-        const tpRegex = /^\/tp\s+(.+)$/;
-        const match = cmd.match(tpRegex);
+        const cmd = tpInput.value.trim(); if (!cmd) return;
+        const match = cmd.match(/^\/tp\s+(.+)$/);
 
         if (match) {
-            const argument = match[1];
-            
-            // 数値（直接Z座標指定）か、日付（YYYY.MM.DD形式）かを自動判定
-            if (!isNaN(argument)) {
-                // 例: /tp -150
-                const targetZ = parseFloat(argument);
+            const arg = match[1];
+            if (!isNaN(arg)) {
                 tpStatusMsg.style.color = "#2ed573";
-                tpStatusMsg.textContent = `[System] ${argument} の座標座標へテレポートします`;
-                warpToZCoordinate(targetZ);
+                tpStatusMsg.textContent = `[System] 座標 ${arg} へテレポートします`;
+                warpToZCoordinate(parseFloat(arg));
             } else {
-                // 例: /tp 2025.08.19
-                const targetZ = mapDateToZ(argument);
+                const targetZ = mapDateToZ(arg);
                 tpStatusMsg.style.color = "#2ed573";
-                tpStatusMsg.textContent = `[System] 日付 ${argument} の座標（Z: ${targetZ.toFixed(1)}）へテレポートします`;
+                tpStatusMsg.textContent = `[System] ${arg}（Z: ${targetZ.toFixed(1)}）へテレポートします`;
                 warpToZCoordinate(targetZ);
             }
         } else {
             tpStatusMsg.style.color = "#ff4757";
-            tpStatusMsg.textContent = `Unknown command. 使用例: /tp 2026.06.02 または /tp -50`;
+            tpStatusMsg.textContent = `Unknown command. 例: /tp 2026.06.02`;
         }
-        tpInput.value = ""; // 入力欄をクリア
+        tpInput.value = "";
     }
 });
 
-
-// --- 7. コントロールパネルの既存イベント ---
-const colorModeSelect = document.getElementById('color-mode');
-const pickerGroup = document.getElementById('picker-group');
-const addBtn = document.getElementById('add-btn');
-
-addBtn.addEventListener('click', () => {
+// 新しい記録のプロット
+document.getElementById('add-btn').addEventListener('click', () => {
     const date = document.getElementById('input-date').value;
     const sat = parseInt(document.getElementById('input-sat').value);
     const density = parseInt(document.getElementById('input-density').value);
     const eventText = document.getElementById('input-event').value || "（イベント記載なし）";
     if(!date) { alert("日付を入力してください！"); return; }
 
-    const newRecord = { id: Date.now(), x_sat: sat, y_density: density, date: date, events: [eventText] };
-    masterLifeRecords.push(newRecord);
+    masterLifeRecords.push({ id: Date.now(), x_sat: sat, y_density: density, date: date, events: [eventText] });
     
-    // プロットした瞬間、その日付のZ座標へ自動ワープ
+    // プロットした瞬間、その新しい座標を反映して線が自動で「ギュンッ」と伸びる！
+    for(let [key, obj] of activeObjectsMap.entries()) { scene.remove(obj); } activeObjectsMap.clear(); clickableObjects.length = 0;
+    updateDynamicViewportChunks();
+    
     warpToZCoordinate(mapDateToZ(date));
     document.getElementById('input-event').value = "";
 });
 
-colorModeSelect.addEventListener('change', () => {
-    pickerGroup.style.display = colorModeSelect.value === 'manual' ? 'block' : 'none';
-    // 宇宙を一度まっさらにして再描画
-    for(let [key, obj] of activeObjectsMap.entries()) {
-        if(key.startsWith("node_")) { scene.remove(obj); activeObjectsMap.delete(key); }
-    }
-    clickableObjects.length = 0;
-    updateDynamicViewportChunks();
+document.getElementById('color-mode').addEventListener('change', () => {
+    document.getElementById('picker-group').style.display = document.getElementById('color-mode').value === 'manual' ? 'block' : 'none';
+    for(let [key, obj] of activeObjectsMap.entries()) { if(key.startsWith("node_")) { scene.remove(obj); activeObjectsMap.delete(key); } }
+    clickableObjects.length = 0; updateDynamicViewportChunks();
 });
 
-// --- 8. タップイベントと付箋UIの制御 ---
+// --- 7. タップイベントと付箋UIの制御 ---
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 const stickyNote = document.getElementById('sticky-note');
@@ -332,16 +328,14 @@ function onPointerDown(event) {
 function resetActiveEffects() {
     clickableObjects.forEach(obj => {
         if (obj.userData.beam) {
-            obj.userData.beam.scale.y = 0.001;
-            obj.userData.beam.material.opacity = 0;
-            obj.userData.beam.userData.isExpanding = false;
+            obj.userData.beam.scale.y = 0.001; obj.userData.beam.material.opacity = 0; obj.userData.beam.userData.isExpanding = false;
         }
     });
 }
 
+// 付箋UIの位置同期
 function updateNotePosition() {
     if (!activeSphere || stickyNote.style.display === 'none') return;
-    const data = activeSphere.userData;
     const targetPosition = new THREE.Vector3();
     activeSphere.getWorldPosition(targetPosition);
     targetPosition.y += 0.5; 
@@ -351,46 +345,35 @@ function updateNotePosition() {
 }
 
 function closeNote() {
-    stickyNote.classList.remove('active');
-    setTimeout(() => { stickyNote.style.display = 'none'; }, 300);
-    resetActiveEffects();
-    activeSphere = null;
+    stickyNote.classList.remove('active'); setTimeout(() => { stickyNote.style.display = 'none'; }, 300);
+    resetActiveEffects(); activeSphere = null;
 }
 
 window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight);
 });
 
-// --- 9. アニメーションループ ---
+// --- 8. アニメーションループ ---
 function animate() {
     requestAnimationFrame(animate);
     
-    // 滑らかなワープ（カメラの自動移動）
     if (isWarping) {
         camera.position.z += (targetCameraZ - camera.position.z) * 0.08;
         controls.target.z += (targetControlsTargetZ - controls.target.z) * 0.08;
-        
-        // シークバーの値もワープ中のカメラとリアルタイム同期
         timelineSlider.value = camera.position.z - 25;
         camZValText.textContent = (camera.position.z - 25).toFixed(1);
 
         if (Math.abs(camera.position.z - targetCameraZ) < 0.1) {
-            camera.position.z = targetCameraZ;
-            controls.target.z = targetControlsTargetZ;
-            isWarping = false;
+            camera.position.z = targetCameraZ; controls.target.set(0, 1, targetControlsTargetZ); isWarping = false;
         }
     } else {
-        // マウスの通常ドラッグ時も、カメラの現在地を常にシークバーに数値フィードバック
         timelineSlider.value = camera.position.z - 25;
         camZValText.textContent = (camera.position.z - 25).toFixed(1);
     }
 
     controls.update();
-    updateDynamicViewportChunks(); // 常にチャンクの描画・更新
+    updateDynamicViewportChunks();
 
-    // 球体の自転とビーム
     clickableObjects.forEach(obj => {
         obj.rotation.y += 0.01;
         if (obj.userData.beam && obj.userData.beam.userData.isExpanding && obj.userData.beam.scale.y < 1) {
@@ -401,4 +384,6 @@ function animate() {
     updateNotePosition();
     renderer.render(scene, camera);
 }
+// 宇宙創生
+updateDynamicViewportChunks();
 animate();

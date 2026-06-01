@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>3D Life Timeline - Quantum Stream</title>
+  <title>3D Life Timeline - Creator Matrix</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,9 +13,20 @@
 </head>
 <body>
 
-  <div id="title-ui">3D TIMELINE MATRIX</div>
+  <div id="title-ui">3D TIMELINE BUILDER</div>
 
   <div id="control-panel">
+    <h2><i class="fa-solid fa-compass-drafting"></i> TIMELINE SCALE</h2>
+    <div class="input-group">
+      <label>📏 数直線の1マス（グリッド）の単位</label>
+      <select id="timeline-scale">
+        <option value="day" selected>1日 = 1マス (詳細日記モード)</option>
+        <option value="week">1週間 = 1マス (週刊ライフログ)</option>
+        <option value="month">1ヶ月 = 1マス (長期年表モード)</option>
+      </select>
+    </div>
+
+    <div class="section-divider"></div>
     <h2><i class="fa-solid fa-satellite-dish"></i> LOG MATRIX</h2>
     
     <div class="input-group">
@@ -63,22 +74,22 @@
     <h2><i class="fa-solid fa-terminal"></i> TELEPORT CONSOLE</h2>
     <div class="input-group">
       <label>⌨️ TPコマンド入力</label>
-      <input type="text" id="tp-command-input" placeholder="例: /tp 2026.06.02 または /tp -150" style="font-family: 'Share Tech Mono', monospace;">
+      <input type="text" id="tp-command-input" placeholder="例: /tp 2026.06.02" style="font-family: 'Share Tech Mono', monospace;">
     </div>
     <div id="tp-status-msg"></div>
   </div>
 
   <div id="timeline-scrollbar-container">
     <div class="scrollbar-label"><i class="fa-solid fa-timeline"></i> TIMELINE NAVIGATOR (Z-AXIS)</div>
-    <input type="range" id="timeline-slider" min="-1000" max="1000" value="25">
+    <input type="range" id="timeline-slider" min="-300" max="300" value="0">
     <div class="scrollbar-coords">
-      <span id="coord-past">PAST (Z: +1000)</span>
-      <span id="coord-current">CURRENT CAMERA Z: <span id="cam-z-val">25.0</span></span>
-      <span id="coord-future">FUTURE (Z: -1000)</span>
+      <span id="coord-past">PAST</span>
+      <span id="coord-current">CURRENT CAMERA Z: <span id="cam-z-val">0.0</span></span>
+      <span id="coord-future">FUTURE</span>
     </div>
   </div>
 
-  <div id="guide-ui">画面下のバーをスライドするか、/tp コマンドで無限の時間軸を高速移動できます。</div>
+  <div id="guide-ui">記録を入力すると、その期間の分だけ3D数直線が自動で生成されて伸びていきます。</div>
 
   <div id="canvas-container"></div>
 

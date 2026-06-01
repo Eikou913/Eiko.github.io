@@ -46,14 +46,14 @@ body {
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(0, 210, 255, 0.2);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-  max-height: 75vh;
+  max-height: 80vh;
   overflow-y: auto;
 }
 #control-panel::-webkit-scrollbar { width: 0; }
 
 #control-panel h2 {
   font-family: 'Orbitron', sans-serif;
-  font-size: 14px;
+  font-size: 13px;
   margin-top: 0;
   margin-bottom: 12px;
   color: #00d2ff;
@@ -98,7 +98,6 @@ body {
   border-color: #00d2ff;
 }
 
-/* コマンドステータス文字 */
 #tp-status-msg {
   font-family: 'Share Tech Mono', monospace;
   font-size: 11px;
@@ -147,10 +146,9 @@ body {
   box-shadow: 0 6px 20px rgba(0, 210, 255, 0.5);
 }
 
-/* ⏳ 新設：スプレッドシート風下部タイムラインシークバー */
 #timeline-scrollbar-container {
   position: absolute;
-  bottom: 60px;
+  bottom: 45px;
   left: 50%;
   transform: translateX(-50%);
   width: 60vw;
@@ -182,7 +180,6 @@ body {
   border-radius: 3px;
   outline: none;
 }
-/* スライダーのつまみ（サイバーネオン仕様） */
 #timeline-slider::-webkit-slider-thumb {
   -webkit-appearance: none;
   width: 30px;
@@ -191,10 +188,6 @@ body {
   background: #00d2ff;
   box-shadow: 0 0 10px #00a8ff;
   cursor: pointer;
-  transition: background 0.2s;
-}
-#timeline-slider::-webkit-slider-thumb:hover {
-  background: #00f2fe;
 }
 
 .scrollbar-coords {
@@ -205,24 +198,20 @@ body {
   color: rgba(255, 255, 255, 0.4);
   margin-top: 6px;
 }
-#cam-z-val {
-  color: #00d2ff;
-  font-weight: bold;
-}
+#cam-z-val { color: #00d2ff; font-weight: bold; }
 
 #guide-ui {
   position: absolute;
-  bottom: 15px;
+  bottom: 12px;
   left: 50%;
   transform: translateX(-50%);
   color: rgba(255, 255, 255, 0.4);
-  font-size: 11px;
+  font-size: 10px;
   pointer-events: none;
   text-align: center;
   z-index: 5;
 }
 
-/* 付箋UI */
 #sticky-note {
   position: absolute;
   display: none;
@@ -253,3 +242,73 @@ body {
 .event-item { margin-bottom: 8px; padding-bottom: 8px; border-bottom: 1px dashed rgba(0,0,0,0.1); }
 .close-btn { position: absolute; top: 5px; right: 10px; cursor: pointer; font-weight: bold; color: #999; font-size: 18px; }
 .close-btn:hover { color: #000; }
+
+/* ===================================================
+   📱 スマートフォン表示 (画面横幅 768px 以下) の最適化
+   =================================================== */
+@media (max-width: 768px) {
+  /* 👑 タイトルをスマホ用に少し小さく */
+  #title-ui {
+    font-size: 18px;
+    top: 15px;
+    letter-spacing: 3px;
+  }
+
+  /* 🛠️ コントロールパネルを画面下部に「ドック（引き出し）」として固定 */
+  #control-panel {
+    top: auto !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    max-height: 35vh !important; /* 画面の下側35%の高さに制限 */
+    
+    border-radius: 20px 20px 0 0 !important; /* 上の角だけ丸く */
+    border-left: none !important;
+    border-right: none !important;
+    border-bottom: none !important;
+    
+    padding: 16px !important;
+    box-sizing: border-box !important;
+    background: rgba(10, 15, 25, 0.8) !important; /* スマホで見やすいよう少し濃く */
+  }
+
+  /* パネル内の見出しの隙間を狭くしてコンパクトに */
+  #control-panel h2 {
+    font-size: 13px;
+    margin-bottom: 8px;
+  }
+  .input-group {
+    margin-bottom: 8px;
+  }
+  .section-divider {
+    margin: 10px 0;
+  }
+
+  /* ⏳ タイムラインスクロールバーをコントロールパネルの「すぐ上」にフロート配置 */
+  #timeline-scrollbar-container {
+    bottom: calc(35vh + 15px) !important; /* パネルの高さ(35vh) ＋ 15px の位置に自動計算 */
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    width: 90vw !important; /* スマホの画面幅いっぱいに広げる */
+    min-width: 0 !important;
+    padding: 8px 16px !important;
+  }
+
+  .scrollbar-label {
+    font-size: 10px;
+    margin-bottom: 4px;
+  }
+  .scrollbar-coords {
+    font-size: 9px;
+  }
+
+  /* 🧭 操作ガイドの文字を極小にして上部に退避 */
+  #guide-ui {
+    bottom: auto !important;
+    top: 50px !important;
+    font-size: 9px !important;
+    width: 85vw !important;
+    padding: 4px 10px !important;
+    background: rgba(0,0,0,0.5);
+  }
+}
