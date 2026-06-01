@@ -1,0 +1,67 @@
+@charset "UTF-8";
+
+/* 📦 ①親の箱：曲のボタン自体を「上から下に縦1列」に1列の表として積む */
+.song-list {
+  display: grid !important;
+  grid-template-columns: 1fr !important; /* 💡 絶対に1列！これで2列になるバグが完全に消滅します */
+  gap: 12px !important;                 /* ボタン同士の上下のすき間 */
+  max-width: 460px;                     /* スマホで見やすいスマートな横幅 */
+  margin: 15px auto !important;         /* 上下に余白を作り、H1タグを力強く押し返して重なりを防ぐ */
+  padding: 0 16px;
+}
+
+/* 🎵 ②曲のボタン：ボタンの内側だけを「画像 ➔ 曲名」の横並び（2列）にする */
+.songall {
+  display: grid !important;
+  /* 💡 左側に40pxの固定枠（画像用）、右側に残りすべての幅（1fr）の文字。これで中身が完璧に横に並びます */
+  grid-template-columns: 40px 1fr !important; 
+  align-items: center !important;       /* 縦方向の真ん中を揃える */
+  gap: 16px !important;                 /* 画像と文字の間のすき間 */
+  
+  height: 60px;
+  padding: 0 14px;
+  text-decoration: none;
+  
+  /* ✨ 背景デザイン */
+  background-color: rgba(255, 255, 255, 0.4) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  color: #2b2b2b !important;
+  font-weight: bold;
+  
+  transition: all 0.2s ease;
+}
+
+/* 🖼️ ジャケットアイコン（グレーの四角） */
+.jacket-icon {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #555555;
+}
+
+/* 📝 曲名テキスト */
+.song-title {
+  font-size: 14px;
+  text-align: left;
+  white-space: nowrap;      
+  overflow: hidden;         
+  text-overflow: ellipsis;  /* 長すぎる曲名は自動で「…」にして枠に収める */
+}
+
+/* 🖱️ 触れたとき（ホバー）のエフェクト */
+.songall:hover {
+  background-color: #353535;
+  color: #ffffff !important;
+  transform: translateX(6px); /* 右にスッ…と動く */
+}
+.songall:hover .jacket-icon {
+  color: #ffffff;
+}
