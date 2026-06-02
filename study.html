@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>えいこう王国 - Study</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;900&display=swap" rel="stylesheet">
+  
+  <style>
+    /* --- 遊園地風カラーパレット --- */
+    :root {
+      --bg-color: #fff4d2;
+      --text-main: #2b2b2b;
+      --color-red: #ff5e5e;
+      --color-blue: #4db8ff;
+      --color-yellow: #ffcf33;
+      --color-green: #3ade82;
+      --color-purple: #b37bf0;
+      --color-pink: #ff85c6;
+      --color-orange: #ffa447;
+      --border-thick: 4px solid #2b2b2b;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-color);
+      background-image: radial-gradient(#ffe082 15%, transparent 20%), radial-gradient(#ffe082 15%, transparent 20%);
+      background-size: 20px 20px;
+      background-position: 0 0, 10px 10px;
+      color: var(--text-main);
+      font-family: 'M PLUS Rounded 1c', sans-serif;
+      line-height: 1.6;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* --- ナビゲーション --- */
+    .margin1 {
+      background-color: var(--color-blue);
+      border-bottom: var(--border-thick);
+      padding: 15px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .navigation {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+    .navigation-item {
+      background-color: #fff;
+      border: var(--border-thick);
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-weight: 900;
+      color: var(--text-main);
+      box-shadow: 3px 3px 0px #2b2b2b;
+      transition: all 0.1s ease;
+    }
+    .navigation-item:active {
+      transform: translate(3px, 3px);
+      box-shadow: 0px 0px 0px #2b2b2b;
+    }
+
+    /* --- コンテンツエリア --- */
+    .page-content {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    /* --- ヒーローエリア --- */
+    .phrase {
+      background-color: var(--color-purple);
+      border: var(--border-thick);
+      border-radius: 30px;
+      padding: 40px 20px;
+      text-align: center;
+      box-shadow: 6px 6px 0px #2b2b2b;
+      margin-bottom: 50px;
+      position: relative;
+    }
+    .phrase::before {
+      content: '';
+      position: absolute;
+      top: 10px; left: 10px; right: 10px; bottom: 10px;
+      border: 3px dashed #fff;
+      border-radius: 20px;
+      pointer-events: none;
+    }
+    .Eikou {
+      margin: 0;
+      font-size: 38px;
+      font-weight: 900;
+      color: #fff;
+      text-shadow: 3px 3px 0px var(--text-main);
+      line-height: 1.4;
+      letter-spacing: 2px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* --- 科目グリッド --- */
+    .subject-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+    }
+
+    /* 各科目のカード（パビリオン） */
+    .subject-card {
+      background-color: #fff;
+      border: var(--border-thick);
+      border-radius: 20px;
+      box-shadow: 6px 6px 0px #2b2b2b;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      transition: 0.1s;
+    }
+    
+    /* カードの上のカラフルなアクセント */
+    .subject-card.japa { border-top: 12px solid var(--color-red); }
+    .subject-card.math { border-top: 12px solid var(--color-blue); }
+    .subject-card.eng { border-top: 12px solid var(--color-yellow); }
+    .subject-card.sci { border-top: 12px solid var(--color-green); }
+    .subject-card.socia { border-top: 12px solid var(--color-orange); }
+    .subject-card.econ { border-top: 12px solid var(--color-pink); }
+    .subject-card.phi { border-top: 12px solid var(--color-purple); }
+
+    /* 科目タイトル */
+    .subject-title {
+      font-size: 24px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding-bottom: 15px;
+      border-bottom: 3px dashed #e0e0e0;
+      transition: opacity 0.2s;
+    }
+    .subject-title:hover {
+      opacity: 0.6;
+    }
+    .subject-title i {
+      font-size: 28px;
+    }
+
+    /* アイコンの色 */
+    .japa i { color: var(--color-red); }
+    .math i { color: var(--color-blue); }
+    .eng i { color: var(--color-yellow); }
+    .sci i { color: var(--color-green); }
+    .socia i { color: var(--color-orange); }
+    .econ i { color: var(--color-pink); }
+    .phi i { color: var(--color-purple); }
+
+    /* サブカテゴリのリンクボタン群 */
+    .sub-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .sub-link {
+      background-color: #fff;
+      border: 3px solid var(--text-main);
+      border-radius: 12px;
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 900;
+      color: var(--text-main);
+      box-shadow: 3px 3px 0px var(--text-main);
+      transition: 0.1s;
+    }
+    .sub-link:active {
+      transform: translate(3px, 3px);
+      box-shadow: 0px 0px 0px var(--text-main);
+    }
+    
+    /* サブカテゴリがないカード用の「一覧を見る」ボタン */
+    .btn-main {
+      display: inline-block;
+      text-align: center;
+      background-color: var(--text-main);
+      color: #fff;
+      border-radius: 12px;
+      padding: 8px;
+      font-weight: 900;
+      font-size: 14px;
+      margin-top: auto;
+      transition: 0.2s;
+    }
+    .btn-main:hover {
+      background-color: #444;
+    }
+
+    @media (max-width: 480px) {
+      .subject-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+  
+  <div class="margin1">
+    <div class="navigation">
+      <a href="index.html" class="navigation-item">Top</a>
+      <a href="rank.html" class="navigation-item">Ranking</a>
+      <a href="search.html" class="navigation-item">Search</a>
+    </div>
+  </div>
+
+  <div class="page-content">
+
+    <div class="phrase">
+      <h3 class="Eikou">Study<br>〜 学びのエリア 〜</h3>
+    </div>
+    
+    <div class="subject-grid">
+      
+      <div class="subject-card japa">
+        <a href="japa.html" class="subject-title">
+          <i class="fa-solid fa-book"></i> 国語
+        </a>
+        <a href="japa.html" class="btn-main">記事一覧を見る <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+
+      <div class="subject-card math">
+        <a href="math.html" class="subject-title">
+          <i class="fa-solid fa-square-root-variable"></i> 数学
+        </a>
+        <div class="sub-links">
+          <a href="hima.html" class="sub-link">高校数学</a>
+          <a href="unima.html" class="sub-link">大学数学</a>
+          <a href="othma.html" class="sub-link">その他</a>
+        </div>
+      </div>
+
+      <div class="subject-card eng">
+        <a href="eng.html" class="subject-title">
+          <i class="fa-solid fa-a"></i> 英語
+        </a>
+        <a href="eng.html" class="btn-main">記事一覧を見る <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+
+      <div class="subject-card sci">
+        <a href="sci.html" class="subject-title">
+          <i class="fa-solid fa-flask"></i> 理科
+        </a>
+        <div class="sub-links">
+          <a href="phy.html" class="sub-link">物理</a>
+          <a href="che.html" class="sub-link">化学</a>
+          <a href="bio.html" class="sub-link">生物</a>
+          <a href="ast.html" class="sub-link">地学</a>
+        </div>
+      </div>
+
+      <div class="subject-card socia">
+        <a href="socia.html" class="subject-title">
+          <i class="fa-solid fa-earth-americas"></i> 社会
+        </a>
+        <a href="socia.html" class="btn-main">記事一覧を見る <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+
+      <div class="subject-card econ">
+        <a href="econ.html" class="subject-title">
+          <i class="fa-solid fa-chart-line"></i> 経済
+        </a>
+        <a href="econ.html" class="btn-main">記事一覧を見る <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+
+      <div class="subject-card phi">
+        <a href="phi.html" class="subject-title">
+          <i class="fa-solid fa-lightbulb"></i> 哲学
+        </a>
+        <a href="phi.html" class="btn-main">記事一覧を見る <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+
+    </div>
+
+  </div> </body>
+</html>
