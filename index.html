@@ -8,205 +8,261 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500&family=Noto+Serif+JP:wght@300;400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;900&display=swap" rel="stylesheet">
   
   <style>
-    /* --- 全体の基本設定（風さん風の余白と色使い） --- */
+    /* --- 遊園地風のカラフルなカラーパレット --- */
     :root {
-      --bg-color: #faf9f6;      /* 温かみのあるオフホワイト */
-      --text-main: #2c2c2c;     /* 真っ黒ではない上品な墨色 */
-      --text-sub: #8c857d;      /* くすんだグレージュ */
-      --border-color: #e0dfdc;  /* 薄いグレーの罫線 */
+      --bg-color: #fff4d2;      /* カスタードのような背景色 */
+      --text-main: #2b2b2b;     /* くっきりした文字色 */
+      --color-red: #ff5e5e;     /* ポップな赤 */
+      --color-blue: #4db8ff;    /* 空色 */
+      --color-yellow: #ffcf33;  /* 元気な黄色 */
+      --color-green: #3ade82;   /* メロンソーダ緑 */
+      --color-purple: #b37bf0;  /* ゆめかわ紫 */
+      --color-pink: #ff85c6;    /* ピンク */
+      --border-thick: 4px solid #2b2b2b; /* アメコミ風の太い黒フチ */
     }
 
     body {
       margin: 0;
       padding: 0;
       background-color: var(--bg-color);
+      /* 遊園地っぽいドット柄の背景 */
+      background-image: radial-gradient(#ffe082 15%, transparent 20%), radial-gradient(#ffe082 15%, transparent 20%);
+      background-size: 20px 20px;
+      background-position: 0 0, 10px 10px;
       color: var(--text-main);
-      font-family: 'Jost', 'Noto Serif JP', serif; /* 明朝体をメインに */
-      line-height: 1.8;
-      -webkit-font-smoothing: antialiased;
+      font-family: 'M PLUS Rounded 1c', sans-serif;
+      line-height: 1.6;
     }
 
     a {
-      color: inherit;
       text-decoration: none;
-      transition: opacity 0.3s ease;
-    }
-
-    a:hover {
-      opacity: 0.5; /* ホバー時はフワッと薄くするだけ（シンプルに） */
+      color: inherit;
     }
 
     /* --- ナビゲーション（ヘッダー） --- */
     .margin1 {
+      background-color: var(--color-blue);
+      border-bottom: var(--border-thick);
+      padding: 15px 0;
       position: sticky;
       top: 0;
-      background: rgba(250, 249, 246, 0.9); /* 少し透ける白 */
-      backdrop-filter: blur(5px);
       z-index: 100;
-      border-bottom: 1px solid var(--border-color);
-      padding: 15px 0;
     }
 
     .navigation {
       display: flex;
       justify-content: center;
-      gap: 40px; /* メニュー同士の隙間を大きく取る */
+      gap: 20px;
     }
 
     .navigation-item {
-      font-family: 'Jost', sans-serif;
-      font-size: 13px;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      font-weight: 400;
+      background-color: #fff;
+      border: var(--border-thick);
+      padding: 8px 20px;
+      border-radius: 20px;
+      font-weight: 900;
+      color: var(--text-main);
+      box-shadow: 3px 3px 0px #2b2b2b;
+      transition: all 0.1s ease;
     }
 
-    /* --- ヒーローエリア（「ようこそ！」の文字） --- */
-    /* 背景画像(bg.svg)はここに設定すると、トップの看板のように機能します */
-    .phrase {
-      height: 60vh; /* 画面の60%の高さを使って大胆に */
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background-image: url('bg.svg'); 
-      background-size: cover;
-      background-position: center;
-      position: relative;
-    }
-
-    /* 背景画像の上に薄くフィルターをかけて文字を読みやすくする */
-    .phrase::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(250, 249, 246, 0.4);
-    }
-
-    .Eikou {
-      position: relative;
-      font-size: 36px;
-      font-weight: 300; /* 細字にして洗練させる */
-      letter-spacing: 0.2em; /* 文字の間隔を空けてエモく */
-      text-align: center;
-      line-height: 1.5;
-      margin: 0;
-      /* 以前の重いドロップシャドウを消し、シンプルに */
+    .navigation-item:active {
+      transform: translate(3px, 3px);
+      box-shadow: 0px 0px 0px #2b2b2b; /* 押すと凹むアクション */
     }
 
     /* --- コンテンツ全体を包む箱 --- */
     .page-content {
-      max-width: 800px;
+      max-width: 600px; /* 少し大きめに確保 */
       margin: 0 auto;
-      padding: 80px 20px;
+      padding: 40px 20px;
+    }
+
+    /* --- ヒーローエリア（看板） --- */
+    .phrase {
+      background-color: var(--color-red);
+      border: var(--border-thick);
+      border-radius: 30px;
+      padding: 40px 20px;
+      text-align: center;
+      box-shadow: 6px 6px 0px #2b2b2b;
+      margin-bottom: 50px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* 看板の電飾みたいな点線飾り */
+    .phrase::before {
+      content: '';
+      position: absolute;
+      top: 10px; left: 10px; right: 10px; bottom: 10px;
+      border: 3px dashed #fff;
+      border-radius: 20px;
+      pointer-events: none;
+    }
+
+    .Eikou {
+      margin: 0;
+      font-size: 38px;
+      font-weight: 900;
+      color: #fff;
+      text-shadow: 3px 3px 0px var(--text-main); /* 立体的な文字 */
+      line-height: 1.4;
+      letter-spacing: 2px;
+      position: relative;
+      z-index: 1;
     }
 
     /* --- 見出しのスタイル --- */
     h1, h3 {
       text-align: center;
-      font-weight: 400;
-      letter-spacing: 0.1em;
-      margin-bottom: 30px;
+      font-weight: 900;
+      background-color: #fff;
+      display: inline-block;
+      padding: 5px 20px;
+      border: var(--border-thick);
+      border-radius: 20px;
+      box-shadow: 3px 3px 0px #2b2b2b;
+      margin-bottom: 20px;
+      transform: rotate(-2deg); /* 少し傾けてポップに */
     }
 
-    h1 {
-      font-size: 24px;
-      margin-top: 60px;
-    }
-
-    h1::after { /* 見出しの下に控えめな線を引く */
-      content: '';
-      display: block;
-      width: 40px;
-      height: 1px;
-      background-color: var(--text-main);
-      margin: 15px auto 0;
-    }
-
-    /* --- プロフィールテキスト --- */
-    .Profile p {
+    .section-title-wrap {
       text-align: center;
-      color: var(--text-main);
-      font-size: 15px;
+      margin-top: 50px;
     }
 
-    .Profile a {
+    /* --- プロフィール --- */
+    .Profile-box {
+      background-color: #fff;
+      border: var(--border-thick);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 6px 6px 0px #2b2b2b;
+      margin-bottom: 50px;
+    }
+
+    .Profile-box p {
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .Profile-box a {
       display: block;
       text-align: center;
-      margin-top: 20px;
-      font-size: 13px;
-      color: var(--text-sub);
+      color: var(--color-blue);
+      font-weight: 900;
       text-decoration: underline;
       text-underline-offset: 4px;
+      margin-top: 15px;
     }
 
-    /* --- メニューグリッド --- */
+    /* --- ★ここが新しいメニューグリッド（3列構成） --- */
     .menu-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* スマホでは自動で縦並びに */
-      gap: 20px;
-      margin: 40px 0;
+      grid-template-columns: repeat(3, 1fr); /* 均等に3列 */
+      gap: 15px;
+      margin-top: 20px;
     }
 
     .menu-item {
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      height: 80px;
+      gap: 8px;
+      height: 90px;
+      border: var(--border-thick);
+      border-radius: 15px;
+      font-weight: 900;
       font-size: 14px;
-      letter-spacing: 0.1em;
-      border: 1px solid var(--border-color); /* 枠線だけにする */
-      background-color: transparent;
       color: var(--text-main);
-      transition: all 0.4s ease;
+      background-color: #fff;
+      box-shadow: 4px 4px 0px #2b2b2b; /* 厚みのある影 */
+      transition: all 0.1s ease;
     }
 
-    .menu-item:hover {
-      background-color: var(--text-main);
-      color: var(--bg-color);
-      /* 上に浮くアクションは消し、色だけが反転する大人っぽい動きに */
+    .menu-item i {
+      font-size: 24px; /* アイコンを大きく */
     }
+
+    /* 押した時のアクション（凹む） */
+    .menu-item:active {
+      transform: translate(4px, 4px);
+      box-shadow: 0px 0px 0px #2b2b2b;
+    }
+
+    /* ★ 特別なNekoaマス（一番上で横3マス分使う） */
+    .nekoa-special {
+      grid-column: span 3; /* 3列分ぶち抜く命令 */
+      height: 100px;
+      font-size: 20px;
+      background-color: var(--color-yellow);
+      flex-direction: row; /* アイコンと文字を横並びに */
+      gap: 15px;
+    }
+    .nekoa-special i { font-size: 32px; color: #fff; text-shadow: 2px 2px 0px var(--text-main); }
+
+    /* 各マスの色分け */
+    .item-timeline { background-color: var(--color-pink); }
+    .item-others { background-color: var(--color-green); }
+    .item-life { background-color: var(--color-blue); }
+    .item-study { background-color: var(--color-purple); color: #fff;}
+    .item-daily { background-color: #ffa447; }
+    .item-music { background-color: #fff; }
 
     /* --- YouTubeエリア --- */
-    .media-section {
-      margin-top: 100px;
-    }
-
     .youtube-wrapper {
+      border: var(--border-thick);
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 6px 6px 0px #2b2b2b;
       position: relative;
       width: 100%;
-      padding-top: 56.25%; /* 16:9の比率を維持 */
-      margin-bottom: 40px;
+      padding-top: 56.25%;
     }
-
     .youtube-wrapper iframe {
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 0; left: 0; width: 100%; height: 100%;
     }
 
     /* --- SNSリンク --- */
     .snslink {
       display: flex;
       justify-content: center;
-      gap: 40px;
-      margin-top: 80px;
-      padding-top: 40px;
-      border-top: 1px solid var(--border-color);
+      gap: 20px;
+      margin-top: 60px;
     }
 
     .snslink a {
-      font-size: 24px; /* アイコンを少し大きめに */
-      color: var(--text-sub); /* 普段は薄いグレー */
-      transition: color 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 60px;
+      height: 60px;
+      background-color: #fff;
+      border: var(--border-thick);
+      border-radius: 50%;
+      font-size: 30px;
+      color: var(--text-main);
+      box-shadow: 4px 4px 0px #2b2b2b;
+      transition: all 0.1s ease;
     }
 
-    .snslink a:hover {
-      color: var(--text-main); /* 触ると黒になる */
+    .snslink a:active {
+      transform: translate(4px, 4px);
+      box-shadow: 0px 0px 0px #2b2b2b;
+    }
+
+    /* モバイル向け微調整 */
+    @media (max-width: 480px) {
+      .menu-grid { gap: 10px; }
+      .menu-item { font-size: 11px; height: 80px; }
+      .menu-item i { font-size: 20px; }
+      .nekoa-special { font-size: 16px; height: 80px; }
     }
   </style>
 </head>
@@ -221,46 +277,62 @@
     </div>
   </div>
 
-  <div class="phrase">
-    <h3 class="Eikou">ようこそ<br>えいこう王国へ</h3>
-  </div>
-
   <div class="page-content">
-    
-    <div class="container">
-      <h3>SCHEDULE</h3>
-    </div>
 
-    <div class="Profile">
-      <h1>PROFILE</h1>
+    <div class="phrase">
+      <h3 class="Eikou">ようこそ！<br>えいこう王国へ！</h3>
+    </div>
+    
+    <div class="Profile-box">
+      <div class="section-title-wrap" style="margin-top:0;">
+        <h1>Profile</h1>
+      </div>
       <p>世界で一番の幸せ者になりたいえいこうくんが作った王国です。</p>
 
-      <h1>ABOUT</h1>
-      <p>自分の作品や計画、記録などを一般に公開しています。<br>やってほしいこと等あれば以下のフィードバックまで。</p>
-      <a href="">フィードバックを送る</a>
-
-      <h1>MENU</h1>
-      <div class="menu-grid">
-        <a href="page1.html" class="menu-item">Nekoa全曲</a>
-        <a href="page2.html" class="menu-item">MV構想</a>
-        <a href="page3.html" class="menu-item">年表</a>
-        <a href="page4.html" class="menu-item">ジャケットパズル</a>
-        <a href="page5.html" class="menu-item">その他楽曲</a>
-        <a href="page6.html" class="menu-item">人生計画</a>
-        <a href="page7.html" class="menu-item">勉強</a>
-        <a href="page8.html" class="menu-item">日常</a>
-        <a href="page9.html" class="menu-item">音楽</a>
+      <div class="section-title-wrap">
+        <h3>概要</h3>
       </div>
+      <p>自分の作品や計画、記録などを一般に公開しています。<br>やってほしいこと等あれば以下のフィードバックまで！</p>
+      <a href=""><i class="fa-solid fa-envelope"></i> フィードバックを送る</a>
     </div>
 
-    <div class="media-section">
-      <h3>LATEST RELEASE</h3>
-      <div class="youtube-wrapper">
-        <iframe src="https://www.youtube.com/embed/3sglAAj271g?si=BoBD4TBkHWZFrI1X"
-          title="YouTube video player" frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-      </div>
+    <div class="section-title-wrap">
+      <h1>Menu</h1>
+    </div>
+    <div class="menu-grid">
+      <a href="nekoa.html" class="menu-item nekoa-special">
+        <i class="fa-solid fa-star"></i>
+        <span>Nekoa</span>
+      </a>
+      
+      <a href="page3.html" class="menu-item item-timeline">
+        <i class="fa-solid fa-clock-rotate-left"></i> 年表
+      </a>
+      <a href="page5.html" class="menu-item item-others">
+        <i class="fa-solid fa-compact-disc"></i> その他楽曲
+      </a>
+      <a href="page6.html" class="menu-item item-life">
+        <i class="fa-solid fa-map"></i> 人生計画
+      </a>
+      <a href="page7.html" class="menu-item item-study">
+        <i class="fa-solid fa-pen-nib"></i> 勉強
+      </a>
+      <a href="page8.html" class="menu-item item-daily">
+        <i class="fa-solid fa-mug-hot"></i> 日常
+      </a>
+      <a href="page9.html" class="menu-item item-music">
+        <i class="fa-solid fa-music"></i> 音楽
+      </a>
+    </div>
+
+    <div class="section-title-wrap" style="margin-top:60px;">
+      <h3>Schedule / Latest</h3>
+    </div>
+    <div class="youtube-wrapper">
+      <iframe src="https://www.youtube.com/embed/3sglAAj271g?si=BoBD4TBkHWZFrI1X"
+        title="YouTube video player" frameborder="0"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
     </div>
 
     <div class="snslink">
