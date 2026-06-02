@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>年表</title>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght=500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div id="top-page-screen">
+    <div class="portal-container">
+      
+      <h2><i class="fa-solid fa-search"></i> クローバー検索</h2>
+      <div class="search-box">
+        <input type="text" placeholder="キーワードやユーザー名で検索...">
+        <button><i class="fa-solid fa-magnifying-glass"></i></button>
+      </div>
+      
+      <div class="qr-section">
+        <button class="portal-btn">
+          <i class="fa-solid fa-qrcode"></i> QRコードで他人の日記に入る
+        </button>
+      </div>
+
+      <h2><i class="fa-solid fa-users"></i> みんなの公開日記</h2>
+      <div class="public-diaries-list">
+        <div class="diary-card">🌸 ユーザー名: ひまり (2015-2026)</div>
+        <div class="diary-card">🚀 ユーザー名: たける (2010-2026)</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="my-page-screen">
+
+    <div id="notebook-overlay">
+      <div class="notebook-cover">
+        <div class="notebook-stitch">
+          <div class="notebook-seal">🌸</div>
+          <h1 class="notebook-title">Eikou's History</h1>
+          <p class="notebook-author">since 2008</p>
+          <div class="notebook-tap-guide">
+            <i class="fa-solid fa-heart animate-pulse"></i> クリックしてMy年表をひらく
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="canvas-container"></div>
+
+    <div id="my-ui-layer">
+
+      <div id="title-ui">瑛幸の年表</div>
+
+      <button id="menu-toggle-btn" class="float-btn left-btn">
+        <i class="fa-solid fa-ribbon"></i>
+      </button>
+
+      <button id="analytics-toggle-btn" class="float-btn right-btn">
+        <i class="fa-solid fa-trophy"></i>
+      </button>
+
+      <div id="control-panel" class="side-panel left-panel">
+        <span id="panel-close-btn" class="close-icon">&times;</span>
+        
+        <h2><i class="fa-solid fa-sliders"></i> SCALE</h2>
+        <div class="input-group">
+          <select id="timeline-scale">
+            <option value="custom" selected>🦄 出来事ごと = 1マス</option>
+            <option value="day">🎀 1日 = 1マス</option>
+            <option value="month">🧸 1ヶ月 = 1マス</option>
+          </select>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <h2><i class="fa-solid fa-heart"></i> NEW LOG</h2>
+        <div class="input-group">
+          <label>📅 年・日付</label>
+          <input type="text" id="input-date" value="2026">
+        </div>
+        <div class="input-group">
+          <label>📊 心の満足度</label>
+          <input type="range" id="input-sat" min="0" max="100" value="85">
+          <span id="sat-val">85%</span>
+        </div>
+        <div class="input-group">
+          <label>📝 メモ・おもいで</label>
+          <textarea id="input-event" rows="2" placeholder="今のおもいでを記述..."></textarea>
+        </div>
+        <button id="add-btn" class="matrix-btn">プロットする ✨</button>
+      </div>
+
+      <div id="analytics-panel" class="side-panel right-panel">
+        <span id="analytics-close-btn" class="close-icon">&times;</span>
+        <h2><i class="fa-solid fa-chart-line"></i> RANKING</h2>
+        <div class="input-group">
+          <select id="ranking-period">
+            <option value="all" selected>✨ すべての期間</option>
+            <option value="2026">✨ 2026年</option>
+            <option value="2013">🚀 2013年</option>
+            <option value="2008">👶 2008年</option>
+          </select>
+        </div>
+        <div id="ranking-list-container"></div>
+      </div>
+
+      <div id="sticky-note">
+        <span class="close-btn" onclick="closeNote()">&times;</span>
+        <h3 id="note-title">日付</h3>
+        <div class="log-events-container" id="note-events"></div>
+        <div class="comment-section">
+          <div id="comment-list"></div>
+          <div class="comment-input-area">
+            <input type="text" id="comment-input" placeholder="コメントをのこす...">
+            <button id="comment-submit-btn"><i class="fa-solid fa-paper-plane"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <div id="timeline-scrollbar-container">
+        <div class="scrollbar-label">TIMELINE NAVIGATOR</div>
+        <input type="range" id="timeline-slider" min="-100" max="100" value="0">
+        <div class="scrollbar-coords">
+          <span>PAST</span>
+          <span>Z: <span id="cam-z-val">0.0</span></span>
+          <span>FUTURE</span>
+        </div>
+      </div>
+
+    </div></div><nav id="app-nav">
+    <div class="nav-tab active" id="to-top-btn">
+      <i class="fa-solid fa-globe"></i>
+      <span>Top</span>
+    </div>
+    <div class="nav-tab" id="to-my-btn">
+      <i class="fa-solid fa-user"></i>
+      <span>My</span>
+    </div>
+  </nav>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
