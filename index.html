@@ -5,35 +5,45 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>えいこう王国</title>
+  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
   
   <style>
-    /* --- 遊園地風のカラフルなカラーパレット --- */
+    /* =========================================
+       1. チームラボ風 / デジタル・アート・パレット
+    ========================================= */
     :root {
-      --bg-color: #fff4d2;      /* カスタードのような背景色 */
-      --text-main: #2b2b2b;     /* くっきりした文字色 */
-      --color-red: #ff5e5e;     /* ポップな赤 */
-      --color-blue: #4db8ff;    /* 空色 */
-      --color-yellow: #ffcf33;  /* 元気な黄色 */
-      --color-green: #3ade82;   /* メロンソーダ緑 */
-      --color-purple: #b37bf0;  /* ゆめかわ紫 */
-      --color-pink: #ff85c6;    /* ピンク */
-      --border-thick: 4px solid #2b2b2b; /* アメコミ風の太い黒フチ */
+      --bg-dark: #050914;         /* 深淵のようなダークネイビー */
+      --glass-bg: rgba(255, 255, 255, 0.03); /* すりガラスの背景 */
+      --glass-border: rgba(255, 255, 255, 0.08); /* ガラスのフチ */
+      --text-main: #f8fafc;       /* 澄んだ白 */
+      --text-sub: #94a3b8;        /* 落ち着いたグレー */
+      
+      /* 発光するアクセントカラー */
+      --neon-blue: #38bdf8;
+      --neon-purple: #c084fc;
+      --neon-pink: #f472b6;
+      --neon-green: #34d399;
+      --neon-yellow: #fbbf24;
     }
 
     body {
       margin: 0;
       padding: 0;
-      background-color: var(--bg-color);
-      background-image: radial-gradient(#ffe082 15%, transparent 20%), radial-gradient(#ffe082 15%, transparent 20%);
-      background-size: 20px 20px;
-      background-position: 0 0, 10px 10px;
+      background-color: var(--bg-dark);
       color: var(--text-main);
-      font-family: 'M PLUS Rounded 1c', sans-serif;
-      line-height: 1.6;
+      font-family: 'Noto Sans JP', sans-serif;
+      line-height: 1.8;
+      overflow-x: hidden;
+      /* チームラボ風の幻想的な光のオーブを背景に配置 */
+      background-image: 
+        radial-gradient(circle at 15% 50%, rgba(56, 189, 248, 0.15), transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(192, 132, 252, 0.15), transparent 25%);
+      background-attachment: fixed;
+      -webkit-font-smoothing: antialiased;
     }
 
     a {
@@ -41,168 +51,176 @@
       color: inherit;
     }
 
-    /* --- ナビゲーション（ヘッダー） --- */
-    .margin1 {
-      background-color: var(--color-blue);
-      border-bottom: var(--border-thick);
-      padding: 15px 0;
+    /* =========================================
+       2. グラスモーフィズム（すりガラス効果）UI
+    ========================================= */
+    .glass-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    /* --- ナビゲーション --- */
+    header {
       position: sticky;
       top: 0;
       z-index: 100;
+      background: rgba(5, 9, 20, 0.6);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--glass-border);
+      padding: 15px 0;
     }
 
     .navigation {
       display: flex;
       justify-content: center;
-      gap: 20px;
+      gap: 30px;
     }
 
     .navigation-item {
-      background-color: #fff;
-      border: var(--border-thick);
-      padding: 8px 20px;
-      border-radius: 20px;
-      font-weight: 900;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-sub);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      transition: color 0.3s ease, text-shadow 0.3s ease;
+    }
+
+    .navigation-item:hover {
       color: var(--text-main);
-      box-shadow: 3px 3px 0px #2b2b2b;
-      transition: all 0.1s ease;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
     }
 
-    .navigation-item:active {
-      transform: translate(3px, 3px);
-      box-shadow: 0px 0px 0px #2b2b2b;
-    }
-
-    /* --- コンテンツ全体を包む箱 --- */
+    /* --- コンテンツエリア --- */
     .page-content {
-      max-width: 600px; 
+      max-width: 700px; 
       margin: 0 auto;
-      padding: 40px 20px;
+      padding: 60px 20px;
     }
 
-    /* --- ヒーローエリア（看板） --- */
+    /* --- ヒーローエリア --- */
     .phrase {
-      background-color: var(--color-red);
-      border: var(--border-thick);
-      border-radius: 30px;
-      padding: 40px 20px;
       text-align: center;
-      box-shadow: 6px 6px 0px #2b2b2b;
-      margin-bottom: 50px;
+      padding: 60px 20px;
+      margin-bottom: 60px;
       position: relative;
-      overflow: hidden;
-    }
-
-    .phrase::before {
-      content: '';
-      position: absolute;
-      top: 10px; left: 10px; right: 10px; bottom: 10px;
-      border: 3px dashed #fff;
-      border-radius: 20px;
-      pointer-events: none;
     }
 
     .Eikou {
       margin: 0;
-      font-size: 38px;
-      font-weight: 900;
-      color: #fff;
-      text-shadow: 3px 3px 0px var(--text-main); 
+      font-family: 'Montserrat', 'Noto Sans JP', sans-serif;
+      font-size: 42px;
+      font-weight: 700;
       line-height: 1.4;
-      letter-spacing: 2px;
-      position: relative;
-      z-index: 1;
+      letter-spacing: 4px;
+      /* 文字自体がグラデーションで発光する表現 */
+      background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 40px rgba(56, 189, 248, 0.3);
     }
 
-    /* --- 見出しのスタイル --- */
+    /* --- 見出し --- */
     h1, h3 {
+      font-family: 'Montserrat', sans-serif;
       text-align: center;
-      font-weight: 900;
-      background-color: #fff;
-      display: inline-block;
-      padding: 5px 20px;
-      border: var(--border-thick);
-      border-radius: 20px;
-      box-shadow: 3px 3px 0px #2b2b2b;
+      font-weight: 600;
+      font-size: 20px;
+      letter-spacing: 2px;
+      color: var(--text-main);
       margin-bottom: 20px;
-      transform: rotate(-2deg); 
     }
 
     .section-title-wrap {
-      text-align: center;
-      margin-top: 50px;
+      margin-top: 80px;
+      display: flex;
+      justify-content: center;
     }
 
-    /* --- 簡易的自己紹介（パスポート風） --- */
+    .section-title-wrap h1 {
+      display: inline-block;
+      border-bottom: 2px solid var(--neon-purple);
+      padding-bottom: 10px;
+    }
+
+    /* --- プロフィール --- */
     .Profile-box {
-      background-color: #fff;
-      border: var(--border-thick);
-      border-radius: 20px;
-      padding: 30px;
-      box-shadow: 6px 6px 0px #2b2b2b;
-      margin-bottom: 50px;
-      position: relative;
+      padding: 40px;
+      margin-bottom: 60px;
+      transition: transform 0.3s ease;
+    }
+    
+    .Profile-box:hover {
+      transform: translateY(-5px);
     }
 
     .profile-header {
       display: flex;
       align-items: center;
-      gap: 15px;
-      margin-bottom: 15px;
-      border-bottom: 3px dashed #e0e0e0;
-      padding-bottom: 15px;
+      gap: 20px;
+      margin-bottom: 20px;
     }
 
     .profile-icon {
-      width: 60px;
-      height: 60px;
-      background-color: var(--color-yellow);
-      border: var(--border-thick);
+      width: 70px;
+      height: 70px;
+      background: linear-gradient(135deg, var(--neon-yellow), var(--neon-pink));
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       font-size: 30px;
       color: #fff;
-      text-shadow: 2px 2px 0px var(--text-main);
+      box-shadow: 0 0 20px rgba(251, 191, 36, 0.4);
     }
 
     .profile-name {
       margin: 0;
-      font-size: 24px;
-      font-weight: 900;
+      font-size: 26px;
+      font-weight: 700;
     }
 
     .profile-role {
+      font-family: 'Montserrat', sans-serif;
       font-size: 12px;
-      color: var(--color-blue);
-      font-weight: 900;
+      color: var(--neon-blue);
+      letter-spacing: 2px;
+      margin-top: 4px;
     }
 
     .Profile-box p {
-      font-weight: 700;
-      font-size: 14px;
-      margin-bottom: 15px;
+      font-size: 15px;
+      color: var(--text-sub);
+      line-height: 1.8;
+      margin-bottom: 25px;
     }
 
-    .Profile-box a {
-      display: inline-block;
-      background-color: var(--color-blue);
-      color: #fff;
-      padding: 8px 15px;
-      border: 3px solid var(--text-main);
-      border-radius: 10px;
-      font-weight: 900;
+    .btn-feedback {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 24px;
+      border-radius: 30px;
       font-size: 13px;
-      box-shadow: 2px 2px 0px var(--text-main);
-      transition: 0.1s;
-    }
-    .Profile-box a:active {
-      transform: translate(2px, 2px);
-      box-shadow: 0 0 0 var(--text-main);
+      font-weight: 500;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-main);
+      transition: all 0.3s ease;
     }
 
-    /* --- 新着記事一覧（チケット風） --- */
+    .btn-feedback:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: var(--text-main);
+    }
+
+    /* --- 新着記事一覧 --- */
     .article-list {
       list-style: none;
       padding: 0;
@@ -213,74 +231,64 @@
     }
 
     .article-item {
-      background: #fff;
-      border: var(--border-thick);
-      border-radius: 15px;
-      padding: 15px;
       display: flex;
       align-items: center;
-      gap: 15px;
-      box-shadow: 4px 4px 0px #2b2b2b;
-      transition: all 0.1s ease;
-      cursor: pointer;
+      gap: 20px;
+      padding: 20px;
+      transition: all 0.3s ease;
     }
 
-    .article-item:active {
-      transform: translate(4px, 4px);
-      box-shadow: 0px 0px 0px #2b2b2b;
+    .article-item:hover {
+      background: rgba(255, 255, 255, 0.06);
+      transform: translateX(5px);
+      border-color: rgba(255, 255, 255, 0.2);
     }
 
     .article-date {
-      font-weight: 900;
+      font-family: 'Montserrat', sans-serif;
       font-size: 12px;
-      color: #777;
-      white-space: nowrap;
+      color: var(--text-sub);
+      min-width: 80px;
     }
 
     .article-category {
-      padding: 4px 10px;
-      border-radius: 15px;
       font-size: 11px;
-      font-weight: 900;
-      border: 2px solid var(--text-main);
-      white-space: nowrap;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: 1px;
     }
+
+    /* 知的なグラデーションバッジ */
+    .badge-nekoa { background: rgba(251, 191, 36, 0.15); color: var(--neon-yellow); }
+    .badge-study { background: rgba(192, 132, 252, 0.15); color: var(--neon-purple); }
+    .badge-life { background: rgba(56, 189, 248, 0.15); color: var(--neon-blue); }
+    .badge-music { background: rgba(244, 114, 182, 0.15); color: var(--neon-pink); }
 
     .article-title {
-      font-weight: 700;
-      font-size: 14px;
-      line-height: 1.4;
+      font-size: 15px;
+      font-weight: 500;
     }
 
-    /* カテゴリバッジの色 */
-    .badge-music { background: var(--color-pink); }
-    .badge-nekoa { background: var(--color-yellow); }
-    .badge-study { background: var(--color-purple); color: #fff;}
-    .badge-life { background: var(--color-blue); }
-
-    /* すべて見るボタン */
     .btn-more {
       display: inline-block;
-      background: #fff;
-      border: var(--border-thick);
-      border-radius: 20px;
-      padding: 10px 30px;
-      font-weight: 900;
-      box-shadow: 4px 4px 0px #2b2b2b;
-      margin-top: 20px;
-      transition: 0.1s;
-    }
-    .btn-more:active {
-      transform: translate(4px, 4px);
-      box-shadow: 0 0 0 #2b2b2b;
+      font-size: 13px;
+      color: var(--text-sub);
+      border-bottom: 1px solid transparent;
+      padding-bottom: 2px;
+      transition: all 0.3s ease;
     }
 
-    /* --- メニューグリッド（3列構成） --- */
+    .btn-more:hover {
+      color: var(--text-main);
+      border-bottom-color: var(--text-main);
+    }
+
+    /* --- メニューグリッド（洗練されたパネル） --- */
     .menu-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr); 
-      gap: 15px;
-      margin-top: 20px;
+      gap: 20px;
     }
 
     .menu-item {
@@ -288,50 +296,58 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      height: 90px;
-      border: var(--border-thick);
-      border-radius: 15px;
-      font-weight: 900;
-      font-size: 14px;
-      background-color: #fff;
-      box-shadow: 4px 4px 0px #2b2b2b; 
-      transition: all 0.1s ease;
-    }
-    .menu-item i { font-size: 24px; }
-    .menu-item:active {
-      transform: translate(4px, 4px);
-      box-shadow: 0px 0px 0px #2b2b2b;
+      gap: 12px;
+      height: 110px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
     }
 
-    /* 特別なNekoaマス */
+    .menu-item i { 
+      font-size: 24px; 
+      color: var(--text-sub);
+      transition: color 0.3s ease;
+    }
+    
+    .menu-item span {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 1px;
+    }
+
+    /* ホバー時に美しく発光するエフェクト */
+    .menu-item:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.2);
+      transform: translateY(-5px);
+    }
+
+    .menu-item:hover i {
+      color: var(--text-main);
+      text-shadow: 0 0 15px rgba(255, 255, 255, 0.6);
+    }
+
     .nekoa-special {
       grid-column: span 3; 
-      height: 100px;
-      font-size: 20px;
-      background-color: var(--color-yellow);
+      height: 120px;
       flex-direction: row; 
-      gap: 15px;
+      gap: 20px;
+      background: linear-gradient(to right, rgba(255,255,255,0.03), rgba(251, 191, 36, 0.05));
     }
-    .nekoa-special i { font-size: 32px; color: #fff; text-shadow: 2px 2px 0px var(--text-main); }
-
-    /* 各マスの色分け */
-    .item-timeline { background-color: var(--color-pink); }
-    .item-others { background-color: var(--color-green); }
-    .item-life { background-color: var(--color-blue); }
-    .item-study { background-color: var(--color-purple); color: #fff;}
-    .item-daily { background-color: #ffa447; }
-    .item-music { background-color: #fff; }
+    
+    .nekoa-special span { font-size: 18px; font-weight: 700; letter-spacing: 2px;}
+    .nekoa-special i { font-size: 32px; color: var(--neon-yellow); }
+    .nekoa-special:hover { border-color: var(--neon-yellow); box-shadow: 0 0 30px rgba(251, 191, 36, 0.1); }
 
     /* --- YouTubeエリア --- */
     .youtube-wrapper {
-      border: var(--border-thick);
-      border-radius: 15px;
+      border-radius: 24px;
       overflow: hidden;
-      box-shadow: 6px 6px 0px #2b2b2b;
       position: relative;
       width: 100%;
       padding-top: 56.25%;
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
     }
     .youtube-wrapper iframe {
       position: absolute;
@@ -342,56 +358,61 @@
     .snslink {
       display: flex;
       justify-content: center;
-      gap: 20px;
-      margin-top: 60px;
+      gap: 30px;
+      margin-top: 80px;
+      padding-top: 40px;
+      border-top: 1px solid var(--glass-border);
     }
+    
     .snslink a {
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 60px;
-      height: 60px;
-      background-color: #fff;
-      border: var(--border-thick);
+      width: 50px;
+      height: 50px;
       border-radius: 50%;
-      font-size: 30px;
-      box-shadow: 4px 4px 0px #2b2b2b;
-      transition: all 0.1s ease;
+      font-size: 20px;
+      color: var(--text-sub);
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      transition: all 0.3s ease;
     }
-    .snslink a:active {
-      transform: translate(4px, 4px);
-      box-shadow: 0px 0px 0px #2b2b2b;
+    
+    .snslink a:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.1);
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1);
     }
 
     /* モバイル向け微調整 */
     @media (max-width: 480px) {
-      .menu-grid { gap: 10px; }
-      .menu-item { font-size: 11px; height: 80px; }
-      .menu-item i { font-size: 20px; }
-      .nekoa-special { font-size: 16px; height: 80px; }
-      .article-item { flex-wrap: wrap; }
+      .menu-grid { gap: 15px; grid-template-columns: repeat(2, 1fr); }
+      .nekoa-special { grid-column: span 2; }
+      .article-item { flex-wrap: wrap; gap: 10px; padding: 15px; }
       .article-title { width: 100%; }
+      .Eikou { font-size: 28px; }
     }
   </style>
 </head>
 
 <body>
   
-  <div class="margin1">
+  <header>
     <div class="navigation">
       <a href="index.html" class="navigation-item">Top</a>
       <a href="rank.html" class="navigation-item">Ranking</a>
       <a href="search.html" class="navigation-item">Search</a>
     </div>
-  </div>
+  </header>
 
   <div class="page-content">
 
     <div class="phrase">
-      <h3 class="Eikou">ようこそ！<br>えいこう王国へ！</h3>
+      <h3 class="Eikou">EIKOU KINGDOM</h3>
     </div>
     
-    <div class="Profile-box">
+    <div class="Profile-box glass-card">
       <div class="profile-header">
         <div class="profile-icon"><i class="fa-solid fa-crown"></i></div>
         <div>
@@ -399,77 +420,75 @@
           <div class="profile-role">King of Eikou Kingdom</div>
         </div>
       </div>
-      <p>世界で一番の幸せ者になりたいえいこうくんが作った王国です！<br>自分の作品や計画、日々の記録などを展示しています。</p>
-      <a href="feedback.html"><i class="fa-solid fa-envelope"></i> フィードバックを送る</a>
+      <p>世界で一番の幸せ者になりたいえいこうくんが作った王国です。<br>自身の創作活動、思考の軌跡、そして未来への記録をここにアーカイブしています。</p>
+      <a href="feedback.html" class="btn-feedback"><i class="fa-solid fa-envelope"></i> フィードバックを送る</a>
     </div>
 
-    <div class="section-title-wrap" style="margin-top:0;">
-      <h1>New Articles</h1>
+    <div class="section-title-wrap">
+      <h1>NEW ARTICLES</h1>
     </div>
     <ul class="article-list">
-      <a href="page3.html" class="article-item">
+      <a href="page3.html" class="article-item glass-card">
         <span class="article-date">2026.06.03</span>
         <span class="article-category badge-nekoa">Nekoa</span>
-        <span class="article-title">Nekoaの新曲「n」を公開しました！</span>
+        <span class="article-title">Nekoaの新曲「n」を公開しました</span>
       </a>
-      <a href="page17.html" class="article-item">
+      <a href="page17.html" class="article-item glass-card">
         <span class="article-date">2026.06.01</span>
-        <span class="article-category badge-study">勉強</span>
+        <span class="article-category badge-study">Study</span>
         <span class="article-title">高校数学：三角比で脳汁どぴゅどぴゅ</span>
       </a>
-      <a href="page8.html" class="article-item">
+      <a href="page8.html" class="article-item glass-card">
         <span class="article-date">2026.05.28</span>
-        <span class="article-category badge-life">人生計画</span>
+        <span class="article-category badge-life">Vision</span>
         <span class="article-title">これからの10年で達成したい100のリスト</span>
       </a>
-      <a href="page35.html" class="article-item">
+      <a href="page35.html" class="article-item glass-card">
         <span class="article-date">2026.05.25</span>
-        <span class="article-category badge-music">音楽</span>
+        <span class="article-category badge-music">Music</span>
         <span class="article-title">DTM環境をアップデートしました</span>
       </a>
-      <a href="page4.html" class="article-item">
+      <a href="page4.html" class="article-item glass-card">
         <span class="article-date">2026.05.20</span>
         <span class="article-category badge-nekoa">Nekoa</span>
         <span class="article-title">未発表曲のMV構想について</span>
       </a>
     </ul>
     
-    <div class="section-title-wrap" style="margin-top: 15px;">
-      <a href="search.html" class="btn-more">
-        すべての記事を見る <i class="fa-solid fa-arrow-right"></i>
+    <div style="text-align: right; margin-top: 20px;">
+      <a href="search.html" class="btn-more">すべての記事を見る <i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+
+    <div class="section-title-wrap">
+      <h1>MENU</h1>
+    </div>
+    <div class="menu-grid">
+      <a href="nekoa.html" class="menu-item glass-card nekoa-special">
+        <i class="fa-solid fa-star"></i>
+        <span>Nekoa</span>
+      </a>
+      <a href="mylife.html" class="menu-item glass-card">
+        <i class="fa-solid fa-clock-rotate-left"></i> <span>年表</span>
+      </a>
+      <a href="song.html" class="menu-item glass-card">
+        <i class="fa-solid fa-compact-disc"></i> <span>楽曲</span>
+      </a>
+      <a href="vision.html" class="menu-item glass-card">
+        <i class="fa-solid fa-map"></i> <span>人生計画</span>
+      </a>
+      <a href="study.html" class="menu-item glass-card">
+        <i class="fa-solid fa-pen-nib"></i> <span>勉強</span>
+      </a>
+      <a href="daily.html" class="menu-item glass-card">
+        <i class="fa-solid fa-mug-hot"></i> <span>日常</span>
+      </a>
+      <a href="music.html" class="menu-item glass-card">
+        <i class="fa-solid fa-music"></i> <span>音楽</span>
       </a>
     </div>
 
     <div class="section-title-wrap">
-      <h1>Menu</h1>
-    </div>
-    <div class="menu-grid">
-      <a href="nekoa.html" class="menu-item nekoa-special">
-        <i class="fa-solid fa-star"></i>
-        <span>Nekoa</span>
-      </a>
-      <a href="mylife.html" class="menu-item item-timeline">
-        <i class="fa-solid fa-clock-rotate-left"></i> 年表
-      </a>
-      <a href="song.html" class="menu-item item-others">
-        <i class="fa-solid fa-compact-disc"></i> 楽曲
-      </a>
-      <a href="vision.html" class="menu-item item-life">
-        <i class="fa-solid fa-map"></i> 人生計画
-      </a>
-      <a href="study.html" class="menu-item item-study">
-        <i class="fa-solid fa-pen-nib"></i> 勉強
-      </a>
-      <a href="page29.html" class="menu-item item-daily">
-        <i class="fa-solid fa-mug-hot"></i> 日常
-      </a>
-      <a href="page32.html" class="menu-item item-music">
-        <i class="fa-solid fa-music"></i> 音楽
-      </a>
-    </div>
-
-    <div class="section-title-wrap" style="margin-top:60px;">
-      <h3>Latest Video</h3>
+      <h1>LATEST VIDEO</h1>
     </div>
     <div class="youtube-wrapper">
       <iframe src="https://www.youtube.com/embed/3sglAAj271g?si=BoBD4TBkHWZFrI1X"
@@ -493,5 +512,6 @@
       </a>
     </div>
 
-  </div> </body>
+  </div> 
+</body>
 </html>
