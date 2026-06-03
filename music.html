@@ -4,184 +4,285 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>えいこう王国 - Music</title>
-  
+  <title>Music - えいこう王国</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
-  
+  <link
+    href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&family=Noto+Sans+JP:wght@300;400;500;700&display=swap"
+    rel="stylesheet">
+
   <style>
-    /* --- チームラボ風 デジタル・アート・パレット --- */
+    /* =========================================
+           1. 洗練されたモダン・ミニマルスタイル（ライト）
+        ========================================= */
     :root {
-      --bg-dark: #050914;
-      --glass-bg: rgba(255, 255, 255, 0.03);
-      --glass-border: rgba(255, 255, 255, 0.08);
-      --text-main: #f8fafc;
-      --text-sub: #94a3b8;
-      
-      --neon-blue: #38bdf8;
-      --neon-purple: #c084fc;
-      --neon-pink: #f472b6;
-      --neon-green: #34d399;
-      --neon-yellow: #fbbf24;
+      --bg-color: #fafafa;
+      /* ほんのり温かみのある白 */
+      --text-main: #1e293b;
+      /* 濃いスレートグレー */
+      --text-muted: #64748b;
+      /* 落ち着いたグレー */
+      --accent-color: #0f172a;
+      /* ほぼ黒のネイビー */
+      --border-color: #e2e8f0;
+      /* 薄く上品な境界線 */
+
+      /* 音楽のパビリオンを引き立てるアイデンティティカラー */
+      --color-muth: #8b5cf6;
+      /* 音楽理論: 神秘的なバイオレット */
+      --color-best: #d97706;
+      /* おすすめ曲: 深みのあるアンバーゴールド */
+      --color-dtm: #0ea5e9;
+      /* DTM: 澄み渡るライトブルー */
+      --color-muther: #10b981;
+      /* その他: 瑞々しいエメラルドグリーン */
     }
 
     body {
       margin: 0;
       padding: 0;
-      background-color: var(--bg-dark);
+      background-color: var(--bg-color);
       color: var(--text-main);
-      font-family: 'Noto Sans JP', sans-serif;
+      font-family: 'Noto Sans JP', 'Helvetica Neue', sans-serif;
       line-height: 1.8;
-      background-image: 
-        radial-gradient(circle at 80% 20%, rgba(244, 114, 182, 0.1), transparent 30%),
-        radial-gradient(circle at 20% 80%, rgba(192, 132, 252, 0.15), transparent 30%);
-      background-attachment: fixed;
+      letter-spacing: 0.05em;
       -webkit-font-smoothing: antialiased;
     }
 
-    a { text-decoration: none; color: inherit; }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
 
-    /* ナビゲーション */
+    /* --- ヘッダー（4ファイル完全共通・ズレ防止） --- */
     header {
+      background-color: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 15px 40px;
       position: sticky;
       top: 0;
       z-index: 100;
-      background: rgba(5, 9, 20, 0.6);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--glass-border);
-      padding: 15px 0;
-    }
-    .navigation { display: flex; justify-content: center; gap: 30px; }
-    .navigation-item {
-      font-family: 'Montserrat', sans-serif;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-sub);
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      transition: all 0.3s ease;
-    }
-    .navigation-item:hover {
-      color: var(--text-main);
-      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-sizing: border-box;
+      /* 横幅の計算を全ファイルで固定 */
     }
 
-    /* コンテンツエリア */
+    .logo {
+      font-family: 'Jost', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      color: var(--accent-color);
+    }
+
+    .navigation {
+      display: flex;
+      gap: 30px;
+      /* ボタン同士の間隔を30pxに固定 */
+    }
+
+    .navigation-item {
+      font-family: 'Jost', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: color 0.3s ease;
+    }
+
+    .navigation-item:hover {
+      color: var(--text-main);
+    }
+
+    /* スマホ表示時のズレも完全に防止 */
+    @media (max-width: 640px) {
+      header {
+        padding: 15px 20px;
+        /* スマホ時は左右の余白を20pxに統一 */
+      }
+    }
+
+    /* --- コンテンツエリア --- */
     .page-content {
       max-width: 800px;
       margin: 0 auto;
-      padding: 60px 20px;
+      padding: 60px 20px 100px 20px;
     }
 
-    /* ヒーローエリア */
-    .phrase {
+    /* ページタイトル */
+    .page-title {
+      font-size: 32px;
+      font-weight: 300;
       text-align: center;
-      padding: 40px 20px;
       margin-bottom: 60px;
-    }
-    .Eikou {
-      margin: 0;
-      font-family: 'Montserrat', 'Noto Sans JP', sans-serif;
-      font-size: 42px;
-      font-weight: 700;
       letter-spacing: 4px;
-      background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple));
-      background-clip: text;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 40px rgba(244, 114, 182, 0.3);
     }
 
-    /* パビリオン（カード）グリッド */
+    /* =========================================
+           2. ブログ風・グリッドレイアウト
+        ========================================= */
     .subject-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 30px;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 35px;
     }
 
+    /* 高級感のあるミニマルブログカード */
     .subject-card {
-      background: var(--glass-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid var(--glass-border);
-      border-radius: 24px;
-      padding: 30px;
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 35px;
       display: flex;
       flex-direction: column;
-      gap: 20px;
-      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      gap: 25px;
       position: relative;
       overflow: hidden;
-    }
-    
-    .subject-card:hover {
-      transform: translateY(-10px);
-      background: rgba(255, 255, 255, 0.05);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.01);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.4s ease;
     }
 
-    /* カードごとの発光エフェクト */
-    .card-muth:hover { border-color: rgba(192, 132, 252, 0.4); box-shadow: 0 10px 30px rgba(192, 132, 252, 0.15); }
-    .card-best:hover { border-color: rgba(251, 191, 36, 0.4); box-shadow: 0 10px 30px rgba(251, 191, 36, 0.15); }
-    .card-dtm:hover { border-color: rgba(56, 189, 248, 0.4); box-shadow: 0 10px 30px rgba(56, 189, 248, 0.15); }
-    .card-muther:hover { border-color: rgba(52, 211, 153, 0.4); box-shadow: 0 10px 30px rgba(52, 211, 153, 0.15); }
+    /* 上部の細いインライン・カラーアクセント */
+    .subject-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+    }
 
+    .card-muth::before {
+      background: var(--color-muth);
+    }
+
+    .card-best::before {
+      background: var(--color-best);
+    }
+
+    .card-dtm::before {
+      background: var(--color-dtm);
+    }
+
+    .card-muther::before {
+      background: var(--color-muther);
+    }
+
+    /* タイトルヘッダー */
     .subject-title {
-      font-size: 22px;
-      font-weight: 600;
+      font-size: 20px;
+      font-weight: 500;
       display: flex;
       align-items: center;
-      gap: 15px;
-      padding-bottom: 15px;
-      border-bottom: 1px solid var(--glass-border);
+      gap: 14px;
       color: var(--text-main);
-      transition: text-shadow 0.3s;
+      letter-spacing: 1px;
     }
-    
-    .subject-title i { 
-      font-size: 28px; 
-      transition: transform 0.3s;
+
+    .subject-title i {
+      font-size: 22px;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* アイコン固有カラー */
+    .card-muth i {
+      color: var(--color-muth);
+    }
+
+    .card-best i {
+      color: var(--color-best);
+    }
+
+    .card-dtm i {
+      color: var(--color-dtm);
+    }
+
+    .card-muther i {
+      color: var(--color-muther);
+    }
+
+    /* --- ホバーエフェクト --- */
+    .subject-card:hover {
+      transform: translateY(-5px);
     }
 
     .subject-card:hover .subject-title i {
-      transform: scale(1.1);
+      transform: scale(1.15);
     }
 
-    /* アイコンの色 */
-    .card-muth i { color: var(--neon-purple); text-shadow: 0 0 15px rgba(192, 132, 252, 0.5); }
-    .card-best i { color: var(--neon-yellow); text-shadow: 0 0 15px rgba(251, 191, 36, 0.5); }
-    .card-dtm i { color: var(--neon-blue); text-shadow: 0 0 15px rgba(56, 189, 248, 0.5); }
-    .card-muther i { color: var(--neon-green); text-shadow: 0 0 15px rgba(52, 211, 153, 0.5); }
+    /* 各カードの個別ホバーシャドウと境界線発光 */
+    .subject-card.card-muth:hover {
+      border-color: rgba(139, 92, 246, 0.3);
+      box-shadow: 0 15px 30px rgba(139, 92, 246, 0.05);
+    }
 
+    .subject-card.card-best:hover {
+      border-color: rgba(217, 119, 6, 0.3);
+      box-shadow: 0 15px 30px rgba(217, 119, 6, 0.05);
+    }
+
+    .subject-card.card-dtm:hover {
+      border-color: rgba(14, 165, 233, 0.3);
+      box-shadow: 0 15px 30px rgba(14, 165, 233, 0.05);
+    }
+
+    .subject-card.card-muther:hover {
+      border-color: rgba(16, 185, 129, 0.3);
+      box-shadow: 0 15px 30px rgba(16, 185, 129, 0.05);
+    }
+
+    /* 洗練された下部メインボタン */
     .btn-main {
       display: inline-flex;
       align-items: center;
-      justify-content: space-between;
-      background: rgba(255, 255, 255, 0.03);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      color: var(--text-sub);
-      border-radius: 12px;
-      padding: 12px 20px;
+      justify-content: center;
+      gap: 10px;
+      background-color: var(--accent-color);
+      color: #ffffff;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 13.5px;
       font-weight: 500;
-      font-size: 13px;
       margin-top: auto;
-      transition: all 0.3s ease;
+      transition: background-color 0.2s, box-shadow 0.2s;
     }
 
-    .subject-card:hover .btn-main {
-      background: rgba(255, 255, 255, 0.1);
-      color: var(--text-main);
-      border-color: rgba(255, 255, 255, 0.2);
+    .btn-main:hover {
+      background-color: #1e293b;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
     }
 
-    @media (max-width: 480px) { .subject-grid { grid-template-columns: 1fr; gap: 20px;} .Eikou { font-size: 32px; } }
+    @media (max-width: 640px) {
+      header {
+        padding: 15px 20px;
+      }
+
+      .subject-grid {
+        grid-template-columns: 1fr;
+        gap: 25px;
+      }
+
+      .page-title {
+        font-size: 28px;
+      }
+
+      .subject-card {
+        padding: 25px;
+      }
+    }
   </style>
 </head>
 
 <body>
+
   <header>
+    <div class="logo">EIKOU KINGDOM</div>
     <div class="navigation">
       <a href="index.html" class="navigation-item">Top</a>
       <a href="rank.html" class="navigation-item">Ranking</a>
@@ -190,12 +291,11 @@
   </header>
 
   <div class="page-content">
-    <div class="phrase">
-      <h3 class="Eikou">MUSIC</h3>
-      <p style="color: var(--text-sub); font-family: 'Montserrat', sans-serif; letter-spacing: 2px;">〜 音楽の世界 〜</p>
-    </div>
-    
+
+    <h1 class="page-title">MUSIC</h1>
+
     <div class="subject-grid">
+
       <div class="subject-card card-muth">
         <a href="muth.html" class="subject-title">
           <i class="fa-solid fa-book-open"></i> 音楽理論
@@ -223,7 +323,10 @@
         </a>
         <a href="muther.html" class="btn-main">記事一覧を見る <i class="fa-solid fa-arrow-right"></i></a>
       </div>
+
     </div>
+
   </div>
 </body>
+
 </html>

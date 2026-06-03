@@ -47,10 +47,11 @@
             color: inherit;
         }
 
-        /* --- ヘッダー（極めてシンプルに） --- */
+        /* --- ヘッダー（4ファイル完全共通・ズレ防止） --- */
         header {
             background-color: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--border-color);
             padding: 15px 40px;
             position: sticky;
@@ -59,6 +60,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-sizing: border-box;
+            /* 横幅の計算を全ファイルで固定 */
         }
 
         .logo {
@@ -72,6 +75,7 @@
         .navigation {
             display: flex;
             gap: 30px;
+            /* ボタン同士の間隔を30pxに固定 */
         }
 
         .navigation-item {
@@ -86,6 +90,14 @@
 
         .navigation-item:hover {
             color: var(--text-main);
+        }
+
+        /* スマホ表示時のズレも完全に防止 */
+        @media (max-width: 640px) {
+            header {
+                padding: 15px 20px;
+                /* スマホ時は左右の余白を20pxに統一 */
+            }
         }
 
         /* --- コンテンツエリア --- */

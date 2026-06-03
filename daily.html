@@ -4,176 +4,283 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>えいこう王国 - Daily</title>
+  <title>Daily - えいこう王国</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@700;900&display=swap" rel="stylesheet">
-  
+  <link
+    href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&family=Noto+Sans+JP:wght@300;400;500;700&display=swap"
+    rel="stylesheet">
+
   <style>
-    /* --- 遊園地風カラーパレット --- */
+    /* =========================================
+       1. 洗練されたモダン・ミニマルスタイル（ライト）
+    ========================================= */
     :root {
-      --bg-color: #fff4d2;
-      --text-main: #2b2b2b;
-      --color-red: #ff5e5e;
-      --color-blue: #4db8ff;
-      --color-yellow: #ffcf33;
-      --color-green: #3ade82;
-      --color-purple: #b37bf0;
-      --color-pink: #ff85c6;
-      --color-orange: #ffa447;
-      --border-thick: 4px solid #2b2b2b;
+      --bg-color: #fafafa;
+      /* ほんのり温かみのある白 */
+      --text-main: #1e293b;
+      /* 濃いスレートグレー */
+      --text-muted: #64748b;
+      /* 落ち着いたグレー */
+      --accent-color: #0f172a;
+      /* ほぼ黒のネイビー */
+      --border-color: #e2e8f0;
+      /* 薄く上品な境界線 */
+
+      /* 日常を引き立てるアイデンティティカラー */
+      --color-game: #0ea5e9;
+      /* ゲーム: 澄み渡るライトブルー */
+      --color-trip: #10b981;
+      /* 旅: 瑞々しいエメラルドグリーン */
+      --color-work: #ef4444;
+      /* 仕事: スタイリッシュなレッド */
     }
 
     body {
       margin: 0;
       padding: 0;
       background-color: var(--bg-color);
-      background-image: radial-gradient(#ffe082 15%, transparent 20%), radial-gradient(#ffe082 15%, transparent 20%);
-      background-size: 20px 20px;
-      background-position: 0 0, 10px 10px;
       color: var(--text-main);
-      font-family: 'M PLUS Rounded 1c', sans-serif;
-      line-height: 1.6;
+      font-family: 'Noto Sans JP', 'Helvetica Neue', sans-serif;
+      line-height: 1.8;
+      letter-spacing: 0.05em;
+      -webkit-font-smoothing: antialiased;
     }
 
-    a { text-decoration: none; color: inherit; }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
 
-    /* ナビゲーション */
-    .margin1 {
-      background-color: var(--color-blue);
-      border-bottom: var(--border-thick);
-      padding: 15px 0;
+    /* --- ヘッダー（4ファイル完全共通・ズレ防止） --- */
+    header {
+      background-color: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 15px 40px;
       position: sticky;
       top: 0;
       z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-sizing: border-box;
+      /* 横幅の計算を全ファイルで固定 */
     }
-    .navigation { display: flex; justify-content: center; gap: 20px; }
-    .navigation-item {
-      background-color: #fff;
-      border: var(--border-thick);
-      padding: 8px 20px;
-      border-radius: 20px;
-      font-weight: 900;
-      color: var(--text-main);
-      box-shadow: 3px 3px 0px #2b2b2b;
-      transition: all 0.1s ease;
-    }
-    .navigation-item:active { transform: translate(3px, 3px); box-shadow: 0px 0px 0px #2b2b2b; }
 
-    /* コンテンツエリア */
+    .logo {
+      font-family: 'Jost', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      color: var(--accent-color);
+    }
+
+    .navigation {
+      display: flex;
+      gap: 30px;
+      /* ボタン同士の間隔を30pxに固定 */
+    }
+
+    .navigation-item {
+      font-family: 'Jost', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: color 0.3s ease;
+    }
+
+    .navigation-item:hover {
+      color: var(--text-main);
+    }
+
+    /* スマホ表示時のズレも完全に防止 */
+    @media (max-width: 640px) {
+      header {
+        padding: 15px 20px;
+        /* スマホ時は左右の余白を20pxに統一 */
+      }
+    }
+
+    /* --- コンテンツエリア --- */
     .page-content {
       max-width: 800px;
       margin: 0 auto;
-      padding: 40px 20px;
+      padding: 60px 20px 100px 20px;
     }
 
-    /* ヒーローエリア */
-    .phrase {
-      background-color: var(--color-orange); /* 日常はあたたかいオレンジ */
-      border: var(--border-thick);
-      border-radius: 30px;
-      padding: 40px 20px;
+    /* ページタイトル */
+    .page-title {
+      font-size: 32px;
+      font-weight: 300;
       text-align: center;
-      box-shadow: 6px 6px 0px #2b2b2b;
-      margin-bottom: 50px;
-      position: relative;
-    }
-    .phrase::before {
-      content: '';
-      position: absolute;
-      top: 10px; left: 10px; right: 10px; bottom: 10px;
-      border: 3px dashed #fff;
-      border-radius: 20px;
-      pointer-events: none;
-    }
-    .Eikou {
-      margin: 0;
-      font-size: 38px;
-      font-weight: 900;
-      color: #fff;
-      text-shadow: 3px 3px 0px var(--text-main);
-      line-height: 1.4;
-      letter-spacing: 2px;
-      position: relative;
-      z-index: 1;
+      margin-bottom: 60px;
+      letter-spacing: 4px;
     }
 
-    /* パビリオン（カード）グリッド */
+    /* =========================================
+       2. ブログ風・グリッドレイアウト
+    ========================================= */
     .subject-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 25px;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 35px;
     }
 
+    /* 高級感のあるミニマルブログカード */
     .subject-card {
-      background-color: #fff;
-      border: var(--border-thick);
-      border-radius: 20px;
-      box-shadow: 6px 6px 0px #2b2b2b;
-      padding: 20px;
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 35px;
       display: flex;
       flex-direction: column;
-      gap: 15px;
-      transition: 0.1s;
+      gap: 25px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.01);
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.4s ease;
     }
-    
-    /* カードごとのアクセントカラー */
-    .subject-card.game { border-top: 12px solid var(--color-blue); }
-    .subject-card.trip { border-top: 12px solid var(--color-green); }
-    .subject-card.work { border-top: 12px solid var(--color-red); }
 
+    /* 上部の細いインライン・カラーアクセント */
+    .subject-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+    }
+
+    .game::before {
+      background: var(--color-game);
+    }
+
+    .trip::before {
+      background: var(--color-trip);
+    }
+
+    .work::before {
+      background: var(--color-work);
+    }
+
+    /* タイトルヘッダー */
     .subject-title {
-      font-size: 24px;
-      font-weight: 900;
+      font-size: 20px;
+      font-weight: 500;
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding-bottom: 15px;
-      border-bottom: 3px dashed #e0e0e0;
-      transition: opacity 0.2s;
+      gap: 14px;
+      color: var(--text-main);
+      letter-spacing: 1px;
     }
-    .subject-title:hover { opacity: 0.6; }
-    .subject-title i { font-size: 28px; }
 
-    /* アイコンの色 */
-    .game i { color: var(--color-blue); }
-    .trip i { color: var(--color-green); }
-    .work i { color: var(--color-red); }
+    .subject-title i {
+      font-size: 22px;
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
 
+    /* アイコン固有カラー */
+    .game i {
+      color: var(--color-game);
+    }
+
+    .trip i {
+      color: var(--color-trip);
+    }
+
+    .work i {
+      color: var(--color-work);
+    }
+
+    /* --- ホバーエフェクト --- */
+    .subject-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .subject-card:hover .subject-title i {
+      transform: scale(1.15);
+    }
+
+    /* 各カードの個別ホバーシャドウと境界線発光 */
+    .subject-card.game:hover {
+      border-color: rgba(14, 165, 233, 0.3);
+      box-shadow: 0 15px 30px rgba(14, 165, 233, 0.05);
+    }
+
+    .subject-card.trip:hover {
+      border-color: rgba(16, 185, 129, 0.3);
+      box-shadow: 0 15px 30px rgba(16, 185, 129, 0.05);
+    }
+
+    .subject-card.work:hover {
+      border-color: rgba(239, 68, 68, 0.3);
+      box-shadow: 0 15px 30px rgba(239, 68, 68, 0.05);
+    }
+
+    /* 洗練された下部メインボタン */
     .btn-main {
-      display: inline-block;
-      text-align: center;
-      background-color: var(--text-main);
-      color: #fff;
-      border-radius: 12px;
-      padding: 8px;
-      font-weight: 900;
-      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background-color: var(--accent-color);
+      color: #ffffff;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 13.5px;
+      font-weight: 500;
       margin-top: auto;
-      transition: 0.2s;
+      transition: background-color 0.2s, box-shadow 0.2s;
     }
-    .btn-main:hover { background-color: #444; }
 
-    @media (max-width: 480px) { .subject-grid { grid-template-columns: 1fr; } }
+    .btn-main:hover {
+      background-color: #1e293b;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
+    }
+
+    @media (max-width: 640px) {
+      header {
+        padding: 15px 20px;
+      }
+
+      .subject-grid {
+        grid-template-columns: 1fr;
+        gap: 25px;
+      }
+
+      .page-title {
+        font-size: 28px;
+      }
+
+      .subject-card {
+        padding: 25px;
+      }
+    }
   </style>
 </head>
 
 <body>
-  <div class="margin1">
-    <div class="navigation">
-      <a href="index.html" class="navigation-item">Top</a>
-      <a href="rank.html" class="navigation-item">Ranking</a>
-      <a href="search.html" class="navigation-item">Search</a>
-    </div>
-  </div>
+
+<header>
+        <div class="logo">EIKOU KINGDOM</div>
+        <div class="navigation">
+            <a href="index.html" class="navigation-item">Top</a>
+            <a href="rank.html" class="navigation-item">Ranking</a>
+            <a href="search.html" class="navigation-item">Search</a>
+        </div>
+    </header>
 
   <div class="page-content">
-    <div class="phrase">
-      <h3 class="Eikou">Daily<br>〜 日常の記録 〜</h3>
-    </div>
-    
+
+    <h1 class="page-title">Daily</h1>
+
     <div class="subject-grid">
+
       <div class="subject-card game">
         <a href="game.html" class="subject-title">
           <i class="fa-solid fa-gamepad"></i> ゲーム
@@ -194,7 +301,10 @@
         </a>
         <a href="work.html" class="btn-main">記事一覧を見る <i class="fa-solid fa-arrow-right"></i></a>
       </div>
+
     </div>
+
   </div>
 </body>
+
 </html>
