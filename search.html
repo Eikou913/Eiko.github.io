@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Search - えいこう王国</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap"
+    rel="stylesheet">
+
+  <style>
+    /* =========================================
+       1. チームラボ風 / デジタル・アート・パレット
+    ========================================= */
+    :root {
+      --bg-dark: #050914;
+      --glass-bg: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --text-main: #f8fafc;
+      --text-sub: #94a3b8;
+      --neon-blue: #38bdf8;
+      --neon-purple: #c084fc;
+      --neon-pink: #f472b6;
+      --neon-green: #34d399;
+      --neon-yellow: #fbbf24;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Noto Sans JP', sans-serif;
+      line-height: 1.8;
+      overflow-x: hidden;
+      background-image:
+        radial-gradient(circle at 15% 50%, rgba(56, 189, 248, 0.15), transparent 25%),
+        radial-gradient(circle at 85% 30%, rgba(192, 132, 252, 0.15), transparent 25%);
+      background-attachment: fixed;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* グラスモーフィズムUI */
+    .glass-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    }
+
+    /* --- ナビゲーション --- */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(5, 9, 20, 0.6);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--glass-border);
+      padding: 15px 0;
+    }
+
+    .navigation {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+    }
+
+    .navigation-item {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-sub);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      transition: color 0.3s ease, text-shadow 0.3s ease;
+    }
+
+    .navigation-item:hover,
+    .navigation-item.active {
+      color: var(--text-main);
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+
+    /* --- コンテンツエリア --- */
+    .page-content {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 60px 20px 100px 20px;
+      box-sizing: border-box;
+    }
+
+    .page-title {
+      font-family: 'Montserrat', 'Noto Sans JP', sans-serif;
+      font-size: 32px;
+      font-weight: 300;
+      text-align: center;
+      margin-bottom: 50px;
+      letter-spacing: 4px;
+      background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 40px rgba(56, 189, 248, 0.2);
+    }
+
+    /* --- 検索ボックス領域 --- */
+    .search-box-wrap {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 40px;
+      padding: 6px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--glass-border);
+    }
+
+    .search-box-wrap input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      padding: 12px 16px;
+      color: var(--text-main);
+      font-size: 15px;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .search-box-wrap input::placeholder {
+      color: rgba(248, 250, 252, 0.3);
+    }
+
+    .search-box-wrap button {
+      background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
+      color: #ffffff;
+      border: none;
+      border-radius: 12px;
+      padding: 0 24px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'Montserrat', sans-serif;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 15px rgba(192, 132, 252, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .search-box-wrap button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(56, 189, 248, 0.4);
+    }
+
+    /* =========================================
+       コンパクト・ブログ風アーカイブ専用CSS
+    ========================================= */
+    .blog-archive-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .archive-row-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 24px;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      border-radius: 16px;
+    }
+
+    .archive-row-item:hover {
+      background: rgba(255, 255, 255, 0.06);
+      transform: translateX(4px);
+      border-color: rgba(255, 255, 255, 0.15);
+    }
+
+    .archive-left-block {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .archive-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-shrink: 0;
+    }
+
+    .archive-page-count {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      color: var(--text-sub);
+      opacity: 0.8;
+    }
+
+    .archive-row-title {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-main);
+      margin: 0;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .archive-right-block {
+      display: flex;
+      align-items: center;
+      color: var(--text-sub);
+      font-size: 12px;
+      flex-shrink: 0;
+      margin-left: 15px;
+      transition: color 0.3s ease, transform 0.3s ease;
+    }
+
+    .archive-row-item:hover .archive-right-block {
+      color: var(--text-main);
+      transform: translateX(2px);
+    }
+
+    /* 各種カテゴリバッジの色 */
+    .badge-nekoa { background: rgba(251, 191, 36, 0.15); color: var(--neon-yellow); }
+    .badge-study { background: rgba(192, 132, 252, 0.15); color: var(--neon-purple); }
+    .badge-life { background: rgba(56, 189, 248, 0.15); color: var(--neon-blue); }
+    .badge-music { background: rgba(244, 114, 182, 0.15); color: var(--neon-pink); }
+    .badge-daily { background: rgba(52, 211, 153, 0.15); color: var(--neon-green); }
+
+    .article-category {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: 1px;
+      text-align: center;
+    }
+
+    /* 検索結果の「該当なし」等のメッセージ */
+    .search-no-result {
+      text-align: center;
+      color: var(--text-sub);
+      font-size: 14px;
+      padding: 30px 20px;
+      border: 1px dashed var(--glass-border);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.01);
+      line-height: 1.6;
+    }
+
+    /* =========================================
+       スマートフォン向け レスポンシブ設計
+    ========================================= */
+    @media (max-width: 640px) {
+      .archive-row-item { padding: 12px 16px; }
+      .archive-left-block { gap: 12px; }
+      .archive-meta { flex-direction: column; align-items: flex-start; gap: 4px; }
+      .archive-row-title { font-size: 13.5px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="navigation">
+      <a href="index.html" class="navigation-item">Top</a>
+      <a href="rank.html" class="navigation-item">Ranking</a>
+      <a href="search.html" class="navigation-item active">Search</a>
+    </div>
+  </header>
+
+  <div class="page-content">
+
+    <h1 class="page-title">PAGES ARCHIVE</h1>
+
+    <div class="search-box-wrap">
+      <input type="text" id="search-input" placeholder="キーワードを入力して絞り込み... (例: 数学、機材、目標)">
+      <button id="search-button"><i class="fa-solid fa-magnifying-glass"></i> FILTER</button>
+    </div>
+
+    <div class="blog-archive-list" id="archive-container">
+      <div class="search-no-result">データを読み込み中...</div>
+    </div>
+
+  </div>
+
+  <script>
+    const searchInput = document.getElementById('search-input');
+    const searchButton = document.getElementById('search-button');
+    const archiveContainer = document.getElementById('archive-container');
+    let archiveDatabase = []; 
+
+    // ★ 外部JSONファイルの読み込み（非同期処理）
+    fetch('articles.json')
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('ネットワークエラーが発生しました');
+        }
+        return response.json();
+      })
+      .then(data => {
+        archiveDatabase = data;
+        renderArchive(); // データの取得が完了した「後」にリストを描画する
+      })
+      .catch(error => {
+        // ローカル環境（file:///）で開いた場合のエラー対策
+        console.error('Fetch Error:', error);
+        archiveContainer.innerHTML = `
+          <div class="search-no-result" style="color: var(--neon-pink);">
+            <i class="fa-solid fa-triangle-exclamation" style="font-size:24px; margin-bottom:10px; display:block;"></i>
+            データの読み込みに失敗しました。<br>
+            ※PCのフォルダから直接開いている（URLが file:///〜 で始まっている）場合、ブラウザのセキュリティ制限により articles.json を読み込めません。<br>
+            VSCodeの「Live Server」機能などを使用して開いてください。
+          </div>
+        `;
+      });
+
+    // リストを描画するメイン処理
+    function renderArchive(filterQuery = '') {
+      archiveContainer.innerHTML = '';
+
+      const filtered = archiveDatabase.filter(item => {
+        if (!filterQuery) return true;
+        return item.title.toLowerCase().includes(filterQuery) ||
+          item.category.toLowerCase().includes(filterQuery) ||
+          (item.keywords && item.keywords.toLowerCase().includes(filterQuery));
+      });
+
+      if (filtered.length === 0) {
+        archiveContainer.innerHTML = '<div class="search-no-result"><i class="fa-solid fa-magnifying-glass-blur" style="font-size:20px; color:var(--neon-pink); display:block; margin-bottom:8px;"></i>該当するアーカイブが見つかりません。</div>';
+        return;
+      }
+
+      filtered.forEach(item => {
+        const anchor = document.createElement('a');
+        anchor.href = item.url;
+        anchor.className = 'archive-row-item glass-card';
+
+        let badgeColorClass = 'badge-life';
+        if (item.category === 'nekoa') badgeColorClass = 'badge-nekoa';
+        if (item.category === 'study') badgeColorClass = 'badge-study';
+        if (item.category === 'music') badgeColorClass = 'badge-music';
+        if (item.category === 'daily') badgeColorClass = 'badge-daily';
+
+        anchor.innerHTML = `
+          <div class="archive-left-block">
+            <div class="archive-meta">
+              <span class="article-category ${badgeColorClass}">${item.category.toUpperCase()}</span>
+              <span class="archive-page-count">${item.count}</span>
+            </div>
+            <h4 class="archive-row-title">${item.title}</h4>
+          </div>
+          <div class="archive-right-block">
+            <i class="fa-solid fa-arrow-right"></i>
+          </div>
+        `;
+        archiveContainer.appendChild(anchor);
+      });
+    }
+
+    function handleSearch() {
+      const query = searchInput.value.trim().toLowerCase();
+      renderArchive(query);
+    }
+
+    searchInput.addEventListener('input', handleSearch);
+    searchButton.addEventListener('click', handleSearch);
+
+    // ※ 注意: 一番下にあった `renderArchive();` は削除しました。
+    // （JSONの読み込みが終わる前に空っぽの状態で実行されるのを防ぐため）
+  </script>
+</body>
+
+</html>

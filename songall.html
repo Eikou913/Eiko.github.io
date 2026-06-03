@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SongAll - えいこう王国</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* =========================================
+           1. 洗練されたモダン・ミニマルスタイル
+        ========================================= */
+        :root {
+            --bg-color: #fafafa;         /* ほんのり温かみのある白 */
+            --text-main: #1e293b;        /* 濃いスレートグレー（真っ黒より知的） */
+            --text-muted: #64748b;       /* 落ち着いたグレー */
+            --accent-color: #0f172a;     /* ほぼ黒のネイビー（引き締め色） */
+            --border-color: #e2e8f0;     /* 薄く上品な境界線 */
+            --highlight: #38bdf8;        /* 知的な印象を与えるクリアなブルー */
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Noto Sans JP', 'Helvetica Neue', sans-serif;
+            line-height: 1.8;
+            letter-spacing: 0.05em;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a { text-decoration: none; color: inherit; }
+
+        /* --- ヘッダー（極めてシンプルに） --- */
+        header {
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 15px 40px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-family: 'Jost', sans-serif;
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: var(--accent-color);
+        }
+
+        .navigation {
+            display: flex;
+            gap: 30px;
+        }
+
+        .navigation-item {
+            font-family: 'Jost', sans-serif;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+        }
+        
+        .navigation-item:hover {
+            color: var(--text-main);
+        }
+
+        /* --- コンテンツエリア --- */
+        .page-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 60px 20px 100px 20px;
+        }
+
+        /* ページタイトル */
+        .page-title {
+            font-size: 32px;
+            font-weight: 300;
+            text-align: center;
+            margin-bottom: 50px;
+            letter-spacing: 4px;
+        }
+
+        /* --- 人生計画 サブナビゲーション（クリーンなタブ風） --- */
+        .vision-nav {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 60px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+        }
+
+        .vision-nav-item {
+            padding: 8px 16px;
+            font-size: 14px;
+            color: var(--text-muted);
+            border-radius: 20px;
+            transition: all 0.2s ease;
+        }
+
+        .vision-nav-item:hover {
+            background-color: #f1f5f9;
+            color: var(--text-main);
+        }
+
+        .vision-nav-item.active {
+            background-color: var(--accent-color);
+            color: #ffffff;
+            font-weight: 500;
+        }
+
+        /* --- テキストコンテンツ --- */
+        .document-section {
+            margin-bottom: 60px;
+        }
+
+        h2 {
+            font-size: 20px;
+            font-weight: 500;
+            border-left: 3px solid var(--accent-color);
+            padding-left: 15px;
+            margin: 50px 0 20px 0;
+        }
+
+        p {
+            font-size: 15px;
+            color: #334155;
+            margin-bottom: 20px;
+        }
+
+        /* CPU/GPU/RAM の解説（アカデミックな注釈風） */
+        .concept-box {
+            background-color: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 30px;
+            margin: 30px 0;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+        }
+
+        .concept-item {
+            margin-bottom: 20px;
+        }
+        .concept-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .concept-item strong {
+            font-family: 'Jost', sans-serif;
+            color: var(--highlight);
+            font-size: 16px;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .concept-item span {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        /* 比較リスト（すっきりとした箇条書き） */
+        .comparison-list {
+            background-color: #f8fafc;
+            border-left: 3px solid var(--border-color);
+            padding: 20px 30px;
+            margin: 20px 0;
+            list-style: none;
+        }
+
+        .comparison-list li {
+            margin-bottom: 10px;
+            font-size: 14.5px;
+        }
+        .comparison-list li:last-child { margin-bottom: 0; }
+        .comparison-list strong { color: var(--accent-color); }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="logo">EIKOU KINGDOM</div>
+        <div class="navigation">
+            <a href="index.html" class="navigation-item">Top</a>
+            <a href="rank.html" class="navigation-item">Ranking</a>
+            <a href="search.html" class="navigation-item">Search</a>
+        </div>
+    </header>
+
+    <div class="page-content">
+            <h2>知能の構造化（CPU・GPU・RAM）</h2>
+            <p>まず、勉強の目的は大きく分けて以下の3つに分類できる。</p>
+
+            <div class="concept-box">
+                <div class="concept-item">
+                    <strong>X : CPU</strong>
+                    <span>主に「直列処理」を担う。深い論理的推論、因果関係の構築、ルールの実行など。</span>
+                </div>
+                <div class="concept-item">
+                    <strong>Y : GPU</strong>
+                    <span>主に「並列処理」を担う。空間認識、パターンの構築処理、3D構造、複数要素のシミュレーションなど。</span>
+                </div>
+                <div class="concept-item">
+                    <strong>Z : RAM</strong>
+                    <span>主にデータベースからの「データ呼び出し」「キャッシュ」を担う。</span>
+                </div>
+            </div>
+            
+            <p>僕の計画では、まずCPUを鍛えて、賢い人がもつ極めて論理的なOSを自分の脳にインストールする。<br>
+               <strong>第一原理思考に忠実になる作業</strong>だ。</p>
+            <p>これをすることで、できる限り早く物事を正しい方向に導けるような直観力を身につけられる。<br>
+               ゴールとしては、哲学的な議題に早いスピードでそれなりの解を見出せること。<br>
+               深く推論しなくても、ある程度「こうなんじゃないか」という指針が浮かぶくらいにはしたい。</p>
+
+            <ul class="comparison-list">
+                <li><strong>CPUを強化しないと：</strong> 無意識に他人の意見に流されたり、丸暗記に頼ることになる。</li>
+                <li><strong>CPUを強化すると：</strong> 第一原理思考に基づき、自分で本質を考える力がつく。</li>
+            </ul>
+
+            <p>CPUを強化したら、次にGPUを強化する。そうすることで、数式を現実世界に同期させたり、パターン認識力が向上する。<br>
+               これにより複雑な問題を処理でき、思考の解像度が上がるのだ。</p>
+
+            <ul class="comparison-list">
+                <li><strong>GPUを強化しないと：</strong> 1つのことしか考えられない。</li>
+                <li><strong>GPUを強化すると：</strong> 様々な事象を並行して結び付け、立体的・俯瞰的に考えることができる。</li>
+            </ul>
+
+            <p>最後にRAMを強化する。インターネットの普及により、脳内に知識を置いていなくても専門家並みの知識が引き出せるようになったため優先度は下がるが、AIに負けないためにはスペックは高い方がいい。<br>
+               また、頭の中に情報をストックできると、GPUの動作もよりスムーズになる。</p>
+
+            <h2>学問の分類とマイルストーン</h2>
+            <p>この考え方を用いて、16の項目を分類すると以下のようになる。</p>
+            <ul class="comparison-list">
+                <li><strong>X (CPU):</strong> 哲学、現代文</li>
+                <li><strong>X + Y:</strong> 数学、物理、プログラミング、経済、音楽</li>
+                <li><strong>Y (GPU):</strong> 文学、地学</li>
+                <li><strong>Y + Z:</strong> 化学、生物、地理、英語</li>
+                <li><strong>Z (RAM):</strong> 古文・漢文、歴史</li>
+                <li><strong>Z + X:</strong> 公共</li>
+            </ul>
+
+            <p>僕はまず「X」と「X+Y」に該当する学問を<strong>「20歳までに」</strong>ある程度制覇したい。<br>
+               範囲としては高校レベルはMust、加えて必要な学問は大学レベルまで全部やってみたい。<br>
+               その他の学問は必要最低限のレベルだけやる。その後にハマった学問や、将来活きると思った学問があれば深く追求していく。</p>
+        </div>
+
+        <div class="roadmap-container">
+            
+            <div class="phase-block" id="stage1">
+                <div class="phase-header">
+                    <div class="phase-title">PHASE 01 : 20歳までの目標（CPUの強化 - X, X+Y）</div>
+                    <div class="phase-progress" id="stage1-progress">0%</div>
+                </div>
+                
+                <div class="step-list">
+                    <div class="step-card" id="block-sub1">
+                        <div class="step-header">
+                            <div class="step-name">現代文・哲学</div>
+                            <div class="step-percent" id="percent-sub1">0%</div>
+                        </div>
+                        <div class="task-list" id="sub1">
+                            <label class="task-item" onclick="toggleCheck(this, 'sub1')">
+                                <input type="checkbox"> <span>【現代文】入試アクセス基本・発展を終わらせる</span>
+                            </label>
+                            <label class="task-item" onclick="toggleCheck(this, 'sub1')">
+                                <input type="checkbox"> <span>【現代文】キーワード読解を3周する</span>
+                            </label>
+                            <label class="task-item" onclick="toggleCheck(this, 'sub1')">
+                                <input type="checkbox"> <span>【現代文】Top2500と漢字マスター1800+を1周</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="step-card" id="block-sub2">
+                        <div class="step-header">
+                            <div class="step-name">数学・物理・プログラミング・経済・音楽</div>
+                            <div class="step-percent" id="percent-sub2">0%</div>
+                        </div>
+                        <div class="task-list" id="sub2">
+                            <label class="task-item" onclick="toggleCheck(this, 'sub2')">
+                                <input type="checkbox"> <span>【数学】入門+青チャートを3周以上</span>
+                            </label>
+                            <label class="task-item" onclick="toggleCheck(this, 'sub2')">
+                                <input type="checkbox"> <span>【数学】標問を3周以上</span>
+                            </label>
+                            <label class="task-item" onclick="toggleCheck(this, 'sub2')">
+                                <input type="checkbox"> <span>【数学】文系プラチカを3周以上</span>
+                            </label>
+                            <label class="task-item" onclick="toggleCheck(this, 'sub2')">
+                                <input type="checkbox"> <span>【数学】上問を3周以上</span>
+                            </label>
+                            <label class="task-item" onclick="toggleCheck(this, 'sub2')">
+                                <input type="checkbox"> <span>【数学】数学の真髄を5周以上</span>
+                            </label>
+                            <label class="task-item" onclick="toggleCheck(this, 'sub2')">
+                                <input type="checkbox"> <span>【物理】セミナー物理基礎+物理を3周以上</span>
+                            </label>
+                            <label class="task-item" onclick="toggleCheck(this, 'sub2')">
+                                <input type="checkbox"> <span>【物理】物理重要問題集を3周以上</span>
+                            </label>
+                            <label class="task-item" onclick="toggleCheck(this, 'sub2')">
+                                <input type="checkbox"> <span>【PG】PythonとJavaScriptの基本を理解</span>
+                            </label>
+                            <label class="task-item" onclick="toggleCheck(this, 'sub2')">
+                                <input type="checkbox"> <span>【音楽】和声法1～3 / 対位法</span>
+                            </label>
+                            <label class="task-item" onclick="toggleCheck(this, 'sub2')">
+                                <input type="checkbox"> <span>【音楽】ザ・ジャズセオリー / 微分音音楽</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="phase-block" id="stage2">
+                <div class="phase-header">
+                    <div class="phase-title">PHASE 02 : 大学生の目標（GPUの強化 - Y, Y+Z）</div>
+                    <div class="phase-progress" id="stage2-progress">0%</div>
+                </div>
+                
+                <div class="step-list">
+                    <div class="step-card" id="block-sub3">
+                        <div class="step-header">
+                            <div class="step-name">文学・地学</div>
+                            <div class="step-percent" id="percent-sub3">0%</div>
+                        </div>
+                        <div class="task-list" id="sub3">
+                            <label class="task-item" onclick="toggleCheck(this, 'sub3')">
+                                <input type="checkbox"> <span>【地学】宇宙を探究する</span>
+                            </label>
+                            <label class="task-item" onclick="toggleCheck(this, 'sub3')">
+                                <input type="checkbox"> <span>【文学】文学作品に触れよう</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="step-card" id="block-sub4">
+                        <div class="step-header">
+                            <div class="step-name">化学・生物・地理・英語</div>
+                            <div class="step-percent" id="percent-sub4">0%</div>
+                        </div>
+                        <div class="task-list" id="sub4">
+                            <label class="task-item" onclick="toggleCheck(this, 'sub4')">
+                                <input type="checkbox"> <span>【化学】基礎の習得</span>
+                            </label>
+                            <label class="task-item" onclick="toggleCheck(this, 'sub4')">
+                                <input type="checkbox"> <span>【生物】基礎の習得</span>
+                            </label>
+                            <label class="task-item" onclick="toggleCheck(this, 'sub4')">
+                                <input type="checkbox"> <span>【英語】英検1級とる</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="phase-block" id="stage3">
+                <div class="phase-header">
+                    <div class="phase-title">PHASE 03 : 更なる高みを求めて（RAMの強化 - Z, Z+X）</div>
+                    <div class="phase-progress" id="stage3-progress">0%</div>
+                </div>
+                
+                <div class="step-list">
+                    <div class="step-card" id="block-sub5">
+                        <div class="step-header">
+                            <div class="step-name">古文・漢文・歴史</div>
+                            <div class="step-percent" id="percent-sub5">0%</div>
+                        </div>
+                        <div class="task-list" id="sub5">
+                            <label class="task-item" onclick="toggleCheck(this, 'sub5')">
+                                <input type="checkbox"> <span>【歴史】詳説世界史を抽象化してノートにまとめる</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="step-card" id="block-sub6">
+                        <div class="step-header">
+                            <div class="step-name">公共</div>
+                            <div class="step-percent" id="percent-sub6">0%</div>
+                        </div>
+                        <div class="task-list" id="sub6">
+                            <label class="task-item" onclick="toggleCheck(this, 'sub6')">
+                                <input type="checkbox"> <span>【化学】基礎の習得</span>
+                            </label>
+                            <label class="task-item" onclick="toggleCheck(this, 'sub6')">
+                                <input type="checkbox"> <span>【生物】基礎の習得</span>
+                            </label>
+                            <label class="task-item" onclick="toggleCheck(this, 'sub6')">
+                                <input type="checkbox"> <span>【英語】英検1級とる</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="vision-goal" id="total-status">
+                GOAL: 社会的意義をもってこれらの知識を活用できるようになる
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function toggleCheck(labelElement, timelineId) {
+            // labelタグを使っているので、クリックイベントは自動的に中のチェックボックスに伝わる
+            // 状態が変化した後に計算を行うための遅延処理
+            setTimeout(() => {
+                const checkbox = labelElement.querySelector('input[type="checkbox"]');
+                if (checkbox.checked) {
+                    labelElement.classList.add('checked');
+                } else {
+                    labelElement.classList.remove('checked');
+                }
+                calculateSquareProgress(timelineId);
+            }, 10);
+        }
+
+        function calculateSquareProgress(timelineId) {
+            const timeline = document.getElementById(timelineId);
+            const boxes = timeline.querySelectorAll('.task-item');
+            const total = boxes.length;
+            let checkedCount = 0;
+
+            boxes.forEach(box => {
+                if (box.querySelector('input[type="checkbox"]').checked) {
+                    checkedCount++;
+                }
+            });
+
+            const percent = Math.round((checkedCount / total) * 100);
+            document.getElementById(`percent-${timelineId}`).innerText = `${percent}%`;
+
+            calculateStageProgress();
+        }
+
+        function calculateStageProgress() {
+            // STAGE 01
+            const stage1Ids = ['sub1', 'sub2'];
+            let stage1TotalPercent = 0;
+            stage1Ids.forEach(id => {
+                stage1TotalPercent += parseInt(document.getElementById(`percent-${id}`).innerText);
+            });
+            const stage1Result = Math.round(stage1TotalPercent / stage1Ids.length);
+            document.getElementById('stage1-progress').innerText = `${stage1Result}%`;
+
+            // STAGE 02
+            const stage2Ids = ['sub3', 'sub4'];
+            let stage2TotalPercent = 0;
+            stage2Ids.forEach(id => {
+                stage2TotalPercent += parseInt(document.getElementById(`percent-${id}`).innerText);
+            });
+            const stage2Result = Math.round(stage2TotalPercent / stage2Ids.length);
+            document.getElementById('stage2-progress').innerText = `${stage2Result}%`;
+
+            // 最終ゴール
+            const totalStatus = document.getElementById('total-status');
+            const finalPercent = Math.round((stage1Result + stage2Result) / 2);
+            if (finalPercent === 100) {
+                totalStatus.innerText = "VISION ACCOMPLISHED";
+                totalStatus.style.backgroundColor = "#38bdf8"; // 達成時は鮮やかなブルーに
+            } else {
+                totalStatus.innerText = `OVERALL PROGRESS: ${finalPercent}%`;
+                totalStatus.style.backgroundColor = "var(--accent-color)";
+            }
+        }
+    </script>
+
+</body>
+</html>

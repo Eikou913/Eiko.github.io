@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Song - えいこう王国</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap"
+    rel="stylesheet">
+
+  <style>
+    /* --- チームラボ風 デジタル・アート・パレット --- */
+    :root {
+      --bg-dark: #050914;
+      --glass-bg: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --text-main: #f8fafc;
+      --text-sub: #94a3b8;
+
+      --neon-blue: #38bdf8;
+      --neon-purple: #c084fc;
+      --neon-pink: #f472b6;
+      --neon-green: #34d399;
+      --neon-yellow: #fbbf24;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Noto Sans JP', sans-serif;
+      line-height: 1.6;
+      background-image:
+        radial-gradient(circle at 10% 20%, rgba(56, 189, 248, 0.1), transparent 40%),
+        radial-gradient(circle at 90% 80%, rgba(52, 211, 153, 0.1), transparent 40%);
+      background-attachment: fixed;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ナビゲーション */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(5, 9, 20, 0.6);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--glass-border);
+      padding: 15px 0;
+    }
+
+    .navigation {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+    }
+
+    .navigation-item {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-sub);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-decoration: none;
+      transition: all 0.3s ease;
+    }
+
+    .navigation-item:hover {
+      color: var(--text-main);
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+
+    /* コンテンツエリア */
+    .page-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 60px 20px;
+    }
+
+    .title-wrap {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    h1 {
+      font-family: 'Montserrat', 'Noto Sans JP', sans-serif;
+      font-weight: 600;
+      font-size: 28px;
+      letter-spacing: 2px;
+      display: inline-flex;
+      align-items: center;
+      gap: 15px;
+      background: linear-gradient(135deg, var(--text-main), var(--text-sub));
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    h1 i {
+      color: var(--neon-blue);
+      -webkit-text-fill-color: initial;
+      text-shadow: 0 0 20px rgba(56, 189, 248, 0.5);
+    }
+
+    /* テーブルラッパー（グラスモーフィズム） */
+    .table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      margin-bottom: 80px;
+    }
+
+    /* スクロールバーのカスタマイズ */
+    .table-wrapper::-webkit-scrollbar {
+      height: 8px;
+    }
+
+    .table-wrapper::-webkit-scrollbar-track {
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 4px;
+    }
+
+    .table-wrapper::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 4px;
+    }
+
+    .table-wrapper::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.4);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      white-space: nowrap;
+    }
+
+    th,
+    td {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      border-right: 1px solid rgba(255, 255, 255, 0.02);
+      padding: 12px 16px;
+      font-size: 13px;
+      font-weight: 400;
+      text-align: center;
+    }
+
+    th:last-child,
+    td:last-child {
+      border-right: none;
+    }
+
+    /* テーブルヘッダー */
+    th {
+      background: rgba(0, 0, 0, 0.4);
+      color: var(--text-sub);
+      font-family: 'Montserrat', 'Noto Sans JP', sans-serif;
+      font-weight: 600;
+      letter-spacing: 1px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(10px);
+    }
+
+    /* セクション区切り行 */
+    .section-row td {
+      background: linear-gradient(90deg, rgba(56, 189, 248, 0.1), transparent);
+      color: var(--neon-blue);
+      font-size: 14px;
+      font-weight: 600;
+      text-align: left;
+      padding-left: 24px;
+      letter-spacing: 2px;
+      border-top: 1px solid rgba(56, 189, 248, 0.2);
+      text-shadow: 0 0 10px rgba(56, 189, 248, 0.3);
+    }
+
+    .bgm-section-row td {
+      background: linear-gradient(90deg, rgba(192, 132, 252, 0.1), transparent);
+      color: var(--neon-purple);
+      border-top: 1px solid rgba(192, 132, 252, 0.2);
+      text-shadow: 0 0 10px rgba(192, 132, 252, 0.3);
+    }
+
+    /* しましま模様・ホバー */
+    tbody tr:nth-child(even):not(.section-row):not(.bgm-section-row) {
+      background: rgba(255, 255, 255, 0.01);
+    }
+
+    tbody tr:hover:not(.section-row):not(.bgm-section-row) {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    /* アルバム用テーブルのヘッダー色 */
+    .table-album th {
+      color: var(--neon-green);
+    }
+
+    .table-album .section-row td {
+      background: linear-gradient(90deg, rgba(52, 211, 153, 0.1), transparent);
+      color: var(--neon-green);
+      border-top: 1px solid rgba(52, 211, 153, 0.2);
+      text-shadow: 0 0 10px rgba(52, 211, 153, 0.3);
+    }
+
+    /* ★曲名リンクのスタイル（光るエフェクト） */
+    .song-link {
+      color: var(--text-main);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      border-bottom: 1px solid transparent;
+    }
+
+    .song-link:hover {
+      color: var(--neon-blue);
+      text-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
+      border-bottom: 1px solid var(--neon-blue);
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="navigation">
+      <a href="index.html" class="navigation-item">Top</a>
+      <a href="rank.html" class="navigation-item">Ranking</a>
+      <a href="search.html" class="navigation-item">Search</a>
+    </div>
+  </header>
+
+  <div class="page-content">
+
+    <div class="title-wrap">
+      <h1><i class="fa-solid fa-music"></i> 提供楽曲など</h1>
+    </div>
+
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>No.</th>
+            <th>タイトル (日本語)</th>
+            <th>Title (English)</th>
+            <th>Key</th>
+            <th>BPM</th>
+            <th>拍子</th>
+            <th>Env</th>
+            <th>Genre</th>
+            <th>Year</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td><a href="songall.html" class="song-link">校歌Remix</a></td>
+            <td>School Song Remix</td>
+            <td>C+5</td>
+            <td></td>
+            <td></td>
+            <td>Fender</td>
+            <td>EDM</td>
+            <td>15</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</body>
+
+</html>

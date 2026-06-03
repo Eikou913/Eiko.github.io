@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ranking - えいこう王国</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* --- チームラボ風 デジタル・アート・パレット --- */
+    :root {
+      --bg-dark: #050914;
+      --glass-bg: rgba(255, 255, 255, 0.03);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --text-main: #f8fafc;
+      --text-sub: #94a3b8;
+      
+      --neon-blue: #38bdf8;
+      --neon-purple: #c084fc;
+      --neon-pink: #f472b6;
+      --neon-green: #34d399;
+      --neon-yellow: #fbbf24;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Noto Sans JP', sans-serif;
+      line-height: 1.8;
+      background-image: 
+        radial-gradient(circle at 80% 20%, rgba(244, 114, 182, 0.1), transparent 30%),
+        radial-gradient(circle at 20% 80%, rgba(192, 132, 252, 0.15), transparent 30%);
+      background-attachment: fixed;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    /* ナビゲーション */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(5, 9, 20, 0.6);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--glass-border);
+      padding: 15px 0;
+    }
+    .navigation { display: flex; justify-content: center; gap: 30px; }
+    .navigation-item {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-sub);
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      transition: all 0.3s ease;
+    }
+    .navigation-item:hover {
+      color: var(--text-main);
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+
+    /* コンテンツエリア */
+    .page-content {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 60px 20px;
+    }
+
+    /* ヒーローエリア */
+    .phrase {
+      text-align: center;
+      padding: 40px 20px;
+      margin-bottom: 60px;
+    }
+    .Eikou {
+      margin: 0;
+      font-family: 'Montserrat', 'Noto Sans JP', sans-serif;
+      font-size: 42px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      background: linear-gradient(135deg, var(--neon-pink), var(--neon-purple));
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 0 40px rgba(244, 114, 182, 0.3);
+    }
+
+    /* パビリオン（カード）グリッド */
+    .subject-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+    }
+
+    .subject-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .subject-card:hover {
+      transform: translateY(-10px);
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    /* カードごとの発光エフェクト */
+    .card-yene:hover { border-color: rgba(192, 132, 252, 0.4); box-shadow: 0 10px 30px rgba(192, 132, 252, 0.15); }
+    .card-yemu:hover { border-color: rgba(251, 191, 36, 0.4); box-shadow: 0 10px 30px rgba(251, 191, 36, 0.15); }
+    .card-month:hover { border-color: rgba(56, 189, 248, 0.4); box-shadow: 0 10px 30px rgba(56, 189, 248, 0.15); }
+
+    .subject-title {
+      font-size: 22px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid var(--glass-border);
+      color: var(--text-main);
+      transition: text-shadow 0.3s;
+    }
+    
+    .subject-title i { 
+      font-size: 28px; 
+      transition: transform 0.3s;
+    }
+
+    .subject-card:hover .subject-title i {
+      transform: scale(1.1);
+    }
+
+    /* アイコンの色 */
+    .card-yene i { color: var(--neon-purple); text-shadow: 0 0 15px rgba(192, 132, 252, 0.5); }
+    .card-yemu i { color: var(--neon-yellow); text-shadow: 0 0 15px rgba(251, 191, 36, 0.5); }
+    .card-month i { color: var(--neon-blue); text-shadow: 0 0 15px rgba(56, 189, 248, 0.5); }
+
+    .btn-main {
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-sub);
+      border-radius: 12px;
+      padding: 12px 20px;
+      font-weight: 500;
+      font-size: 13px;
+      margin-top: auto;
+      transition: all 0.3s ease;
+    }
+
+    .subject-card:hover .btn-main {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text-main);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    @media (max-width: 480px) { .subject-grid { grid-template-columns: 1fr; gap: 20px;} .Eikou { font-size: 32px; } }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="navigation">
+      <a href="index.html" class="navigation-item">Top</a>
+      <a href="rank.html" class="navigation-item">Ranking</a>
+      <a href="search.html" class="navigation-item">Search</a>
+    </div>
+  </header>
+
+  <div class="page-content">
+    <div class="phrase">
+      <h3 class="Eikou">Ranking</h3>
+    </div>
+    
+    <div class="subject-grid">
+      <div class="subject-card card-yene">
+        <a href="yene.html" class="subject-title">
+          <i class="fa-solid fa-book-open"></i> Year20nn/Nekoa
+        </a>
+        <a href="yene.html" class="btn-main">ランキングを見る <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+
+      <div class="subject-card card-yemu">
+        <a href="yemu.html" class="subject-title">
+          <i class="fa-solid fa-headphones"></i> Year20nn/Music
+        </a>
+        <a href="yemu.html" class="btn-main">ランキングを見る <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+
+      <div class="subject-card card-month">
+        <a href="month.html" class="subject-title">
+          <i class="fa-solid fa-sliders"></i> 月間ランキング
+        </a>
+        <a href="month.html" class="btn-main">ランキングを見る <i class="fa-solid fa-arrow-right"></i></a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

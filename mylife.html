@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>人生計画 - Midnight Chronology</title>
+  <title>Memory Museum</title>
   
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;700&family=Noto+Sans+JP:wght@300;400;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="style.css">
 </head>
@@ -16,59 +16,59 @@
 
   <div id="top-page-screen">
     <div class="portal-container">
-      <h2><i class="fa-solid fa-search"></i> CLOVER SEARCH</h2>
+      <h2><i class="fa-solid fa-search"></i> MUSEUM SEARCH</h2>
       <div class="search-box">
-        <input type="text" placeholder="キーワードやユーザー名...">
+        <input type="text" placeholder="キーワードや展示室名...">
         <button><i class="fa-solid fa-magnifying-glass"></i></button>
       </div>
-      <button class="portal-btn"><i class="fa-solid fa-qrcode"></i> QRコードで他人の記憶にダイブ</button>
-      <h2><i class="fa-solid fa-users"></i> PUBLIC ARCHIVES</h2>
+      <button class="portal-btn"><i class="fa-solid fa-qrcode"></i> QRコードで他人の展示室へ</button>
+      <h2><i class="fa-solid fa-users"></i> PUBLIC EXHIBITIONS</h2>
       <div class="public-diaries-list">
-        <div class="diary-card">User: ひまり (2015-2026)</div>
-        <div class="diary-card">User: たける (2010-2026)</div>
+        <div class="diary-card">Museum: ひまり (2015-2026)</div>
+        <div class="diary-card">Museum: たける (2010-2026)</div>
       </div>
     </div>
   </div>
 
   <div id="my-page-screen">
+    
     <div id="notebook-overlay">
       <div class="notebook-cover">
-        <h1 class="notebook-title">CHRONOLOGY</h1>
+        <h1 class="notebook-title">MEMORIES</h1>
         <p class="notebook-author">EIKOU KINGDOM</p>
-        <div class="notebook-tap-guide"><i class="fa-solid fa-fingerprint"></i> ACCESS ARCHIVE</div>
+        <div class="notebook-tap-guide"><i class="fa-solid fa-shoe-prints"></i> ENTER MUSEUM</div>
       </div>
     </div>
 
     <div id="canvas-container"></div>
+    
     <div id="floating-labels-container"></div>
 
+    <div id="cinematic-focus">
+      <div id="cinematic-year">2008</div>
+      <div id="cinematic-text">展示室へようこそ</div>
+    </div>
+
     <div id="my-ui-layer">
-      <div id="axis-legend">
-        <div class="legend-item"><span class="legend-x">X :</span> Happiness & Sorrow</div>
-        <div class="legend-item"><span class="legend-y">Y :</span> Depth of Memory</div>
-        <div class="legend-item"><span class="legend-z">Z :</span> Flow of Time</div>
-      </div>
-
-      <button id="menu-toggle-btn" class="float-btn left-btn"><i class="fa-solid fa-bars-staggered"></i></button>
+      
+      <button id="menu-toggle-btn" class="float-btn left-btn"><i class="fa-solid fa-bars"></i></button>
       <button id="analytics-toggle-btn" class="float-btn right-btn"><i class="fa-solid fa-chart-pie"></i></button>
-
-      <div id="cinematic-focus">
-        <div id="cinematic-year">2008</div>
-        <div id="cinematic-text">おぎゃー！えいこう王国に生まれる👶✨</div>
-      </div>
 
       <div id="control-panel" class="side-panel left-panel">
         <span id="panel-close-btn" class="close-icon">&times;</span>
-        <h2><i class="fa-solid fa-sliders"></i> SCALE SETTINGS</h2>
+        
+        <h2><i class="fa-solid fa-archway"></i> ARCH SETTINGS</h2>
         <div class="input-group">
+          <label>アーチ（ゲート）の表示単位</label>
           <select id="timeline-scale">
-            <option value="custom" selected>出来事ベース (Event)</option>
-            <option value="day">日ベース (Daily)</option>
-            <option value="month">月ベース (Monthly)</option>
+            <option value="year" selected>年別 (Yearly Rooms)</option>
+            <option value="all">すべての記録 (Every Event)</option>
           </select>
         </div>
+        
         <div class="section-divider"></div>
-        <h2><i class="fa-solid fa-plus"></i> NEW RECORD</h2>
+        
+        <h2><i class="fa-solid fa-plus"></i> ADD ARTWORK</h2>
         <div class="input-group">
           <label>YEAR / DATE</label>
           <input type="text" id="input-date" value="2026">
@@ -80,9 +80,9 @@
         </div>
         <div class="input-group">
           <label>MEMORY / LOG</label>
-          <textarea id="input-event" rows="2" placeholder="記憶を記述..."></textarea>
+          <textarea id="input-event" rows="2" placeholder="展示する記憶を記述..."></textarea>
         </div>
-        <button id="add-btn" class="matrix-btn">PLOT DATA</button>
+        <button id="add-btn" class="matrix-btn">DISPLAY ARTWORK</button>
       </div>
 
       <div id="analytics-panel" class="side-panel right-panel">
@@ -93,7 +93,6 @@
             <option value="all" selected>すべての期間 (All Time)</option>
             <option value="2026">2026年</option>
             <option value="2013">2013年</option>
-            <option value="2008">2008年</option>
           </select>
         </div>
         <div id="ranking-list-container"></div>
@@ -102,31 +101,32 @@
       <div id="sticky-note">
         <span class="close-btn" id="close-note-btn">&times;</span>
         <h3 id="note-title">Date</h3>
-        <div class="log-events-container" id="note-events"></div>
+        <div id="note-events"></div>
         <div class="comment-section">
           <div id="comment-list"></div>
           <div class="comment-input-area">
-            <input type="text" id="comment-input" placeholder="追記する...">
+            <input type="text" id="comment-input" placeholder="感想を残す...">
             <button id="comment-submit-btn"><i class="fa-solid fa-paper-plane"></i></button>
           </div>
         </div>
       </div>
 
       <div id="timeline-scrollbar-container">
-        <div class="scrollbar-label">TIMELINE NAVIGATOR</div>
-        <input type="range" id="timeline-slider" min="-100" max="100" value="0">
+        <div class="scrollbar-label">MUSEUM NAVIGATOR</div>
+        <input type="range" id="timeline-slider" min="0" max="100" value="0">
         <div class="scrollbar-coords">
           <span>PAST</span>
-          <span>Z-AXIS: <span id="cam-z-val">0.0</span></span>
+          <span>LOCATION: <span id="cam-z-val">0</span></span>
           <span>FUTURE</span>
         </div>
       </div>
+
     </div>
   </div>
 
   <nav id="app-nav">
-    <div class="nav-tab active" id="to-top-btn"><i class="fa-solid fa-globe"></i> Top</div>
-    <div class="nav-tab" id="to-my-btn"><i class="fa-solid fa-database"></i> My Archive</div>
+    <div class="nav-tab active" id="to-top-btn"><i class="fa-solid fa-globe"></i> Hub</div>
+    <div class="nav-tab" id="to-my-btn"><i class="fa-solid fa-building-columns"></i> Museum</div>
   </nav>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
