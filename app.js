@@ -37,12 +37,12 @@ toMyBtn.addEventListener('click', () => {
 
 // ノートタップ時のズームトランジション
 notebookOverlay.addEventListener('click', () => {
-    notebookOverlay.classList.add('opened'); 
+    notebookOverlay.classList.add('opened');
     setTimeout(() => {
         notebookOverlay.style.display = "none";
         canvasContainer.style.display = "block";
         myUiLayer.style.display = "block";
-        initCity(); 
+        initCity();
     }, 1000);
 });
 
@@ -54,7 +54,7 @@ scene.background = new THREE.Color(0x0a0c14); // 少し明るい夜の街の空
 scene.fog = new THREE.FogExp2(0x0a0c14, 0.015); // 霧を薄くして見通しを良くする
 
 const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
-camera.position.set(0, 4, 10); 
+camera.position.set(0, 4, 10);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -76,9 +76,9 @@ function createStreetFloor() {
     const ctx = canvas.getContext('2d');
     ctx.fillStyle = '#11131a'; // アスファルト
     ctx.fillRect(0, 0, 512, 512);
-    for(let i=0; i<3000; i++) {
-        ctx.fillStyle = `rgba(255,255,255,${Math.random()*0.04})`;
-        ctx.fillRect(Math.random()*512, Math.random()*512, 2, 2);
+    for (let i = 0; i < 3000; i++) {
+        ctx.fillStyle = `rgba(255,255,255,${Math.random() * 0.04})`;
+        ctx.fillRect(Math.random() * 512, Math.random() * 512, 2, 2);
     }
     const tex = new THREE.CanvasTexture(canvas);
     tex.wrapS = THREE.RepeatWrapping; tex.wrapT = THREE.RepeatWrapping;
@@ -95,9 +95,9 @@ function createCityWall() {
     ctx.fillRect(0, 0, 512, 512);
     ctx.strokeStyle = '#030406';
     ctx.lineWidth = 4;
-    for(let y=0; y<8; y++) {
-        for(let x=0; x<8; x++) {
-            ctx.strokeRect(x*64, y*64, 64, 64);
+    for (let y = 0; y < 8; y++) {
+        for (let x = 0; x < 8; x++) {
+            ctx.strokeRect(x * 64, y * 64, 64, 64);
         }
     }
     const tex = new THREE.CanvasTexture(canvas);
@@ -116,7 +116,7 @@ function createHighFidelityBillboard(date, text) {
     // 黒いアクリルベース
     ctx.fillStyle = 'rgba(8, 10, 15, 0.95)';
     ctx.fillRect(0, 0, 2048, 1024);
-    
+
     // 白い光るフレーム
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
     ctx.lineWidth = 8;
@@ -132,7 +132,7 @@ function createHighFidelityBillboard(date, text) {
     ctx.font = '72px Noto Sans JP';
     let line = '';
     let y = 420;
-    for(let i=0; i<text.length; i++) {
+    for (let i = 0; i < text.length; i++) {
         let test = line + text[i];
         if (ctx.measureText(test).width > 1800 && i > 0) {
             ctx.fillText(line, 100, y);
@@ -151,10 +151,10 @@ function createHighFidelityBillboard(date, text) {
     tex.magFilter = THREE.LinearFilter;
 
     // 物理ベースマテリアルで「光を反射するガラスの看板」を表現
-    return new THREE.MeshPhysicalMaterial({ 
-        map: tex, 
-        emissive: 0xffffff, 
-        emissiveMap: tex, 
+    return new THREE.MeshPhysicalMaterial({
+        map: tex,
+        emissive: 0xffffff,
+        emissiveMap: tex,
         emissiveIntensity: 0.6, // 文字が自ら発光する
         roughness: 0.1, // ツルツル
         metalness: 0.5,
@@ -167,13 +167,83 @@ function createHighFidelityBillboard(date, text) {
 // 4. データと街の建築
 // ==========================================
 const masterLifeRecords = [
-    { date: "2008", text: "おぎゃー！栄光王国に生まれる。" },
+    { date: "2008", text: "おぎゃー！生まれる" },
     { date: "2010", text: "アンパンマンミュージアムにおでかけ！" },
-    { date: "2013", text: "妖怪ウォッチにハマる。インフルエンザで演劇主役を辞退。" },
-    { date: "2015", text: "ルービックキューブで6面そろえる。漢字テスト事件。" },
-    { date: "2019", text: "いじめ事件。のちにこれが音楽への原動力となる。" },
-    { date: "2021", text: "Maestroで作曲開始。世界が音で満ち始めた。" },
-    { date: "2026", text: "Tunecore運営と面談。人生の新たなフェーズへ。" }
+    { date: "2013", text: "インフルエンザにて演劇の主役を辞退！" },
+    { date: "2013", text: "妖怪ウォッチにハマる" },
+    { date: "2013", text: "鉄砲大会で優勝" },
+    { date: "2014", text: "幼稚園でかき氷屋さん" },
+    { date: "2014", text: "ピアノを習い始める" },
+    { date: "2015", text: "ルービックキューブで6面そろえる" },
+    { date: "2015", text: "書写の宿題で表彰される" },
+    { date: "2015", text: "漢字テストでカンニングされる" },
+    { date: "2015", text: "じゃんけん大会で優勝する" },
+    { date: "2015", text: "けん玉にハマる" },
+    { date: "2016", text: "車のCD(サカナクション、サザン、Boowyなど)に沼る" },
+    { date: "2016", text: "コナンごっこ" },
+    { date: "2016", text: "自分の3DSをゲット！" },
+    { date: "2016", text: "電波人間に課金(ヨッシー)" },
+    { date: "2016", text: "水泳を習い始める" },
+    { date: "2016", text: "図工の授業中に告白して3番目に好きと言われる" },
+    { date: "2016", text: "ちんこ見せろでお礼にまんこのにおい" },
+    { date: "2016", text: "給食最後まで食べれず居残り" },
+    { date: "2016", text: "川に飛び込む" },
+    { date: "2016", text: "くつを川にぶん投げる" },
+    { date: "2016", text: "かぎ紛失事件" },
+    { date: "2016", text: "鍵盤ハーモニカで無双" },
+    { date: "2017", text: "牛乳いたずらで先生ぶち切れ" },
+    { date: "2017", text: "両想いの自由帳" },
+    { date: "2017", text: "友達のリコーダーを川にぶん投げかける" },
+    { date: "2017", text: "漫画を描き始める" },
+    { date: "2018", text: "あだ名「えみこ」" },
+    { date: "2018", text: "今でも恩人の先生" },
+    { date: "2018", text: "校外学習でみんなを弄ぶクズ" },
+    { date: "2018", text: "脳内作曲の開始" },
+    { date: "2019", text: "パワハラ担任が君臨" },
+    { date: "2019", text: "いじめ事件" },
+    { date: "2019", text: "Switch買う" },
+    { date: "2019", text: "おとめちゃん呼ばわり" },
+    { date: "2019", text: "運命のフォークダンス" },
+    { date: "2020", text: "神の日記" },
+    { date: "2020", text: "学校を休んだ日の手紙" },
+    { date: "2020", text: "ぞうたときりんこの話「落とし穴」" },
+    { date: "2020", text: "2人きりのフォートナイト" },
+    { date: "2020", text: "NCSに沼る" },
+    { date: "2021", text: "フォートナイト告白爆死" },
+    { date: "2021", text: "ピアノをやめる" },
+    { date: "2021", text: "Maestroで作曲開始" },
+    { date: "2021", text: "イヤイヤ期でロン毛突入" },
+    { date: "2021", text: "パワハラ技術教師" },
+    { date: "2022", text: "職場用PCをゲット" },
+    { date: "2022", text: "友達0人ぼっちデビュー" },
+    { date: "2022", text: "通塾開始" },
+    { date: "2022", text: "Studio One Prime開始" },
+    { date: "2023", text: "理科の動画が大成功" },
+    { date: "2023", text: "トイレ事件" },
+    { date: "2023", text: "FLStudioMobile開始" },
+    { date: "2023", text: "学校飛び出して自殺未遂" },
+    { date: "2023", text: "Studio One Artist開始" },
+    { date: "2023", text: "祭りで会う約束" },
+    { date: "2023", text: "塾をやめる" },
+    { date: "2023", text: "ふられる" },
+    { date: "2024", text: "高校合格" },
+    { date: "2024", text: "ゲーミングPC購入" },
+    { date: "2024", text: "卒業ディズニー" },
+    { date: "2024", text: "入学式でひとめぼれ" },
+    { date: "2024", text: "Filmora開始" },
+    { date: "2024", text: "校外学習で撃沈→クラス中に好きな人情報が広まる" },
+    { date: "2024", text: "音読で大爆死" },
+    { date: "2024", text: "有料VSTを購入" },
+    { date: "2024", text: "部長になる" },
+    { date: "2024", text: "放課後の見えないデート" },
+    { date: "2025", text: "家庭科でトラウマが蘇る" },
+    { date: "2025", text: "2度目の自殺未遂" },
+    { date: "2025", text: "精神科に通う" },
+    { date: "2025", text: "Tunecoreの開始" },
+    { date: "2025", text: "文化祭のバンド" },
+    { date: "2026", text: "退学" },
+    { date: "2026", text: "通信制に転校" },
+    { date: "2026", text: "プログラミングを開始" },
 ];
 
 let cityGroup = new THREE.Group();
@@ -188,44 +258,44 @@ function initCity() {
     cityGroup = new THREE.Group();
     scene.add(cityGroup);
     activeZones = [];
-    
+
     const streetLength = masterLifeRecords.length * 40 + 60;
 
     // 床と壁
     const floor = new THREE.Mesh(new THREE.PlaneGeometry(STREET_W, streetLength), createStreetFloor());
-    floor.rotation.x = -Math.PI / 2; floor.position.z = -streetLength/2 + 20;
+    floor.rotation.x = -Math.PI / 2; floor.position.z = -streetLength / 2 + 20;
     cityGroup.add(floor);
 
     const wallMat = createCityWall();
     const wallL = new THREE.Mesh(new THREE.PlaneGeometry(streetLength, STREET_H), wallMat);
-    wallL.rotation.y = Math.PI / 2; wallL.position.set(-STREET_W/2, STREET_H/2, -streetLength/2 + 20);
+    wallL.rotation.y = Math.PI / 2; wallL.position.set(-STREET_W / 2, STREET_H / 2, -streetLength / 2 + 20);
     cityGroup.add(wallL);
 
     const wallR = new THREE.Mesh(new THREE.PlaneGeometry(streetLength, STREET_H), wallMat);
-    wallR.rotation.y = -Math.PI / 2; wallR.position.set(STREET_W/2, STREET_H/2, -streetLength/2 + 20);
+    wallR.rotation.y = -Math.PI / 2; wallR.position.set(STREET_W / 2, STREET_H / 2, -streetLength / 2 + 20);
     cityGroup.add(wallR);
 
     // 街灯と看板の配置
     masterLifeRecords.forEach((data, index) => {
         const zPos = -index * 40 - 20;
         const isLeft = index % 2 === 0;
-        
+
         activeZones.push({ z: zPos, date: data.date });
 
         // 街灯の光 (暖色系のスポットライト)
-        const light = new THREE.SpotLight(0xffeebb, 60, 40, Math.PI/3, 0.5, 1.5);
-        const lightX = isLeft ? -STREET_W/2 + 2 : STREET_W/2 - 2;
+        const light = new THREE.SpotLight(0xffeebb, 60, 40, Math.PI / 3, 0.5, 1.5);
+        const lightX = isLeft ? -STREET_W / 2 + 2 : STREET_W / 2 - 2;
         light.position.set(lightX, STREET_H - 1, zPos + 2);
-        
+
         // 看板 (超高画質・光沢アクリルボード)
         const boardGeo = new THREE.PlaneGeometry(8, 4); // パネルを少し大きく
         const boardMat = createHighFidelityBillboard(data.date, data.text);
         const board = new THREE.Mesh(boardGeo, boardMat);
-        
-        const boardX = isLeft ? -STREET_W/2 + 0.2 : STREET_W/2 - 0.2;
+
+        const boardX = isLeft ? -STREET_W / 2 + 0.2 : STREET_W / 2 - 0.2;
         board.position.set(boardX, 4, zPos);
         board.rotation.y = isLeft ? Math.PI / 2 : -Math.PI / 2;
-        
+
         // 光の演出用ダミー球体（電球）
         const bulbGeo = new THREE.SphereGeometry(0.3);
         const bulbMat = new THREE.MeshBasicMaterial({ color: 0xffeebb });
@@ -241,7 +311,7 @@ function initCity() {
 // 5. FPS操作コントローラー (WASD + ドラッグ)
 // ==========================================
 // 歩行速度を少し落ち着いたスピードに調整
-const walkSpeed = 9.0; 
+const walkSpeed = 9.0;
 const keys = { w: false, a: false, s: false, d: false };
 let isDragging = false;
 let prevMouse = { x: 0, y: 0 };
@@ -255,7 +325,7 @@ function onDrag(x, y) {
         euler.setFromQuaternion(camera.quaternion);
         euler.y -= (x - prevMouse.x) * 0.005;
         euler.x -= (y - prevMouse.y) * 0.005;
-        euler.x = Math.max(-Math.PI/2.5, Math.min(Math.PI/2.5, euler.x));
+        euler.x = Math.max(-Math.PI / 2.5, Math.min(Math.PI / 2.5, euler.x));
         camera.quaternion.setFromEuler(euler);
         prevMouse = { x, y };
     }
@@ -287,7 +357,7 @@ btnBwd.addEventListener('mouseup', e => { mobileDir = 0; });
 // 6. メインループ (歩行の揺れ・ベクトル計算)
 // ==========================================
 const clock = new THREE.Clock();
-let headBobTimer = 0; 
+let headBobTimer = 0;
 
 function animate() {
     requestAnimationFrame(animate);
@@ -297,8 +367,8 @@ function animate() {
         // ① 進行方向ベクトルの取得
         const dir = new THREE.Vector3();
         camera.getWorldDirection(dir);
-        dir.y = 0; dir.normalize(); 
-        
+        dir.y = 0; dir.normalize();
+
         // ★ A/Dキーの左右反転修正
         const right = new THREE.Vector3().crossVectors(dir, camera.up).normalize();
 
@@ -319,7 +389,7 @@ function animate() {
 
         // ★ マイクラ風ヘッドボブ（歩行時の上下揺れ）
         if (isMoving) {
-            headBobTimer += delta * 12; 
+            headBobTimer += delta * 12;
             camera.position.y = 4 + Math.sin(headBobTimer) * 0.12; // 自然な揺れ幅
         } else {
             camera.position.y += (4 - camera.position.y) * 0.1; // 停止時はスッと戻る
