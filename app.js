@@ -1,58 +1,21 @@
 /**
- * 🏛️ Memory Museum - Realistic Brick & Cloud Edition
+ * 🌃 Memory City - High Fidelity Night Walk Edition
  */
 
 // ==========================================
-// 1. DOM要素の取得
+// 1. DOM要素の取得 & 画面遷移
 // ==========================================
 const topScreen = document.getElementById('top-page-screen');
 const myScreen = document.getElementById('my-page-screen');
 const notebookOverlay = document.getElementById('notebook-overlay');
 const canvasContainer = document.getElementById('canvas-container');
 const myUiLayer = document.getElementById('my-ui-layer');
-
-const floatingLabelsContainer = document.getElementById('floating-labels-container');
 const cinematicYear = document.getElementById('cinematic-year');
-const cinematicText = document.getElementById('cinematic-text');
-
 const toTopBtn = document.getElementById('to-top-btn');
 const toMyBtn = document.getElementById('to-my-btn');
-const menuToggleBtn = document.getElementById('menu-toggle-btn');
-const controlPanel = document.getElementById('control-panel');
-const panelCloseBtn = document.getElementById('panel-close-btn');
-const analyticsToggleBtn = document.getElementById('analytics-toggle-btn');
-const analyticsPanel = document.getElementById('analytics-panel');
-const analyticsCloseBtn = document.getElementById('analytics-close-btn');
 
-const timelineSlider = document.getElementById('timeline-slider');
-const camZValText = document.getElementById('cam-z-val');
-const timelineScaleSelect = document.getElementById('timeline-scale');
-
-const addBtn = document.getElementById('add-btn');
-const stickyNote = document.getElementById('sticky-note');
-const closeNoteBtn = document.getElementById('close-note-btn');
-
-document.getElementById('input-sat').addEventListener('input', (e) => {
-    document.getElementById('sat-val').textContent = e.target.value + '%';
-});
-
-// ==========================================
-// 2. 画面切り替え
-// ==========================================
 topScreen.style.display = "block";
 myScreen.style.display = "none";
-
-toMyBtn.addEventListener('click', () => {
-    topScreen.style.display = "none";
-    myScreen.style.display = "block";
-    notebookOverlay.style.display = "flex";
-    notebookOverlay.classList.remove('opened');
-    canvasContainer.style.display = "none";
-    myUiLayer.style.display = "none";
-    floatingLabelsContainer.style.display = "none";
-    toTopBtn.classList.remove('active');
-    toMyBtn.classList.add('active');
-});
 
 toTopBtn.addEventListener('click', () => {
     topScreen.style.display = "block";
@@ -61,401 +24,319 @@ toTopBtn.addEventListener('click', () => {
     toMyBtn.classList.remove('active');
 });
 
+toMyBtn.addEventListener('click', () => {
+    topScreen.style.display = "none";
+    myScreen.style.display = "block";
+    notebookOverlay.style.display = "flex";
+    notebookOverlay.classList.remove('opened');
+    canvasContainer.style.display = "none";
+    myUiLayer.style.display = "none";
+    toTopBtn.classList.remove('active');
+    toMyBtn.classList.add('active');
+});
+
+// ノートタップ時のズームトランジション
 notebookOverlay.addEventListener('click', () => {
-    notebookOverlay.classList.add('opened');
+    notebookOverlay.classList.add('opened'); 
     setTimeout(() => {
         notebookOverlay.style.display = "none";
         canvasContainer.style.display = "block";
         myUiLayer.style.display = "block";
-        floatingLabelsContainer.style.display = "block";
-        initCorridor(); 
-        renderer.render(scene, camera);
+        initCity(); 
     }, 1000);
 });
 
-menuToggleBtn.onclick = () => { controlPanel.classList.toggle('open'); analyticsPanel.classList.remove('open'); };
-analyticsToggleBtn.onclick = () => { analyticsPanel.classList.toggle('open'); controlPanel.classList.remove('open'); };
-panelCloseBtn.onclick = () => { controlPanel.classList.remove('open'); };
-analyticsCloseBtn.onclick = () => { analyticsPanel.classList.remove('open'); };
-closeNoteBtn.onclick = () => { stickyNote.style.display = 'none'; };
-timelineScaleSelect.addEventListener('change', initCorridor);
-
 // ==========================================
-// 3. Three.js セットアップ (リアルなライティング)
+// 2. Three.js セットアップ (街灯のある夜の街)
 // ==========================================
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0xeae9e5);
-scene.fog = new THREE.FogExp2(0xeae9e5, 0.012);
+scene.background = new THREE.Color(0x0a0c14); // 少し明るい夜の街の空
+scene.fog = new THREE.FogExp2(0x0a0c14, 0.015); // 霧を薄くして見通しを良くする
 
-const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
-camera.position.set(0, 3.5, 15);
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+camera.position.set(0, 4, 10); 
 
-const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // 重さ対策
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 renderer.shadowMap.enabled = true;
-renderer.shadowMap.type = THREE.PCFSoftShadowMap; // 柔らかくリアルな影
-renderer.physicallyCorrectLights = true; // 物理ベースの光演算
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 canvasContainer.appendChild(renderer.domElement);
 
-const controls = new THREE.OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true;
-controls.target.set(0, 3.5, 0);
-controls.enablePan = false;
-
-// リアルな環境光（空からの光と床の反射）
-const hemiLight = new THREE.HemisphereLight(0xffffff, 0xc2c0bc, 0.8);
-scene.add(hemiLight);
-
-// 太陽/メイン照明 (影を落とす)
-const dirLight = new THREE.DirectionalLight(0xfff5e6, 1.5);
-dirLight.position.set(5, 20, 10);
-dirLight.castShadow = true;
-dirLight.shadow.mapSize.width = 2048;
-dirLight.shadow.mapSize.height = 2048;
-dirLight.shadow.camera.near = 0.5;
-dirLight.shadow.camera.far = 100;
-dirLight.shadow.camera.left = -20;
-dirLight.shadow.camera.right = 20;
-dirLight.shadow.camera.top = 20;
-dirLight.shadow.camera.bottom = -50;
-dirLight.shadow.bias = -0.001;
-scene.add(dirLight);
+// アンビエントライト（街全体のベースの明るさ）をアップ
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+scene.add(ambientLight);
 
 // ==========================================
-// 4. プログラムでテクスチャと雲を生成 (画像不要)
+// 3. テクスチャ生成
 // ==========================================
-
-// ① 白レンガのテクスチャをCanvasで自動生成
-function createBrickTexture() {
+function createStreetFloor() {
     const canvas = document.createElement('canvas');
     canvas.width = 512; canvas.height = 512;
     const ctx = canvas.getContext('2d');
-    
-    // ベースの白漆喰色
-    ctx.fillStyle = '#f4f3f0';
+    ctx.fillStyle = '#11131a'; // アスファルト
     ctx.fillRect(0, 0, 512, 512);
-    
-    // 目地（グレー）
+    for(let i=0; i<3000; i++) {
+        ctx.fillStyle = `rgba(255,255,255,${Math.random()*0.04})`;
+        ctx.fillRect(Math.random()*512, Math.random()*512, 2, 2);
+    }
+    const tex = new THREE.CanvasTexture(canvas);
+    tex.wrapS = THREE.RepeatWrapping; tex.wrapT = THREE.RepeatWrapping;
+    tex.repeat.set(10, 50);
+    // 床も光を少し反射させる
+    return new THREE.MeshStandardMaterial({ map: tex, roughness: 0.6, metalness: 0.2 });
+}
+
+function createCityWall() {
+    const canvas = document.createElement('canvas');
+    canvas.width = 512; canvas.height = 512;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#08090d'; // ビルの壁
+    ctx.fillRect(0, 0, 512, 512);
+    ctx.strokeStyle = '#030406';
     ctx.lineWidth = 4;
-    ctx.strokeStyle = '#dcdad5';
-    
-    const rows = 16; const cols = 8;
-    const brickH = 512 / rows; const brickW = 512 / cols;
-    
-    for(let y = 0; y < rows; y++) {
-        const offset = (y % 2 === 0) ? 0 : brickW / 2;
-        for(let x = -1; x < cols + 1; x++) {
-            ctx.strokeRect(x * brickW + offset, y * brickH, brickW, brickH);
-            // レンガに微細なノイズ質感を足す
-            ctx.fillStyle = `rgba(0, 0, 0, ${Math.random() * 0.02})`;
-            ctx.fillRect(x * brickW + offset, y * brickH, brickW, brickH);
+    for(let y=0; y<8; y++) {
+        for(let x=0; x<8; x++) {
+            ctx.strokeRect(x*64, y*64, 64, 64);
         }
     }
-    const texture = new THREE.CanvasTexture(canvas);
-    texture.wrapS = THREE.RepeatWrapping;
-    texture.wrapT = THREE.RepeatWrapping;
-    texture.repeat.set(30, 2); // 壁全体にリピート
-    return texture;
+    const tex = new THREE.CanvasTexture(canvas);
+    tex.wrapS = THREE.RepeatWrapping; tex.wrapT = THREE.RepeatWrapping;
+    tex.repeat.set(5, 1);
+    return new THREE.MeshStandardMaterial({ map: tex, roughness: 0.9 });
 }
 
-// ② 3Dの「雲」オブジェクトを生成する
-function createCloud(colorHex) {
-    const cloudGroup = new THREE.Group();
-    // 質感: フラットシェーディングでモダンアート風に
-    const cloudMat = new THREE.MeshStandardMaterial({
-        color: 0xffffff,
-        emissive: colorHex,
-        emissiveIntensity: 0.2, // ほんのり内側から光る
-        roughness: 0.9,
-        flatShading: true 
-    });
-    
-    // ゴツゴツした球体を複数組み合わせて雲を作る
-    const geo = new THREE.IcosahedronGeometry(1, 1);
-    const positions = [
-        [0, 0, 0, 1.2],           // 中心
-        [0.8, -0.2, 0.2, 0.8],    // 右
-        [-0.8, -0.3, -0.1, 0.9],  // 左
-        [0.4, 0.6, 0.1, 0.7],     // 右上
-        [-0.5, 0.5, -0.2, 0.6]    // 左上
-    ];
-    
-    positions.forEach(p => {
-        const mesh = new THREE.Mesh(geo, cloudMat);
-        mesh.position.set(p[0], p[1], p[2]);
-        mesh.scale.set(p[3], p[3], p[3]);
-        mesh.castShadow = true;
-        mesh.receiveShadow = true;
-        cloudGroup.add(mesh);
-    });
-    
-    // 雲自体が周りの壁を照らすライト
-    const light = new THREE.PointLight(colorHex, 0.8, 8);
-    light.position.set(0, 0, 1);
-    cloudGroup.add(light);
-    
-    return cloudGroup;
-}
-
-function createTextTexture(text, color, fontSize = 80) {
+// ★ 画質を限界まで高め、アクリルガラスのような反射(Clearcoat)を追加した看板
+function createHighFidelityBillboard(date, text) {
     const canvas = document.createElement('canvas');
+    // 解像度を4倍にしてベクターのような鮮明さを出す
+    canvas.width = 2048; canvas.height = 1024;
     const ctx = canvas.getContext('2d');
-    canvas.width = 512; canvas.height = 128;
-    ctx.font = `bold ${fontSize}px Montserrat`;
-    ctx.fillStyle = color;
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.fillText(text, 256, 64);
-    return new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(canvas), transparent: true });
-}
 
-function getNoteColor(sat) {
-    if (sat >= 75) return 0xfde047; // 幸福：イエロー
-    if (sat >= 40) return 0xf9a8d4; // 普通：ピンク
-    return 0x93c5fd; // 試練：ブルー
+    // 黒いアクリルベース
+    ctx.fillStyle = 'rgba(8, 10, 15, 0.95)';
+    ctx.fillRect(0, 0, 2048, 1024);
+    
+    // 白い光るフレーム
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+    ctx.lineWidth = 8;
+    ctx.strokeRect(20, 20, 2008, 984);
+
+    // 年号
+    ctx.fillStyle = '#ffffff';
+    ctx.font = 'bold 160px Montserrat';
+    ctx.fillText(date, 100, 240);
+
+    // テキスト
+    ctx.fillStyle = '#eeeeee';
+    ctx.font = '72px Noto Sans JP';
+    let line = '';
+    let y = 420;
+    for(let i=0; i<text.length; i++) {
+        let test = line + text[i];
+        if (ctx.measureText(test).width > 1800 && i > 0) {
+            ctx.fillText(line, 100, y);
+            line = text[i];
+            y += 100;
+        } else {
+            line = test;
+        }
+    }
+    ctx.fillText(line, 100, y);
+
+    const tex = new THREE.CanvasTexture(canvas);
+    // 斜めから見ても文字がぼやけない魔法の処理（異方性フィルタリング）
+    tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+    tex.minFilter = THREE.LinearMipmapLinearFilter;
+    tex.magFilter = THREE.LinearFilter;
+
+    // 物理ベースマテリアルで「光を反射するガラスの看板」を表現
+    return new THREE.MeshPhysicalMaterial({ 
+        map: tex, 
+        emissive: 0xffffff, 
+        emissiveMap: tex, 
+        emissiveIntensity: 0.6, // 文字が自ら発光する
+        roughness: 0.1, // ツルツル
+        metalness: 0.5,
+        clearcoat: 1.0, // 表面のクリアな反射（ガラス感）
+        clearcoatRoughness: 0.1
+    });
 }
 
 // ==========================================
-// 5. マスターデータと空間構築
+// 4. データと街の建築
 // ==========================================
 const masterLifeRecords = [
-    { id: 1, x_sat: 100, date: "2008", events: ["おぎゃー！栄光王国に生まれる"], category: "誕生" },
-    { id: 2, x_sat: 95, date: "2010", events: ["アンパンマンミュージアムにおでかけ！"], category: "イベント" },
-    { id: 3, x_sat: 15, date: "2013", events: ["インフルエンザにて演劇の主役を辞退"], category: "試練" },
-    { id: 4, x_sat: 85, date: "2013", events: ["妖怪ウォッチにハマる"], category: "ゲーム" },
-    { id: 5, x_sat: 95, date: "2015", events: ["ルービックキューブで6面そろえる"], category: "達成" },
-    { id: 6, x_sat: 20, date: "2015", events: ["漢字テストでカンニングされる"], category: "事件" },
-    { id: 7, x_sat: 10, date: "2019", events: ["いじめ事件"], category: "試練" },
-    { id: 8, x_sat: 95, date: "2021", events: ["Maestroで作曲開始"], category: "音楽" },
-    { id: 9, x_sat: 80, date: "2026", events: ["Tunecore運営と面談"], category: "飛躍" }
+    { date: "2008", text: "おぎゃー！栄光王国に生まれる。" },
+    { date: "2010", text: "アンパンマンミュージアムにおでかけ！" },
+    { date: "2013", text: "妖怪ウォッチにハマる。インフルエンザで演劇主役を辞退。" },
+    { date: "2015", text: "ルービックキューブで6面そろえる。漢字テスト事件。" },
+    { date: "2019", text: "いじめ事件。のちにこれが音楽への原動力となる。" },
+    { date: "2021", text: "Maestroで作曲開始。世界が音で満ち始めた。" },
+    { date: "2026", text: "Tunecore運営と面談。人生の新たなフェーズへ。" }
 ];
 
-let activeObjects = []; 
-let clickableObjects = []; 
-let floatingLabels = []; 
-let corridorGroup = new THREE.Group();
-scene.add(corridorGroup);
+let cityGroup = new THREE.Group();
+scene.add(cityGroup);
+let activeZones = [];
 
-const ROOM_WIDTH = 16;
-const ROOM_HEIGHT = 12;
-const ROOM_LENGTH = 3000;
-const brickTexture = createBrickTexture(); // 生成したレンガテクスチャ
+const STREET_W = 20;
+const STREET_H = 15;
 
-function initCorridor() {
-    scene.remove(corridorGroup);
-    corridorGroup = new THREE.Group();
-    scene.add(corridorGroup);
-    activeObjects = []; clickableObjects = []; floatingLabels = [];
-    floatingLabelsContainer.innerHTML = '';
-
-    // ① 美術館の室内（レンガ壁とコンクリ床）
-    const wallGeo = new THREE.PlaneGeometry(ROOM_LENGTH, ROOM_HEIGHT);
-    const floorGeo = new THREE.PlaneGeometry(ROOM_WIDTH, ROOM_LENGTH);
+function initCity() {
+    scene.remove(cityGroup);
+    cityGroup = new THREE.Group();
+    scene.add(cityGroup);
+    activeZones = [];
     
-    const wallMat = new THREE.MeshStandardMaterial({ map: brickTexture, roughness: 0.9 });
-    const floorMat = new THREE.MeshStandardMaterial({ color: 0xd8d6d0, roughness: 0.4 });
+    const streetLength = masterLifeRecords.length * 40 + 60;
 
-    const floor = new THREE.Mesh(floorGeo, floorMat);
-    floor.rotation.x = -Math.PI / 2; floor.position.set(0, 0, -ROOM_LENGTH/2 + 100); floor.receiveShadow = true;
-    
-    const wallL = new THREE.Mesh(wallGeo, wallMat);
-    wallL.rotation.y = Math.PI / 2; wallL.position.set(-ROOM_WIDTH/2, ROOM_HEIGHT/2, -ROOM_LENGTH/2 + 100); wallL.receiveShadow = true;
-    
-    const wallR = new THREE.Mesh(wallGeo, wallMat);
-    wallR.rotation.y = -Math.PI / 2; wallR.position.set(ROOM_WIDTH/2, ROOM_HEIGHT/2, -ROOM_LENGTH/2 + 100); wallR.receiveShadow = true;
+    // 床と壁
+    const floor = new THREE.Mesh(new THREE.PlaneGeometry(STREET_W, streetLength), createStreetFloor());
+    floor.rotation.x = -Math.PI / 2; floor.position.z = -streetLength/2 + 20;
+    cityGroup.add(floor);
 
-    corridorGroup.add(floor, wallL, wallR);
+    const wallMat = createCityWall();
+    const wallL = new THREE.Mesh(new THREE.PlaneGeometry(streetLength, STREET_H), wallMat);
+    wallL.rotation.y = Math.PI / 2; wallL.position.set(-STREET_W/2, STREET_H/2, -streetLength/2 + 20);
+    cityGroup.add(wallL);
 
-    // ② アーチと雲の配置
-    const scaleMode = timelineScaleSelect.value;
-    const archMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.5 });
-    const pillarGeo = new THREE.BoxGeometry(1.5, ROOM_HEIGHT, 1.5);
-    const beamGeo = new THREE.BoxGeometry(ROOM_WIDTH, 1.5, 1.5);
+    const wallR = new THREE.Mesh(new THREE.PlaneGeometry(streetLength, STREET_H), wallMat);
+    wallR.rotation.y = -Math.PI / 2; wallR.position.set(STREET_W/2, STREET_H/2, -streetLength/2 + 20);
+    cityGroup.add(wallR);
 
-    let maxSliderValue = 0;
+    // 街灯と看板の配置
+    masterLifeRecords.forEach((data, index) => {
+        const zPos = -index * 40 - 20;
+        const isLeft = index % 2 === 0;
+        
+        activeZones.push({ z: zPos, date: data.date });
 
-    if (scaleMode === 'year') {
-        const groupedByYear = {};
-        masterLifeRecords.forEach(r => {
-            const year = r.date.substring(0, 4);
-            if (!groupedByYear[year]) groupedByYear[year] = [];
-            groupedByYear[year].push(r);
-        });
+        // 街灯の光 (暖色系のスポットライト)
+        const light = new THREE.SpotLight(0xffeebb, 60, 40, Math.PI/3, 0.5, 1.5);
+        const lightX = isLeft ? -STREET_W/2 + 2 : STREET_W/2 - 2;
+        light.position.set(lightX, STREET_H - 1, zPos + 2);
+        
+        // 看板 (超高画質・光沢アクリルボード)
+        const boardGeo = new THREE.PlaneGeometry(8, 4); // パネルを少し大きく
+        const boardMat = createHighFidelityBillboard(data.date, data.text);
+        const board = new THREE.Mesh(boardGeo, boardMat);
+        
+        const boardX = isLeft ? -STREET_W/2 + 0.2 : STREET_W/2 - 0.2;
+        board.position.set(boardX, 4, zPos);
+        board.rotation.y = isLeft ? Math.PI / 2 : -Math.PI / 2;
+        
+        // 光の演出用ダミー球体（電球）
+        const bulbGeo = new THREE.SphereGeometry(0.3);
+        const bulbMat = new THREE.MeshBasicMaterial({ color: 0xffeebb });
+        const bulb = new THREE.Mesh(bulbGeo, bulbMat);
+        bulb.position.copy(light.position);
 
-        let archIndex = 0;
-        for (const [year, records] of Object.entries(groupedByYear)) {
-            const zPos = -archIndex * 50; 
-            const group = new THREE.Group();
-
-            const pL = new THREE.Mesh(pillarGeo, archMat); pL.position.set(-ROOM_WIDTH/2 + 0.75, ROOM_HEIGHT/2, 0); pL.castShadow = true; pL.receiveShadow = true;
-            const pR = new THREE.Mesh(pillarGeo, archMat); pR.position.set(ROOM_WIDTH/2 - 0.75, ROOM_HEIGHT/2, 0); pR.castShadow = true; pR.receiveShadow = true;
-            const beam = new THREE.Mesh(beamGeo, archMat); beam.position.set(0, ROOM_HEIGHT - 0.75, 0); beam.castShadow = true;
-            
-            const yearPlate = new THREE.Mesh(new THREE.PlaneGeometry(8, 2), createTextTexture(year, "#888888"));
-            yearPlate.position.set(0, ROOM_HEIGHT - 0.75, 0.76);
-
-            group.add(pL, pR, beam, yearPlate);
-            group.position.set(0, 0, zPos);
-            corridorGroup.add(group);
-            activeObjects.push({ z: zPos, date: year, event: `${year}年の展示室` });
-
-            // 雲のアートワークを配置
-            const eventSpacing = 50 / (records.length + 1);
-            records.forEach((data, eIdx) => {
-                buildCloudArtwork(data, zPos - (eventSpacing * (eIdx + 1)), eIdx);
-            });
-            archIndex++;
-            maxSliderValue = Math.abs(zPos - 50);
-        }
-    } else {
-        masterLifeRecords.forEach((data, index) => {
-            const zPos = -index * 30;
-            const group = new THREE.Group();
-
-            const pL = new THREE.Mesh(pillarGeo, archMat); pL.position.set(-ROOM_WIDTH/2 + 0.75, ROOM_HEIGHT/2, 0); pL.castShadow = true;
-            const pR = new THREE.Mesh(pillarGeo, archMat); pR.position.set(ROOM_WIDTH/2 - 0.75, ROOM_HEIGHT/2, 0); pR.castShadow = true;
-            const beam = new THREE.Mesh(beamGeo, archMat); beam.position.set(0, ROOM_HEIGHT - 0.75, 0); beam.castShadow = true;
-            
-            const yearPlate = new THREE.Mesh(new THREE.PlaneGeometry(8, 2), createTextTexture(data.date, "#888888"));
-            yearPlate.position.set(0, ROOM_HEIGHT - 0.75, 0.76);
-
-            group.add(pL, pR, beam, yearPlate);
-            group.position.set(0, 0, zPos);
-            corridorGroup.add(group);
-            activeObjects.push({ z: zPos, date: data.date, event: data.events[0] });
-
-            buildCloudArtwork(data, zPos - 5, index);
-            maxSliderValue = Math.abs(zPos);
-        });
-    }
-
-    timelineSlider.min = 0; timelineSlider.max = maxSliderValue; timelineSlider.value = 0;
-    updateCameraPosition(0);
-}
-
-// 共通：雲のアートとHTML吹き出しを配置
-function buildCloudArtwork(data, zPos, index) {
-    const isLeft = index % 2 === 0;
-    const noteColor = getNoteColor(data.x_sat);
-    
-    // 3Dの雲を生成
-    const cloud = createCloud(noteColor);
-    const xPos = isLeft ? -ROOM_WIDTH/2 + 1.2 : ROOM_WIDTH/2 - 1.2;
-    cloud.position.set(xPos, 4, zPos);
-    
-    // クリック判定用にデータを親グループに付与
-    cloud.userData = data;
-    clickableObjects.push(cloud);
-    corridorGroup.add(cloud);
-
-    // HTMLの吹き出し
-    const label = document.createElement('div');
-    label.className = 'floating-label';
-    label.innerHTML = `<strong>${data.date}</strong><br>${data.events[0]}`;
-    floatingLabelsContainer.appendChild(label);
-    
-    floatingLabels.push({ 
-        element: label, 
-        position: new THREE.Vector3(isLeft ? xPos+1 : xPos-1, 6, zPos) 
+        light.target = board;
+        cityGroup.add(board, light, light.target, bulb);
     });
 }
 
 // ==========================================
-// 6. ストリートビュー操作 & ナビゲーション
+// 5. FPS操作コントローラー (WASD + ドラッグ)
 // ==========================================
-function updateCameraPosition(sliderValue) {
-    const targetZ = -sliderValue;
-    camera.position.z = targetZ + 12;
-    controls.target.z = targetZ;
-    camZValText.textContent = Math.abs(targetZ).toFixed(0);
-    
-    if (activeObjects.length > 0) {
-        let nearest = activeObjects[0];
-        let minDiff = Infinity;
-        activeObjects.forEach(obj => {
-            const diff = Math.abs(obj.z - targetZ);
-            if (diff < minDiff) { minDiff = diff; nearest = obj; }
-        });
-        cinematicYear.textContent = nearest.date;
-        cinematicText.textContent = nearest.event;
+// 歩行速度を少し落ち着いたスピードに調整
+const walkSpeed = 9.0; 
+const keys = { w: false, a: false, s: false, d: false };
+let isDragging = false;
+let prevMouse = { x: 0, y: 0 };
+let euler = new THREE.Euler(0, 0, 0, 'YXZ');
+let mobileDir = 0;
+
+function startDrag(x, y) { isDragging = true; prevMouse = { x, y }; }
+function stopDrag() { isDragging = false; }
+function onDrag(x, y) {
+    if (isDragging && canvasContainer.style.display === "block") {
+        euler.setFromQuaternion(camera.quaternion);
+        euler.y -= (x - prevMouse.x) * 0.005;
+        euler.x -= (y - prevMouse.y) * 0.005;
+        euler.x = Math.max(-Math.PI/2.5, Math.min(Math.PI/2.5, euler.x));
+        camera.quaternion.setFromEuler(euler);
+        prevMouse = { x, y };
     }
 }
-timelineSlider.addEventListener('input', () => updateCameraPosition(parseFloat(timelineSlider.value)));
+canvasContainer.addEventListener('mousedown', e => startDrag(e.clientX, e.clientY));
+window.addEventListener('mouseup', stopDrag);
+window.addEventListener('mousemove', e => onDrag(e.clientX, e.clientY));
+canvasContainer.addEventListener('touchstart', e => startDrag(e.touches[0].clientX, e.touches[0].clientY));
+window.addEventListener('touchend', stopDrag);
+window.addEventListener('touchmove', e => onDrag(e.touches[0].clientX, e.touches[0].clientY));
 
-addBtn.addEventListener('click', () => {
-    const date = document.getElementById('input-date').value;
-    const sat = parseInt(document.getElementById('input-sat').value);
-    const eventText = document.getElementById('input-event').value || "NO DATA";
-    if (!date) return;
-    masterLifeRecords.push({ id: Date.now(), x_sat: sat, date: date, events: [eventText], category: "新規" });
-    masterLifeRecords.sort((a, b) => parseInt(a.date.substring(0,4)) - parseInt(b.date.substring(0,4)));
-    initCorridor();
-    controlPanel.classList.remove('open');
-});
+// キーボード
+window.addEventListener('keydown', e => { if (keys.hasOwnProperty(e.key.toLowerCase())) keys[e.key.toLowerCase()] = true; });
+window.addEventListener('keyup', e => { if (keys.hasOwnProperty(e.key.toLowerCase())) keys[e.key.toLowerCase()] = false; });
 
-// ==========================================
-// 8. クリック判定 (雲に触れる)
-// ==========================================
-const raycaster = new THREE.Raycaster();
-const mouse = new THREE.Vector2();
-
-window.addEventListener('click', (e) => {
-    if (canvasContainer.style.display === "none" || e.target.closest('#my-ui-layer')) return; 
-    mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
-    mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
-    raycaster.setFromCamera(mouse, camera);
-    
-    // Group内の子メッシュまで再帰的に判定する
-    const intersects = raycaster.intersectObjects(clickableObjects, true);
-
-    if (intersects.length > 0) {
-        // クリックしたメッシュの親（Cloud Group）からuserDataを取得
-        let obj = intersects[0].object;
-        while(obj && !obj.userData.date) { obj = obj.parent; }
-        
-        if(obj) {
-            const data = obj.userData;
-            const hexColor = '#' + getNoteColor(data.x_sat).toString(16).padStart(6, '0');
-            stickyNote.style.borderTopColor = hexColor;
-            document.getElementById('note-title').innerHTML = `<span style="color:${hexColor}; font-weight:bold;">${data.date}</span> <span style="float:right; font-size:11px; color:#888;">SAT: ${data.x_sat}%</span>`;
-            document.getElementById('note-events').textContent = data.events[0];
-            stickyNote.style.display = 'block';
-        }
-    } else {
-        stickyNote.style.display = 'none';
-    }
-});
+// スマホ
+const btnFwd = document.getElementById('btn-walk-fwd');
+const btnBwd = document.getElementById('btn-walk-bwd');
+btnFwd.addEventListener('touchstart', e => { e.preventDefault(); mobileDir = 1; });
+btnFwd.addEventListener('touchend', e => { e.preventDefault(); mobileDir = 0; });
+btnBwd.addEventListener('mousedown', e => { mobileDir = 1; });
+btnBwd.addEventListener('mouseup', e => { mobileDir = 0; });
+btnBwd.addEventListener('touchstart', e => { e.preventDefault(); mobileDir = -1; });
+btnBwd.addEventListener('touchend', e => { e.preventDefault(); mobileDir = 0; });
+btnBwd.addEventListener('mousedown', e => { mobileDir = -1; });
+btnBwd.addEventListener('mouseup', e => { mobileDir = 0; });
 
 // ==========================================
-// 9. メインループ
+// 6. メインループ (歩行の揺れ・ベクトル計算)
 // ==========================================
+const clock = new THREE.Clock();
+let headBobTimer = 0; 
+
 function animate() {
     requestAnimationFrame(animate);
-    controls.update();
-    
-    // 雲をゆっくり回転させて生きているように見せる
-    clickableObjects.forEach(cloud => {
-        cloud.rotation.y += 0.005;
-        cloud.rotation.x += 0.002;
-    });
-    
-    if (canvasContainer.style.display === "block") {
-        floatingLabels.forEach(labelData => {
-            const pos = labelData.position.clone();
-            pos.project(camera);
-            if (pos.z > 1) { labelData.element.classList.remove('visible'); return; }
-            const x = (pos.x * .5 + .5) * window.innerWidth;
-            const y = (pos.y * -.5 + .5) * window.innerHeight;
-            labelData.element.style.left = `${x}px`;
-            labelData.element.style.top = `${y}px`;
+    const delta = clock.getDelta();
 
-            const dist = camera.position.distanceTo(labelData.position);
-            // 近づいた時だけ表示
-            if (dist > 5 && dist < 25) { labelData.element.classList.add('visible'); } 
-            else { labelData.element.classList.remove('visible'); }
-        });
+    if (canvasContainer.style.display === "block") {
+        // ① 進行方向ベクトルの取得
+        const dir = new THREE.Vector3();
+        camera.getWorldDirection(dir);
+        dir.y = 0; dir.normalize(); 
+        
+        // ★ A/Dキーの左右反転修正
+        const right = new THREE.Vector3().crossVectors(dir, camera.up).normalize();
+
+        let isMoving = false;
+        const dist = walkSpeed * delta;
+
+        // 前進・後退
+        if (keys.w || mobileDir === 1) { camera.position.addScaledVector(dir, dist); isMoving = true; }
+        if (keys.s || mobileDir === -1) { camera.position.addScaledVector(dir, -dist); isMoving = true; }
+        // 左右カニ歩き
+        if (keys.a) { camera.position.addScaledVector(right, -dist); isMoving = true; } // 左
+        if (keys.d) { camera.position.addScaledVector(right, dist); isMoving = true; } // 右
+
+        // 壁の衝突判定
+        const limitX = STREET_W / 2 - 2;
+        camera.position.x = Math.max(-limitX, Math.min(limitX, camera.position.x));
+        camera.position.z = Math.min(10, camera.position.z);
+
+        // ★ マイクラ風ヘッドボブ（歩行時の上下揺れ）
+        if (isMoving) {
+            headBobTimer += delta * 12; 
+            camera.position.y = 4 + Math.sin(headBobTimer) * 0.12; // 自然な揺れ幅
+        } else {
+            camera.position.y += (4 - camera.position.y) * 0.1; // 停止時はスッと戻る
+        }
+
+        // 年号の表示更新
+        if (activeZones.length > 0) {
+            let nearest = activeZones[0];
+            let minDiff = Infinity;
+            activeZones.forEach(zone => {
+                const diff = Math.abs(zone.z - camera.position.z);
+                if (diff < minDiff) { minDiff = diff; nearest = zone; }
+            });
+            cinematicYear.textContent = nearest.date;
+        }
     }
+
     renderer.render(scene, camera);
 }
 animate();
