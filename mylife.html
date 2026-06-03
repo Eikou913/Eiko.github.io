@@ -41,21 +41,84 @@
 
     <div id="my-ui-layer">
       
+      <div id="top-controls">
+        <button id="btn-toggle-light" class="icon-btn white-glass" title="照明スイッチ (夜 / 夕方)"><i class="fa-solid fa-lightbulb"></i></button>
+        <button id="btn-open-map" class="icon-btn white-glass" title="マップ (テレポート)"><i class="fa-solid fa-map-location-dot"></i></button>
+        <button id="btn-open-add" class="icon-btn white-glass" title="記録の追加"><i class="fa-solid fa-plus"></i></button>
+        <button id="btn-open-settings" class="icon-btn white-glass" title="部屋/壁紙の設定"><i class="fa-solid fa-palette"></i></button>
+      </div>
+
       <div id="cinematic-focus">
         <div id="cinematic-year">START</div>
       </div>
 
+      <div id="sprint-indicator"><i class="fa-solid fa-wind"></i> DASH!</div>
+
       <div id="walk-controls-guide">
         <div class="guide-text white-glass">
-          <span class="pc-only"><span class="key">W</span> <span class="key">A</span> <span class="key">S</span> <span class="key">D</span> で歩く / </span>
-          <strong>ドラッグ</strong> で見回す
-        </div>
-        <div class="mobile-walk-btns">
-          <button id="btn-walk-fwd" class="white-glass"><i class="fa-solid fa-arrow-up"></i> 前進</button>
-          <button id="btn-walk-bwd" class="white-glass"><i class="fa-solid fa-arrow-down"></i> 後退</button>
+          <span class="pc-only"><span class="key">W</span> <span class="key">A</span> <span class="key">S</span> <span class="key">D</span> で歩く (W長押しでダッシュ) / </span>
+          <strong>ドラッグ</strong> で見回す / <strong>展示をタップ</strong> で詳細
         </div>
       </div>
 
+      <div id="mobile-dpad">
+        <div class="dpad-row">
+          <button id="btn-up" class="dpad-btn white-glass"><i class="fa-solid fa-caret-up"></i></button>
+        </div>
+        <div class="dpad-row">
+          <button id="btn-left" class="dpad-btn white-glass"><i class="fa-solid fa-caret-left"></i></button>
+          <button id="btn-down" class="dpad-btn white-glass"><i class="fa-solid fa-caret-down"></i></button>
+          <button id="btn-right" class="dpad-btn white-glass"><i class="fa-solid fa-caret-right"></i></button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="detail-modal" class="modal-overlay">
+    <div class="modal-content white-glass">
+      <span class="close-modal"><i class="fa-solid fa-xmark"></i></span>
+      <h2 id="detail-date" class="modal-title">2008</h2>
+      <p id="detail-text" class="modal-body">おぎゃー！栄光王国に生まれる。</p>
+    </div>
+  </div>
+
+  <div id="map-modal" class="modal-overlay">
+    <div class="modal-content white-glass">
+      <span class="close-modal"><i class="fa-solid fa-xmark"></i></span>
+      <h2 class="modal-title"><i class="fa-solid fa-map-location-dot"></i> TELEPORT MAP</h2>
+      <div class="modal-body" id="map-list">
+        </div>
+    </div>
+  </div>
+
+  <div id="add-modal" class="modal-overlay">
+    <div class="modal-content white-glass">
+      <span class="close-modal"><i class="fa-solid fa-xmark"></i></span>
+      <h2 class="modal-title"><i class="fa-solid fa-plus"></i> ADD RECORD</h2>
+      <div class="modal-body form-group">
+        <label>年号 (Date)</label>
+        <input type="text" id="add-date" placeholder="例: 2026/06">
+        <label>出来事 (Event Text)</label>
+        <textarea id="add-text" rows="3" placeholder="出来事を入力してください..."></textarea>
+        <button id="btn-submit-record" class="action-btn">街に追加する</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="settings-modal" class="modal-overlay">
+    <div class="modal-content white-glass">
+      <span class="close-modal"><i class="fa-solid fa-xmark"></i></span>
+      <h2 class="modal-title"><i class="fa-solid fa-palette"></i> ROOM SETTINGS</h2>
+      <div class="modal-body form-group">
+        <label>壁紙の変更 (画像アップロード)</label>
+        <input type="file" id="upload-wallpaper" accept="image/*">
+        <p style="font-size:12px; color:rgba(255,255,255,0.6);">※お好きな画像を壁のテクスチャに指定できます。</p>
+        <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
+        <label>道幅の調整</label>
+        <input type="range" id="street-width-slider" min="10" max="40" value="20">
+        <button id="btn-apply-settings" class="action-btn">適用して街を再構築</button>
+      </div>
     </div>
   </div>
 
