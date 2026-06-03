@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>音楽(人生計画) - えいこう王国</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&family=Noto+Sans+JP:wght@300;400;500;700&display=swap"
+    rel="stylesheet">
+
+  <style>
+    /* =========================================
+           1. 洗練されたモダン・ミニマルスタイル
+        ========================================= */
+    :root {
+      --bg-color: #fafafa;
+      /* ほんのり温かみのある白 */
+      --text-main: #1e293b;
+      /* 濃いスレートグレー（真っ黒より知的） */
+      --text-muted: #64748b;
+      /* 落ち着いたグレー */
+      --accent-color: #0f172a;
+      /* ほぼ黒のネイビー（引き締め色） */
+      --border-color: #e2e8f0;
+      /* 薄く上品な境界線 */
+      --highlight: #38bdf8;
+      /* 知的な印象を与えるクリアなブルー */
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      font-family: 'Noto Sans JP', 'Helvetica Neue', sans-serif;
+      line-height: 1.8;
+      letter-spacing: 0.05em;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* --- ヘッダー（極めてシンプルに） --- */
+    header {
+      background-color: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 15px 40px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-family: 'Jost', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      color: var(--accent-color);
+    }
+
+    .navigation {
+      display: flex;
+      gap: 30px;
+    }
+
+    .navigation-item {
+      font-family: 'Jost', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: color 0.3s ease;
+    }
+
+    .navigation-item:hover {
+      color: var(--text-main);
+    }
+
+    /* --- コンテンツエリア --- */
+    .page-content {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 60px 20px 100px 20px;
+    }
+
+    /* ページタイトル */
+    .page-title {
+      font-size: 32px;
+      font-weight: 300;
+      text-align: center;
+      margin-bottom: 50px;
+      letter-spacing: 4px;
+    }
+
+    /* --- 人生計画 サブナビゲーション（クリーンなタブ風） --- */
+    .vision-nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 60px;
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 20px;
+    }
+
+    .vision-nav-item {
+      padding: 8px 16px;
+      font-size: 14px;
+      color: var(--text-muted);
+      border-radius: 20px;
+      transition: all 0.2s ease;
+    }
+
+    .vision-nav-item:hover {
+      background-color: #f1f5f9;
+      color: var(--text-main);
+    }
+
+    .vision-nav-item.active {
+      background-color: var(--accent-color);
+      color: #ffffff;
+      font-weight: 500;
+    }
+
+    /* --- テキストコンテンツ --- */
+    .document-section {
+      margin-bottom: 60px;
+    }
+
+    h2 {
+      font-size: 20px;
+      font-weight: 500;
+      border-left: 3px solid var(--accent-color);
+      padding-left: 15px;
+      margin: 50px 0 20px 0;
+    }
+
+    p {
+      font-size: 15px;
+      color: #334155;
+      margin-bottom: 20px;
+    }
+
+    /* CPU/GPU/RAM の解説（アカデミックな注釈風） */
+    .concept-box {
+      background-color: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 30px;
+      margin: 30px 0;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    }
+
+    .concept-item {
+      margin-bottom: 20px;
+    }
+
+    .concept-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .concept-item strong {
+      font-family: 'Jost', sans-serif;
+      color: var(--highlight);
+      font-size: 16px;
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .concept-item span {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    /* 比較リスト（すっきりとした箇条書き） */
+    .comparison-list {
+      background-color: #f8fafc;
+      border-left: 3px solid var(--border-color);
+      padding: 20px 30px;
+      margin: 20px 0;
+      list-style: none;
+    }
+
+    .comparison-list li {
+      margin-bottom: 10px;
+      font-size: 14.5px;
+    }
+
+    .comparison-list li:last-child {
+      margin-bottom: 0;
+    }
+
+    .comparison-list strong {
+      color: var(--accent-color);
+    }
+
+    /* =========================================
+           3. マイルストーン（ロードマップ）
+        ========================================= */
+    .roadmap-container {
+      margin-top: 60px;
+    }
+
+    .phase-block {
+      margin-bottom: 50px;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: #ffffff;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    }
+
+    .phase-header {
+      background-color: #f8fafc;
+      border-bottom: 1px solid var(--border-color);
+      padding: 20px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .phase-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--accent-color);
+    }
+
+    .phase-progress {
+      font-family: 'Jost', sans-serif;
+      font-size: 13px;
+      color: var(--highlight);
+      font-weight: 500;
+    }
+
+    .step-list {
+      padding: 30px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+    }
+
+    .step-card {
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 20px;
+    }
+
+    .step-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      padding-bottom: 15px;
+      border-bottom: 1px dashed var(--border-color);
+    }
+
+    .step-name {
+      font-size: 15px;
+      font-weight: 500;
+    }
+
+    .step-percent {
+      font-family: 'Jost', sans-serif;
+      font-size: 12px;
+      background: #f1f5f9;
+      padding: 2px 8px;
+      border-radius: 12px;
+      color: var(--text-muted);
+    }
+
+    /* タスクのリスト */
+    .task-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .task-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      font-size: 13px;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .task-item:hover {
+      color: var(--text-main);
+    }
+
+    .task-item input[type="checkbox"] {
+      margin-top: 3px;
+      width: 15px;
+      height: 15px;
+      cursor: pointer;
+      accent-color: var(--accent-color);
+    }
+
+    .task-item.checked {
+      text-decoration: line-through;
+      color: #cbd5e1;
+    }
+
+    .vision-goal {
+      text-align: center;
+      padding: 40px;
+      background-color: var(--accent-color);
+      color: #ffffff;
+      border-radius: 12px;
+      margin-top: 40px;
+      font-weight: 300;
+      letter-spacing: 2px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="logo">EIKOU KINGDOM</div>
+    <div class="navigation">
+      <a href="index.html" class="navigation-item">Top</a>
+      <a href="rank.html" class="navigation-item">Ranking</a>
+      <a href="search.html" class="navigation-item">Search</a>
+    </div>
+  </header>
+
+  <div class="page-content">
+
+    <h1 class="page-title">人生計画</h1>
+
+    <div class="vision-nav">
+      <a href="vision.html" class="vision-nav-item">総合</a>
+      <a href="vis1.html" class="vision-nav-item">勉強</a>
+      <a href="vis2.html" class="vision-nav-item active">音楽</a>
+      <a href="vis3.html" class="vision-nav-item">ビジネス</a>
+      <a href="vis4.html" class="vision-nav-item">アニメ・ドラマ</a>
+      <a href="vis5.html" class="vision-nav-item">恋愛</a>
+    </div>
+
+    <div class="document-section">
+      <h2>音楽の認識を2種類に区別する</h2>
+      <p>先ほど勉強のページにて音楽がでてきたのにも関わらず、ここに音楽のページが独立している。<br>
+        これには訳があって、音楽は以下の2つに分けて考えるのが理想だからだ。</p>
+
+      <div class="concept-box">
+        <div class="concept-item">
+          <strong>【勉強】「理論的な」音楽の理解</strong>
+          <span>音楽理論などを通して音楽を構造的に理解する。</span>
+        </div>
+        <div class="concept-item">
+          <strong>【音楽】「感覚的な」音楽の理解</strong>
+          <span>このページでは主にこれについて扱っていく。耳で膨大なデータの特徴を感覚的に掴んだり、昨今の音楽シーンの考察、音楽の将来の理想、AI音楽時代において「人間らしさとは何か」を経験則的に述べていく。</span>
+        </div>
+      </div>
+
+      <p>それでは、早速今までの人生で(感覚的に)培ってきた自分なりの「音楽とは？」を言語化してみる。<br>
+        まずは今までの人生を振り返っていこう。
+      </p>
+      <p>年表も参考にしてほしいのだが、まず僕が音楽を始めたのは5歳か6歳くらいのこと。<br>
+        エレクトーンからはじめ、その後ピアノを習い始めたのがきっかけである。<br>
+        その前から音楽に興味があったのかどうかは正直わからないが、早くから絶対音感を持っていたため、感覚的に音楽を理解する能力には長けていたと思う。<br>
+        ここだけの話だが、絶対音感はヤマハ音楽教室に行けば誰でも身につくもんだと思っている。みんな何かしらの音楽経験を通して後天的につけているものではないかな。<br>
+        エレクトーンのことはよく覚えていない。今ではもう使い方もわからないだろう。</p>
+
+      <p>小3までは自宅の安いキーボードで習い事レベルでピアノを弾いていた。ピアノに夢中になってるとかではない。<br>
+        当時僕が夢中になっていたのは、自由帳づくりと妖怪ウォッチであろうか。<br>
+        「ピアノ習ってます」っていうだけで、音楽少年って感じでは1ミリもなかった。<br>
+        それから家に電子ピアノがくるのだが、その時から電子ピアノやキーボードの収録楽曲を聴き漁るようになっていった。<br>
+        当時使っていたCASIOのキーボードの収録楽曲は未だに全部覚えている。CASIOソングバンクというスマホアプリで聴くこともできるので気になったら調べてみてほしい。<br>
+        そんな感じで内蔵曲を漁っているうちに作曲を始めることになるのだ。<br>
+      </p>
+
+      <ul class="comparison-list">
+        <h3>《当時好きだった楽曲》</h3>
+        <li><strong>CASIOのキーボード : </strong> アニーローリー、ジェリコの戦い、パン屋さん、おめでとうクリスマス、結構行進曲、ジュトゥウ、朝日のあたる家、ハバネラ</li>
+        <li><strong>電子ピアノ：</strong> パスピエ、きらきら星変奏曲、小舟にて、スラブ舞曲8番、ゴーカート</li><br>
+      </ul>
+
+      <p>ということで、ここからはいよいよ作曲を始めた日のことを丁寧に話してみる。<br>
+        作曲を始めたのは小学5年生の時のこと。<br>
+        当時は本当にひどい世界だった。クラスのみんなはいい子だった。だけど一部の女子から僕はいじめられていた。<br>
+        周りのクラスメイトが庇ってくれたこともあったけど、それでもだめだった。<br>
+        担任もひどい人だった。今思うと厳しさゆえの感謝もあるが、生徒を差別するような人だったことは間違いない。<br>
+        すなわち、論理的な正しさは兼ね備えているのに道理的な正しさは弁えない、一番タチが悪いタイプである。<br>
+        学校を仮病することも多くなった。実際クラスの中に不登校みたいな人も現れ始めた。<br>
+        他にもいじめられている生徒もいたし、間違いなくあの時に僕はネガティブ思考に転落したのだと思う。<br><br>
+        ちなみに自分がいじめられた原因は何となくわかっている。昔から僕は内向型な性格だった。<br>
+        割と今でも人に好かれるタイプで、人生でほとんど喧嘩をせずここまで生きてこれてはいるのだが、もちろん環境に恵まれていたのもあるのだろう。<br>
+        人をいじめるタイプの人からすれば僕はとことんつまらなく弱弱しい、きわめて腹が立つ。攻撃対象にふさわしかったに違いない。
+        今みたいに哲学的なものや個性もほとんどなかった。あったとしても彼はその芸術的な僕の何かをひどく嫌った。<br>
+        社会というフィルターの下で生徒を見極めている。ゆえに僕は選ばれなかったのだ。
+        <br><br>
+        ー話を戻そう。<br>
+        それは無意識なことだったと思う。たまたまキーボードの自動演奏機能を見つけたのだ。<br>
+        何か鍵盤を押すと自動でそのキーの演奏をしてくれる。<br>
+        そこにメロディーを乗せたりして曲を考えるようになった。<br>
+        また自動演奏を用いなくても、この頃にはある程度頭に自分の曲がふんわりと浮かんでいた。<br>
+        そもそも勝手に曲を作っていたのか、自動演奏と出会ってから作曲するようになったのか。<br>
+        どっちが先かはわからないが、間違いなく何かの反動で音楽が生まれたのだろう。<br>
+        そう思うと、少し残酷ではあるが、僕が誰かにいじめられたり差別されたりしたことに対して少し肯定的になれる。音楽が現実逃避の代名詞のように語られるのはそのためであろう。<br>
+        95.mp3にてこのことを音楽にしようと思っている。<br>
+        彼は不適格な教師ではないのかもしれない。「無個性で物静かな人間は淘汰される」「でもはみ出しすぎたらそれも淘汰される」ということを僕に教えてくれた。<br>
+        本当に大事なことは「人から好かれるとっつきやすさ」を持つことであり、優秀になることでも天才になることでもない。そんなことが彼の教育姿勢から伺えるのではないか。<br>
+        したがって、僕自身も嫌な思いをしたしこれを正当化したいわけではないが、ある意味で彼は教育者なのかもしれない。<br>
+      </p>
+
+      <p>さて、ここまで読んでくれたあなたはもう気づいているであろう。
+        <strong>僕はほとんど音楽理論とは無縁に生きてきた</strong>のである。<br>
+        音感がある、加えて厳重な理論の下で作られたクラシックを聴いて育った。<br>
+        そんな経験があるからこそ、意識しなくてもある程度は理論に従ってしまうのである。<br>
+        ゆえに僕は理論を意識して音楽を考えるのが極めて苦手だ。<br>
+        しかし、だからといって「理論とは無縁の作曲者」にはなりたくない。理論なくして作曲者を名乗ることが許されるのであろうかと。
+        弱者は弱さを生きる理由にする。克服できないことを正当化する。僕はそんな弱者にはならない。常に高みを求めて生きるのだ。<br>
+        だから僕は音楽理論を学ぼうとは思う。けどそれで感覚派をやめるつもりは微塵たりともない。<br>
+      </p>
+      <h2>これからの音楽シーン</h2>
+      <p>というわけで、僕は音楽を感覚で捉えることを軸としている。音楽を語るときはこの感覚を軸にお話しすることになる。<br>
+        僕はこれからの音楽シーンでは間違いなく<strong>微分音が浸透する</strong>と思っている。というのは、AIの進化によりAIが音楽をコントロールできるようになる。
+        AIが自動的に人に合わせて音楽を生み出すようになる。<br>
+        「意識的に音楽を聴く以外の目的の音楽」をAIが担うようになる。<br>
+        AIは賢いからユーザーに最適な周波数に合わせて音楽を考えるであろう。<br>
+        そうともなれば、間違いなく周波数の在り方が多様化してくる。<br>
+        結果として、より自由な周波数帯で構成された音楽が生まれるのだ。<br>
+        既定のスケール以外の真新しいスケールが数十年後、早ければ数年後には生まれ、僕たち生産者もそれと向き合うことになるであろう。<br>
+      </p>
+      <h2>僕が目指す方向性</h2>
+      <p>ここでは「音楽の質感の種類」と「音楽の構造の種類」をまず定義し、その後に自分の音楽の方向性を定めようと思っている。<br>
+        まず、「音楽の質感の種類」には5種類あると思っている。先ほどは音楽の認識の種類を紹介したが、今から述べるのは音楽そのものについてである。<br>
+      <div class="concept-box">
+        <div class="concept-item">
+          <strong>アナログ・アナログ</strong>
+          <span>アナログの中でアナログな音楽を目指すことを意味する。ピアノだけで作られたクラシック音楽はまさにこれ。</span>
+        </div>
+        <div class="concept-item">
+          <strong>アナログ・デジタル</strong>
+          <span>アナログの中でデジタルな音楽を目指すことを意味する。エフェクトでギターを電子音みたいにしてる曲はまさにこれ。</span>
+        </div>
+        <div class="concept-item">
+          <strong>中間</strong>
+          <span>アナログとデジタルの中立を目指すことを意味する。ギターやボーカルなどはレコーディング、その他のシンセやFXはDAWで追加というハイブリッド型。現代のJPOPの大半はこれに該当するのではないか。</span>
+        </div>
+        <div class="concept-item">
+          <strong>デジタル・アナログ</strong>
+          <span>デジタルの中でアナログな音楽を目指すことを意味する。DTMで作られたJPOPはこれに近い。</span>
+        </div>
+        <div class="concept-item">
+          <strong>デジタル・デジタル</strong>
+          <span>デジタルの中でデジタルな音楽を目指すことを意味する。EDMやKPOPなどはまさにこれ。</span>
+        </div>
+
+      </div>
+      <p>数直線で見るとわかりやすいかもしれない。<br><br><br>
+        上の画像より、アナログを左、デジタルを右としてグラデーションするのである。<br>
+        僕が目指している音楽はアナログ・アナログとデジタル・アナログである。アナログ・アナログは僕の作品としてのレベルというよりかは、作品を引き立てるためにもっておきたいといったところである。<br>
+        つまり音楽活動としてはデジタル・アナログを目指す。<br>
+        巷ではアナログに価値が宿るとの見解を示している学者が多いようだ。<br>
+        どういうことかというと、AIが技術を代行するようになり、技術や作品だけでは人間とAIの区別ができなくなる。<br>
+        そこで実際に音楽を生み出した背景を持ったり演奏したりするその姿が評価される、との考えである。<br>
+        僕もいつかはアナログに帰化したいが、だからといって未知の未来を放置するわけにもいかない。<br>
+        軸としてはデジタルに身を置き続けると思う。<br>
+      </p>
+
+      <p>そして音楽の構造の種類についてだが、これは微分音音楽か非微分音音楽かでざっくり区別する。<br>
+        質感は5種類、構造は2種類、これらからそれぞれ1つずつ取り出す組み合わせの総数は5×2で10通りである。<br>
+        とはいえ、アナログと微分音の融合はまだ難しいかもしれない。いつかその日が来ることを気長に待とう。それまではデジタルの中で旅をするんだ。<br>
+        僕の音楽における夢は、この10通りすべてのアルバムを出すこと。それでこそ真のミュージシャンになれる。<br>
+      </p>
+
+      <p>では最後に音楽活動についての構想も述べておこう。<br>
+        <ui>
+          <li></li>
+          <li></li>
+          <li></li>
+        </ui>
+        2026年6月地点で、僕の楽曲の収入源の大半は初音ミクの楽曲で成立している。<br>
+        リスナーの多くが初音ミク楽曲を望んでいるとのことなので、しばらくは初音ミクの楽曲をメインにリリースしていく。<br>
+        また、MVについても積極的に制作していこうと思っている。基本的には自分で動画を撮影してMVを作るか、有志のクリエイターにお金を払って制作してもらうか、はたまたMVの制作業者に頼むかの3択である。<br>
+      </p>
+    </div>
+
+    <div class="roadmap-container">
+
+      <div class="phase-block" id="stage1">
+        <div class="phase-header">
+          <div class="phase-title">PHASE 01 : 20歳までの目標（CPUの強化 - X, X+Y）</div>
+          <div class="phase-progress" id="stage1-progress">0%</div>
+        </div>
+
+        <div class="step-list">
+          <div class="step-card" id="block-sub1">
+            <div class="step-header">
+              <div class="step-name">現代文・哲学</div>
+              <div class="step-percent" id="percent-sub1">0%</div>
+            </div>
+            <div class="task-list" id="sub1">
+              <label class="task-item" onclick="toggleCheck(this, 'sub1')">
+                <input type="checkbox"> <span>【現代文】入試アクセス基本・発展を終わらせる</span>
+              </label>
+              <label class="task-item" onclick="toggleCheck(this, 'sub1')">
+                <input type="checkbox"> <span>【現代文】キーワード読解を3周する</span>
+              </label>
+              <label class="task-item" onclick="toggleCheck(this, 'sub1')">
+                <input type="checkbox"> <span>【現代文】Top2500と漢字マスター1800+を1周</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="step-card" id="block-sub2">
+            <div class="step-header">
+              <div class="step-name">数学・物理・プログラミング・経済・音楽</div>
+              <div class="step-percent" id="percent-sub2">0%</div>
+            </div>
+            <div class="task-list" id="sub2">
+              <label class="task-item" onclick="toggleCheck(this, 'sub2')">
+                <input type="checkbox"> <span>【数学】入門+青チャートを3周以上</span>
+              </label>
+              <label class="task-item" onclick="toggleCheck(this, 'sub2')">
+                <input type="checkbox"> <span>【数学】標問を3周以上</span>
+              </label>
+              <label class="task-item" onclick="toggleCheck(this, 'sub2')">
+                <input type="checkbox"> <span>【数学】文系プラチカを3周以上</span>
+              </label>
+              <label class="task-item" onclick="toggleCheck(this, 'sub2')">
+                <input type="checkbox"> <span>【数学】上問を3周以上</span>
+              </label>
+              <label class="task-item" onclick="toggleCheck(this, 'sub2')">
+                <input type="checkbox"> <span>【数学】数学の真髄を5周以上</span>
+              </label>
+              <label class="task-item" onclick="toggleCheck(this, 'sub2')">
+                <input type="checkbox"> <span>【物理】セミナー物理基礎+物理を3周以上</span>
+              </label>
+              <label class="task-item" onclick="toggleCheck(this, 'sub2')">
+                <input type="checkbox"> <span>【物理】物理重要問題集を3周以上</span>
+              </label>
+              <label class="task-item" onclick="toggleCheck(this, 'sub2')">
+                <input type="checkbox"> <span>【PG】PythonとJavaScriptの基本を理解</span>
+              </label>
+              <label class="task-item" onclick="toggleCheck(this, 'sub2')">
+                <input type="checkbox"> <span>【音楽】和声法1～3 / 対位法</span>
+              </label>
+              <label class="task-item" onclick="toggleCheck(this, 'sub2')">
+                <input type="checkbox"> <span>【音楽】ザ・ジャズセオリー / 微分音音楽</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-block" id="stage2">
+        <div class="phase-header">
+          <div class="phase-title">PHASE 02 : 大学生の目標（GPUの強化 - Y, Y+Z）</div>
+          <div class="phase-progress" id="stage2-progress">0%</div>
+        </div>
+
+        <div class="step-list">
+          <div class="step-card" id="block-sub3">
+            <div class="step-header">
+              <div class="step-name">文学・地学</div>
+              <div class="step-percent" id="percent-sub3">0%</div>
+            </div>
+            <div class="task-list" id="sub3">
+              <label class="task-item" onclick="toggleCheck(this, 'sub3')">
+                <input type="checkbox"> <span>【地学】宇宙を探究する</span>
+              </label>
+              <label class="task-item" onclick="toggleCheck(this, 'sub3')">
+                <input type="checkbox"> <span>【文学】文学作品に触れよう</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="step-card" id="block-sub4">
+            <div class="step-header">
+              <div class="step-name">化学・生物・地理・英語</div>
+              <div class="step-percent" id="percent-sub4">0%</div>
+            </div>
+            <div class="task-list" id="sub4">
+              <label class="task-item" onclick="toggleCheck(this, 'sub4')">
+                <input type="checkbox"> <span>【化学】基礎の習得</span>
+              </label>
+              <label class="task-item" onclick="toggleCheck(this, 'sub4')">
+                <input type="checkbox"> <span>【生物】基礎の習得</span>
+              </label>
+              <label class="task-item" onclick="toggleCheck(this, 'sub4')">
+                <input type="checkbox"> <span>【英語】英検1級とる</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="phase-block" id="stage3">
+        <div class="phase-header">
+          <div class="phase-title">PHASE 03 : 更なる高みを求めて（RAMの強化 - Z, Z+X）</div>
+          <div class="phase-progress" id="stage3-progress">0%</div>
+        </div>
+
+        <div class="step-list">
+          <div class="step-card" id="block-sub5">
+            <div class="step-header">
+              <div class="step-name">古文・漢文・歴史</div>
+              <div class="step-percent" id="percent-sub5">0%</div>
+            </div>
+            <div class="task-list" id="sub5">
+              <label class="task-item" onclick="toggleCheck(this, 'sub5')">
+                <input type="checkbox"> <span>【歴史】詳説世界史を抽象化してノートにまとめる</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="step-card" id="block-sub6">
+            <div class="step-header">
+              <div class="step-name">公共</div>
+              <div class="step-percent" id="percent-sub6">0%</div>
+            </div>
+            <div class="task-list" id="sub6">
+              <label class="task-item" onclick="toggleCheck(this, 'sub6')">
+                <input type="checkbox"> <span>【化学】基礎の習得</span>
+              </label>
+              <label class="task-item" onclick="toggleCheck(this, 'sub6')">
+                <input type="checkbox"> <span>【生物】基礎の習得</span>
+              </label>
+              <label class="task-item" onclick="toggleCheck(this, 'sub6')">
+                <input type="checkbox"> <span>【英語】英検1級とる</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="vision-goal" id="total-status">
+        GOAL: 社会的意義をもってこれらの知識を活用できるようになる
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    function toggleCheck(labelElement, timelineId) {
+      // labelタグを使っているので、クリックイベントは自動的に中のチェックボックスに伝わる
+      // 状態が変化した後に計算を行うための遅延処理
+      setTimeout(() => {
+        const checkbox = labelElement.querySelector('input[type="checkbox"]');
+        if (checkbox.checked) {
+          labelElement.classList.add('checked');
+        } else {
+          labelElement.classList.remove('checked');
+        }
+        calculateSquareProgress(timelineId);
+      }, 10);
+    }
+
+    function calculateSquareProgress(timelineId) {
+      const timeline = document.getElementById(timelineId);
+      const boxes = timeline.querySelectorAll('.task-item');
+      const total = boxes.length;
+      let checkedCount = 0;
+
+      boxes.forEach(box => {
+        if (box.querySelector('input[type="checkbox"]').checked) {
+          checkedCount++;
+        }
+      });
+
+      const percent = Math.round((checkedCount / total) * 100);
+      document.getElementById(`percent-${timelineId}`).innerText = `${percent}%`;
+
+      calculateStageProgress();
+    }
+
+    function calculateStageProgress() {
+      // STAGE 01
+      const stage1Ids = ['sub1', 'sub2'];
+      let stage1TotalPercent = 0;
+      stage1Ids.forEach(id => {
+        stage1TotalPercent += parseInt(document.getElementById(`percent-${id}`).innerText);
+      });
+      const stage1Result = Math.round(stage1TotalPercent / stage1Ids.length);
+      document.getElementById('stage1-progress').innerText = `${stage1Result}%`;
+
+      // STAGE 02
+      const stage2Ids = ['sub3', 'sub4'];
+      let stage2TotalPercent = 0;
+      stage2Ids.forEach(id => {
+        stage2TotalPercent += parseInt(document.getElementById(`percent-${id}`).innerText);
+      });
+      const stage2Result = Math.round(stage2TotalPercent / stage2Ids.length);
+      document.getElementById('stage2-progress').innerText = `${stage2Result}%`;
+
+      // 最終ゴール
+      const totalStatus = document.getElementById('total-status');
+      const finalPercent = Math.round((stage1Result + stage2Result) / 2);
+      if (finalPercent === 100) {
+        totalStatus.innerText = "VISION ACCOMPLISHED";
+        totalStatus.style.backgroundColor = "#38bdf8"; // 達成時は鮮やかなブルーに
+      } else {
+        totalStatus.innerText = `OVERALL PROGRESS: ${finalPercent}%`;
+        totalStatus.style.backgroundColor = "var(--accent-color)";
+      }
+    }
+  </script>
+
+</body>
+
+</html>
