@@ -42,27 +42,45 @@
 
     a { text-decoration: none; color: inherit; }
 
-    /* ナビゲーション */
+    /* --- ヘッダー（全ファイル完全同期・位置固定） --- */
     header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: rgba(5, 9, 20, 0.6);
+      background-color: rgba(5, 9, 20, 0.6);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--glass-border);
-      padding: 15px 0;
+      padding: 15px 40px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-sizing: border-box;
     }
-    .navigation { display: flex; justify-content: center; gap: 30px; }
+    
+    .logo {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      color: var(--text-main);
+    }
+
+    .navigation {
+      display: flex;
+      gap: 30px;
+    }
+
     .navigation-item {
       font-family: 'Montserrat', sans-serif;
       font-size: 13px;
-      font-weight: 600;
+      font-weight: 500;
       color: var(--text-sub);
       text-transform: uppercase;
-      letter-spacing: 2px;
-      transition: all 0.3s ease;
+      letter-spacing: 1px;
+      transition: color 0.3s ease, text-shadow 0.3s ease;
     }
+
     .navigation-item:hover {
       color: var(--text-main);
       text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
@@ -173,12 +191,18 @@
       border-color: rgba(255, 255, 255, 0.2);
     }
 
+    /* モバイル向けヘッダー追記 */
+    @media (max-width: 640px) {
+      header { padding: 15px 20px; }
+    }
+
     @media (max-width: 480px) { .subject-grid { grid-template-columns: 1fr; gap: 20px;} .Eikou { font-size: 32px; } }
   </style>
 </head>
 
 <body>
   <header>
+    <div class="logo">EIKOU KINGDOM</div>
     <div class="navigation">
       <a href="index.html" class="navigation-item">Top</a>
       <a href="rank.html" class="navigation-item">Ranking</a>

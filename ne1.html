@@ -11,7 +11,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
   
   <style>
-    /* --- チームラボ風 デジタル・アート・パレット --- */
+    /* --- デジタル・アート・パレット --- */
     :root {
       --bg-dark: #050914;
       --glass-bg: rgba(255, 255, 255, 0.03);
@@ -40,31 +40,54 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ナビゲーション */
+    /* --- ヘッダー（全ファイル完全同期・位置固定） --- */
     header {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: rgba(5, 9, 20, 0.6);
+      background-color: rgba(5, 9, 20, 0.6);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
       border-bottom: 1px solid var(--glass-border);
-      padding: 15px 0;
+      padding: 15px 40px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-sizing: border-box;
     }
-    .navigation { display: flex; justify-content: center; gap: 30px; }
+    
+    .logo {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      color: var(--text-main);
+    }
+
+    .navigation {
+      display: flex;
+      gap: 30px;
+    }
+
     .navigation-item {
       font-family: 'Montserrat', sans-serif;
       font-size: 13px;
-      font-weight: 600;
+      font-weight: 500;
       color: var(--text-sub);
       text-transform: uppercase;
-      letter-spacing: 2px;
+      letter-spacing: 1px;
       text-decoration: none;
-      transition: all 0.3s ease;
+      transition: color 0.3s ease, text-shadow 0.3s ease;
     }
+
     .navigation-item:hover {
       color: var(--text-main);
       text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+
+    /* モバイル向けヘッダー追記 */
+    @media (max-width: 640px) {
+      header { padding: 15px 20px; }
     }
 
     /* コンテンツエリア */
@@ -204,6 +227,7 @@
 <body>
 
   <header>
+    <div class="logo">EIKOU KINGDOM</div>
     <div class="navigation">
       <a href="index.html" class="navigation-item">Top</a>
       <a href="rank.html" class="navigation-item">Ranking</a>
