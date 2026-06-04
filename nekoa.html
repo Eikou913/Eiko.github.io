@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nekoa - えいこう王国</title>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* =========================================
+       1. デジタル・アート・パレット（ダークテーマ）
+    ========================================= */
+    :root {
+      --bg-dark: #050914;         /* 深淵のようなダークネイビー */
+      --glass-bg: rgba(255, 255, 255, 0.03); /* すりガラスの背景 */
+      --glass-border: rgba(255, 255, 255, 0.08); /* ガラスのフチ */
+      --text-main: #f8fafc;       /* 澄んだ白 */
+      --text-sub: #94a3b8;        /* 落ち着いたグレー */
+      
+      /* 幻想的に発光するアクセントネオン */
+      --neon-blue: #38bdf8;
+      --neon-purple: #c084fc;
+      --neon-pink: #f472b6;
+      --neon-green: #34d399;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Noto Sans JP', sans-serif;
+      line-height: 1.8;
+      overflow-x: hidden;
+      /* 幻想的な光のオーブを背景に配置 */
+      background-image: 
+        radial-gradient(circle at 20% 35%, rgba(192, 132, 252, 0.15), transparent 30%),
+        radial-gradient(circle at 80% 65%, rgba(56, 189, 248, 0.12), transparent 30%);
+      background-attachment: fixed;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* グラスモーフィズムUI */
+    .glass-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    /* --- ヘッダー（4ファイル完全同期・位置固定） --- */
+    header {
+      background-color: rgba(5, 9, 20, 0.6);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--glass-border);
+      padding: 15px 40px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-sizing: border-box;
+    }
+    
+    .logo {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      color: var(--text-main);
+    }
+
+    .navigation {
+      display: flex;
+      gap: 30px;
+    }
+
+    .navigation-item {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-sub);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: color 0.3s ease, text-shadow 0.3s ease;
+    }
+    
+    .navigation-item:hover {
+      color: var(--text-main);
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+
+    /* --- コンテンツエリア --- */
+    .page-content {
+      max-width: 800px; 
+      margin: 0 auto;
+      padding: 60px 20px 100px 20px;
+      box-sizing: border-box;
+    }
+
+    /* --- タイローエリア --- */
+    .phrase {
+      text-align: center;
+      padding: 40px 20px;
+      margin-bottom: 40px;
+    }
+
+    .Eikou {
+      margin: 0;
+      font-family: 'Montserrat', sans-serif;
+      font-size: 44px;
+      font-weight: 700;
+      line-height: 1.2;
+      letter-spacing: 8px;
+      background: linear-gradient(135deg, #ffffff, var(--text-sub));
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    
+    .Eikou span {
+      display: block;
+      font-size: 13px;
+      color: var(--neon-blue);
+      font-weight: 600;
+      letter-spacing: 4px;
+      margin-top: 12px;
+      text-transform: uppercase;
+      text-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
+    }
+
+    /* =========================================
+       2. ディレクトリ＆トラック構造 UI
+    ========================================= */
+    .archive-container {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    /* 親ディレクトリカード */
+    .directory-card {
+      padding: 35px;
+      position: relative;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .directory-card:hover {
+      border-color: rgba(192, 132, 252, 0.2);
+      box-shadow: 0 0 30px rgba(192, 132, 252, 0.08);
+    }
+
+    .directory-header {
+      font-size: 22px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--glass-border);
+      margin-bottom: 20px;
+    }
+    .directory-header i {
+      color: var(--neon-purple);
+      text-shadow: 0 0 10px rgba(192, 132, 252, 0.5);
+    }
+
+    /* 入れ子（子階層）のトラックリスト */
+    .track-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-left: 10px;
+    }
+
+    .track-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      background: rgba(255, 255, 255, 0.01);
+      border: 1px solid var(--glass-border);
+      border-radius: 14px;
+      transition: all 0.2s ease;
+    }
+
+    .track-item:hover {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: var(--neon-blue);
+      box-shadow: 0 0 15px rgba(56, 189, 248, 0.1);
+      transform: translateX(4px);
+    }
+
+    .track-info {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-weight: 500;
+    }
+    .track-info i {
+      font-size: 16px;
+      color: var(--text-sub);
+      transition: color 0.2s ease;
+    }
+    .track-item:hover .track-info i {
+      color: var(--neon-blue);
+    }
+
+    .track-meta {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 12px;
+      color: var(--text-sub);
+      background: rgba(255, 255, 255, 0.05);
+      padding: 2px 10px;
+      border-radius: 20px;
+    }
+
+    /* 横並びの下位クリエイティブリンク */
+    .creative-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 25px;
+    }
+
+    .creative-card {
+      padding: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .creative-info {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .creative-card .arrow-icon {
+      font-size: 16px;
+      color: var(--text-sub);
+      transition: transform 0.3s ease, color 0.3s ease;
+    }
+
+    /* 各カードのホバーエフェクト（ネオンカラーの切り替え） */
+    .mv-link .creative-info i { color: var(--neon-pink); text-shadow: 0 0 10px rgba(244, 114, 182, 0.4); }
+    .mv-link:hover { border-color: var(--neon-pink); box-shadow: 0 0 25px rgba(244, 114, 182, 0.12); transform: translateY(-3px); }
+    .mv-link:hover .arrow-icon { color: var(--neon-pink); transform: translateX(4px); }
+
+    .puzzle-link .creative-info i { color: var(--neon-green); text-shadow: 0 0 10px rgba(52, 211, 153, 0.4); }
+    .puzzle-link:hover { border-color: var(--neon-green); box-shadow: 0 0 25px rgba(52, 211, 153, 0.12); transform: translateY(-3px); }
+    .puzzle-link:hover .arrow-icon { color: var(--neon-green); transform: translateX(4px); }
+
+    @media (max-width: 640px) {
+      header { padding: 15px 20px; }
+      .Eikou { font-size: 34px; }
+      .directory-card { padding: 20px; }
+      .creative-grid { grid-template-columns: 1fr; gap: 15px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="logo">EIKOU KINGDOM</div>
+    <div class="navigation">
+      <a href="index.html" class="navigation-item">Top</a>
+      <a href="rank.html" class="navigation-item">Ranking</a>
+      <a href="search.html" class="navigation-item">Search</a>
+    </div>
+  </header>
+
+  <div class="page-content">
+
+    <div class="phrase">
+      <h3 class="Eikou">NEKOA<span>Sound & Vision Archive</span></h3>
+    </div>
+    
+    <div class="archive-container">
+      
+      <div class="directory-card glass-card">
+        <a href="ne1.html" class="directory-header">
+          <i class="fa-solid fa-folder-open"></i> Nekoa全曲
+        </a>
+        
+        <div class="track-list">
+          
+          <a href="nso1.html" class="track-item">
+            <div class="track-info">
+              <i class="fa-solid fa-music"></i>
+              <span>n.mp3</span>
+            </div>
+            <div class="track-meta">TRACK 01</div>
+          </a>
+
+          <a href="bnso1.html" class="track-item">
+            <div class="track-info">
+              <i class="fa-solid fa-music"></i>
+              <span>bn.mp3</span>
+            </div>
+            <div class="track-meta">TRACK 02</div>
+          </a>
+
+          <a href="mal1.html" class="track-item">
+            <div class="track-info">
+              <i class="fa-solid fa-compact-disc"></i>
+              <span>m.album</span>
+            </div>
+            <div class="track-meta">ALBUM</div>
+          </a>
+
+          <a href="sal1.html" class="track-item">
+            <div class="track-info">
+              <i class="fa-solid fa-compact-disc"></i>
+              <span>s.album</span>
+            </div>
+            <div class="track-meta">ALBUM</div>
+          </a>
+
+        </div>
+      </div>
+
+      <div class="creative-grid">
+        
+        <a href="ne2.html" class="creative-card glass-card mv-link">
+          <div class="creative-info">
+            <i class="fa-solid fa-clapperboard"></i>
+            <span>MV構想</span>
+          </div>
+          <i class="fa-solid fa-arrow-right arrow-icon"></i>
+        </a>
+
+        <a href="ne3.html" class="creative-card glass-card puzzle-link">
+          <div class="creative-info">
+            <i class="fa-solid fa-puzzle-piece"></i>
+            <span>ジャケットパズル</span>
+          </div>
+          <i class="fa-solid fa-arrow-right arrow-icon"></i>
+        </a>
+
+      </div>
+
+    </div>
+
+  </div> 
+</body>
+
+</html>
