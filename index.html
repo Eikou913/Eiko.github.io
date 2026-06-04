@@ -22,7 +22,6 @@
       --text-main: #f8fafc;       /* 澄んだ白 */
       --text-sub: #94a3b8;        /* 落ち着いたグレー */
       
-      /* 発光するアクセントカラー */
       --neon-blue: #38bdf8;
       --neon-purple: #c084fc;
       --neon-pink: #f472b6;
@@ -38,7 +37,6 @@
       font-family: 'Noto Sans JP', sans-serif;
       line-height: 1.8;
       overflow-x: hidden;
-      /* 幻想的な光のオーブを背景に配置 */
       background-image: 
         radial-gradient(circle at 15% 50%, rgba(56, 189, 248, 0.15), transparent 25%),
         radial-gradient(circle at 85% 30%, rgba(192, 132, 252, 0.15), transparent 25%);
@@ -51,9 +49,6 @@
       color: inherit;
     }
 
-    /* =========================================
-       2. グラスモーフィズム（すりガラス効果）UI
-    ========================================= */
     .glass-card {
       background: var(--glass-bg);
       backdrop-filter: blur(16px);
@@ -63,7 +58,7 @@
       box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     }
 
-    /* --- ヘッダー（nekoa.htmlと完全同期・位置固定） --- */
+    /* --- ヘッダー --- */
     header {
       background-color: rgba(5, 9, 20, 0.6);
       backdrop-filter: blur(20px);
@@ -114,7 +109,6 @@
       padding: 60px 20px;
     }
 
-    /* --- ヒーローエリア --- */
     .phrase {
       text-align: center;
       padding: 60px 20px;
@@ -129,7 +123,6 @@
       font-weight: 700;
       line-height: 1.4;
       letter-spacing: 4px;
-      /* 文字自体がグラデーションで発光する表現 */
       background: linear-gradient(135deg, var(--neon-blue), var(--neon-purple));
       background-clip: text;
       -webkit-background-clip: text;
@@ -137,7 +130,6 @@
       text-shadow: 0 0 40px rgba(56, 189, 248, 0.3);
     }
 
-    /* --- 見出し --- */
     h1, h3 {
       font-family: 'Montserrat', sans-serif;
       text-align: center;
@@ -270,7 +262,6 @@
       letter-spacing: 1px;
     }
 
-    /* 知的なグラデーションバッジ */
     .badge-nekoa { background: rgba(251, 191, 36, 0.15); color: var(--neon-yellow); }
     .badge-study { background: rgba(192, 132, 252, 0.15); color: var(--neon-purple); }
     .badge-life { background: rgba(56, 189, 248, 0.15); color: var(--neon-blue); }
@@ -295,7 +286,7 @@
       border-bottom-color: var(--text-main);
     }
 
-    /* --- メニューグリッド（洗練されたパネル） --- */
+    /* --- メニューグリッド --- */
     .menu-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr); 
@@ -326,7 +317,6 @@
       letter-spacing: 1px;
     }
 
-    /* ホバー時に美しく発光するエフェクト */
     .menu-item:hover {
       background: rgba(255, 255, 255, 0.08);
       border-color: rgba(255, 255, 255, 0.2);
@@ -396,18 +386,101 @@
       box-shadow: 0 5px 15px rgba(255, 255, 255, 0.1);
     }
 
-    /* モバイル向けヘッダー追記 */
-    @media (max-width: 640px) {
-      header { padding: 15px 20px; }
+    /* =========================================
+       2. 共通フルサイトマップ・フッター (ダーク)
+    ========================================= */
+    footer {
+      margin-top: 100px;
+      border-top: 1px solid var(--glass-border);
+      background-color: rgba(5, 9, 20, 0.6);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      padding: 60px 40px 40px 40px;
+      box-sizing: border-box;
     }
 
-    /* モバイル向け微調整 */
-    @media (max-width: 480px) {
+    .footer-sitemap {
+      max-width: 1100px;
+      margin: 0 auto 50px auto;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 30px;
+    }
+
+    .sitemap-col h4 {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      color: var(--text-main);
+      margin: 0 0 15px 0;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--glass-border);
+      text-transform: uppercase;
+    }
+
+    .sitemap-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .sitemap-item a {
+      font-size: 12px;
+      color: var(--text-sub);
+      display: inline-block;
+      transition: color 0.2s ease, transform 0.2s ease, text-shadow 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .sitemap-item a:hover {
+      color: var(--text-main);
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+      transform: translateX(3px);
+    }
+
+    .layer-1 { padding-left: 0; font-weight: 500; }
+    .layer-2 { padding-left: 12px; }
+
+    .footer-bottom {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding-top: 20px;
+      border-top: 1px solid var(--glass-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-copy {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 11px;
+      color: var(--text-sub);
+      letter-spacing: 1px;
+    }
+
+    /* レスポンシブ */
+    @media (max-width: 960px) {
+      .footer-sitemap { grid-template-columns: repeat(3, 1fr); gap: 25px; }
+    }
+
+    @media (max-width: 640px) {
+      header { padding: 15px 20px; }
+      footer { padding: 40px 20px; }
+      .footer-sitemap { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+      .footer-bottom { flex-direction: column; gap: 15px; text-align: center; }
       .menu-grid { gap: 15px; grid-template-columns: repeat(2, 1fr); }
       .nekoa-special { grid-column: span 2; }
       .article-item { flex-wrap: wrap; gap: 10px; padding: 15px; }
       .article-title { width: 100%; }
       .Eikou { font-size: 28px; }
+    }
+
+    @media (max-width: 400px) {
+      .footer-sitemap { grid-template-columns: 1fr; gap: 20px; }
     }
   </style>
 </head>
@@ -438,7 +511,7 @@
         </div>
       </div>
       <p>世界で一番の幸せ者になりたいえいこうくんが作った王国です。<br>自身の創作活動、思考の軌跡、そして未来への記録をここにアーカイブしています。</p>
-      <a href="https://docs.google.com/forms/d/e/1FAIpQLSce3kKywOFO4k7jGF7EJ_jhMAkNhV-CORjmXcU_leNIlxPMHg/viewform?usp=publish-editor" class="btn-feedback"><i class="fa-solid fa-envelope"></i> フィードバックを送る</a>
+      <a href="feedback.html" class="btn-feedback"><i class="fa-solid fa-envelope"></i> フィードバックを送る</a>
     </div>
 
     <div class="section-title-wrap">
@@ -515,5 +588,79 @@
     </div>
 
   </div> 
+
+  <footer>
+    <div class="footer-sitemap">
+      <div class="sitemap-col">
+        <h4>System</h4>
+        <ul class="sitemap-list">
+          <li class="sitemap-item layer-1"><a href="index.html">TOP</a></li>
+          <li class="sitemap-item layer-1"><a href="rank.html">Ranking</a></li>
+          <li class="sitemap-item layer-2"><a href="yene.html">└ Year20nn/Nekoa</a></li>
+          <li class="sitemap-item layer-2"><a href="yemu.html">└ Year20nn/Music</a></li>
+          <li class="sitemap-item layer-2"><a href="month.html">└ 月間ランキング</a></li>
+          <li class="sitemap-item layer-1"><a href="search.html">Search</a></li>
+        </ul>
+      </div>
+
+      <div class="sitemap-col">
+        <h4>Music</h4>
+        <ul class="sitemap-list">
+          <li class="sitemap-item layer-1"><a href="song.html">楽曲</a></li>
+          <li class="sitemap-item layer-1"><a href="nekoa.html">Nekoa</a></li>
+          <li class="sitemap-item layer-2"><a href="ne1.html">└ Nekoa全曲</a></li>
+          <li class="sitemap-item layer-2"><a href="ne2.html">└ MV構想</a></li>
+          <li class="sitemap-item layer-2"><a href="ne3.html">└ ジャケットパズル</a></li>
+          <li class="sitemap-item layer-1"><a href="music.html">音楽</a></li>
+          <li class="sitemap-item layer-2"><a href="muth.html">└ 音楽理論</a></li>
+          <li class="sitemap-item layer-2"><a href="best.html">└ おすすめ曲</a></li>
+          <li class="sitemap-item layer-2"><a href="dtm.html">└ DTM</a></li>
+          <li class="sitemap-item layer-2"><a href="muther.html">└ その他</a></li>
+        </ul>
+      </div>
+
+      <div class="sitemap-col">
+        <h4>Vision</h4>
+        <ul class="sitemap-list">
+          <li class="sitemap-item layer-1"><a href="vision.html">人生計画</a></li>
+          <li class="sitemap-item layer-2"><a href="vis1.html">└ 勉強</a></li>
+          <li class="sitemap-item layer-2"><a href="vis2.html">└ 音楽</a></li>
+          <li class="sitemap-item layer-2"><a href="vis3.html">└ ビジネス</a></li>
+          <li class="sitemap-item layer-2"><a href="vis4.html">└ アニメ・ドラマ</a></li>
+          <li class="sitemap-item layer-2"><a href="vis5.html">└ 恋愛</a></li>
+        </ul>
+      </div>
+
+      <div class="sitemap-col">
+        <h4>Study</h4>
+        <ul class="sitemap-list">
+          <li class="sitemap-item layer-1"><a href="study.html">勉強</a></li>
+          <li class="sitemap-item layer-2"><a href="japa.html">└ 国語</a></li>
+          <li class="sitemap-item layer-2"><a href="math.html">└ 数学</a></li>
+          <li class="sitemap-item layer-2"><a href="eng.html">└ 英語</a></li>
+          <li class="sitemap-item layer-2"><a href="sci.html">└ 理科</a></li>
+          <li class="sitemap-item layer-2"><a href="socia.html">└ 社会</a></li>
+          <li class="sitemap-item layer-2"><a href="econ.html">└ 経済</a></li>
+          <li class="sitemap-item layer-2"><a href="phi.html">└ 哲学</a></li>
+        </ul>
+      </div>
+
+      <div class="sitemap-col">
+        <h4>Other</h4>
+        <ul class="sitemap-list">
+          <li class="sitemap-item layer-1"><a href="mylife.html">年表</a></li>
+          <li class="sitemap-item layer-1"><a href="daily.html">日常</a></li>
+          <li class="sitemap-item layer-2"><a href="game.html">└ ゲーム</a></li>
+          <li class="sitemap-item layer-2"><a href="trip.html">└ 旅</a></li>
+          <li class="sitemap-item layer-2"><a href="work.html">└ 仕事</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-copy">&copy; 2026 EIKOU KINGDOM</div>
+    </div>
+  </footer>
+
 </body>
 </html>

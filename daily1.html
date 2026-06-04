@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>【お知らせ】サイトが完成しました！ - えいこう王国</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* =========================================
+       1. 洗練されたモダン・ミニマルスタイル
+    ========================================= */
+    :root {
+      --bg-color: #fafafa;         /* ほんのり温かみのある白 */
+      --text-main: #1e293b;        /* 濃いスレートグレー */
+      --text-muted: #64748b;       /* 落ち着いたグレー */
+      --accent-color: #0f172a;     /* ほぼ黒のネイビー */
+      --border-color: #e2e8f0;     /* 薄く上品な境界線 */
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      font-family: 'Noto Sans JP', 'Helvetica Neue', sans-serif;
+      line-height: 1.8;
+      letter-spacing: 0.05em;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* --- 絶対固定ヘッダー --- */
+    header {
+      background-color: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border-color);
+      padding: 15px 40px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-sizing: border-box;
+    }
+
+    .logo {
+      font-family: 'Jost', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      color: var(--accent-color);
+    }
+
+    .navigation {
+      display: flex;
+      gap: 30px;
+    }
+
+    .navigation-item {
+      font-family: 'Jost', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: color 0.3s ease;
+    }
+
+    .navigation-item:hover {
+      color: var(--text-main);
+    }
+
+    /* --- コンテンツエリア --- */
+    .page-content {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 60px 20px 40px 20px;
+      box-sizing: border-box;
+    }
+
+    .page-title {
+      font-size: 32px;
+      font-weight: 300;
+      text-align: center;
+      margin-bottom: 50px;
+      letter-spacing: 4px;
+    }
+
+    p {
+      font-size: 15px;
+      color: #334155;
+      margin-bottom: 20px;
+    }
+
+    ul {
+      padding-left: 20px;
+      margin-bottom: 20px;
+    }
+
+    li {
+      margin-bottom: 8px;
+      font-size: 15px;
+      color: #334155;
+    }
+
+    /* =========================================
+       2. 共通フルサイトマップ・フッター
+    ========================================= */
+    footer {
+      margin-top: 100px;
+      border-top: 1px solid var(--border-color);
+      background-color: #ffffff;
+      padding: 60px 40px 40px 40px;
+      box-sizing: border-box;
+    }
+
+    .footer-sitemap {
+      max-width: 1100px;
+      margin: 0 auto 50px auto;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 30px;
+    }
+
+    .sitemap-col h4 {
+      font-family: 'Jost', 'Noto Sans JP', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      color: var(--accent-color);
+      margin: 0 0 15px 0;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border-color);
+      text-transform: uppercase;
+    }
+
+    .sitemap-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .sitemap-item a {
+      font-size: 12px;
+      color: var(--text-muted);
+      display: inline-block;
+      transition: color 0.2s ease, transform 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .sitemap-item a:hover {
+      color: var(--text-main);
+      transform: translateX(3px);
+    }
+
+    /* 階層に応じたインデント */
+    .layer-1 { padding-left: 0; font-weight: 500; }
+    .layer-2 { padding-left: 12px; }
+
+    .footer-bottom {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-copy {
+      font-family: 'Jost', sans-serif;
+      font-size: 11px;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+    }
+
+    /* レスポンシブ */
+    @media (max-width: 960px) {
+      .footer-sitemap { grid-template-columns: repeat(3, 1fr); gap: 25px; }
+    }
+
+    @media (max-width: 640px) {
+      header { padding: 15px 20px; }
+      .footer-sitemap { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+      .footer-bottom { flex-direction: column; gap: 15px; text-align: center; }
+      .page-title { font-size: 26px; }
+    }
+
+    @media (max-width: 400px) {
+      .footer-sitemap { grid-template-columns: 1fr; gap: 20px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <div class="logo">EIKOU KINGDOM</div>
+    <div class="navigation">
+      <a href="index.html" class="navigation-item">Top</a>
+      <a href="rank.html" class="navigation-item">Ranking</a>
+      <a href="search.html" class="navigation-item">Search</a>
+    </div>
+  </header>
+
+  <div class="page-content">
+    <h1 class="page-title">えいこう王国爆誕！</h1>
+    <p>みなさん！ついにえいこう王国が完成しました！<br>
+      アーティストとしての公式サイトでもあり、ブログサイトでもあります。<br>
+      いずれはちゃんとしたドメインを取得し、サイトを運営してみたいなと思っています。</p>
+      
+    <ul>
+      <li>どういうビジョンを掲げているのかの記録</li>
+      <li>普段どんなことをどのような視点で考えているのかの記録</li>
+      <li>自分の作品の一覧</li>
+      <li>自分の人生の記録(後にアプリ化予定)</li>
+      <li>音楽以外にもビジネスや恋愛・学問・自分語りなど様々な記録</li>
+    </ul>
+    
+    <p>上記のようなことをこれからこのサイトでやっていけたらいいなと思ってます！<br>
+    匿名の要望フォームも作成しようと思っているので、こんなことしてほしいとかあれば是非！<br>
+    しばらくはまだ優先順位的にやることが多くまともに更新できないと思います。</p>
+  </div>
+
+  <footer>
+    <div class="footer-sitemap">
+      <div class="sitemap-col">
+        <h4>System</h4>
+        <ul class="sitemap-list">
+          <li class="sitemap-item layer-1"><a href="index.html">TOP</a></li>
+          <li class="sitemap-item layer-1"><a href="rank.html">Ranking</a></li>
+          <li class="sitemap-item layer-2"><a href="yene.html">└ Year20nn/Nekoa</a></li>
+          <li class="sitemap-item layer-2"><a href="yemu.html">└ Year20nn/Music</a></li>
+          <li class="sitemap-item layer-2"><a href="month.html">└ 月間ランキング</a></li>
+          <li class="sitemap-item layer-1"><a href="search.html">Search</a></li>
+        </ul>
+      </div>
+
+      <div class="sitemap-col">
+        <h4>Music</h4>
+        <ul class="sitemap-list">
+          <li class="sitemap-item layer-1"><a href="song.html">楽曲</a></li>
+          <li class="sitemap-item layer-1"><a href="nekoa.html">Nekoa</a></li>
+          <li class="sitemap-item layer-2"><a href="ne1.html">└ Nekoa全曲</a></li>
+          <li class="sitemap-item layer-2"><a href="ne2.html">└ MV構想</a></li>
+          <li class="sitemap-item layer-2"><a href="ne3.html">└ ジャケットパズル</a></li>
+          <li class="sitemap-item layer-1"><a href="music.html">音楽</a></li>
+          <li class="sitemap-item layer-2"><a href="muth.html">└ 音楽理論</a></li>
+          <li class="sitemap-item layer-2"><a href="best.html">└ おすすめ曲</a></li>
+          <li class="sitemap-item layer-2"><a href="dtm.html">└ DTM</a></li>
+          <li class="sitemap-item layer-2"><a href="muther.html">└ その他</a></li>
+        </ul>
+      </div>
+
+      <div class="sitemap-col">
+        <h4>Vision</h4>
+        <ul class="sitemap-list">
+          <li class="sitemap-item layer-1"><a href="vision.html">人生計画</a></li>
+          <li class="sitemap-item layer-2"><a href="vis1.html">└ 勉強</a></li>
+          <li class="sitemap-item layer-2"><a href="vis2.html">└ 音楽</a></li>
+          <li class="sitemap-item layer-2"><a href="vis3.html">└ ビジネス</a></li>
+          <li class="sitemap-item layer-2"><a href="vis4.html">└ アニメ・ドラマ</a></li>
+          <li class="sitemap-item layer-2"><a href="vis5.html">└ 恋愛</a></li>
+        </ul>
+      </div>
+
+      <div class="sitemap-col">
+        <h4>Study</h4>
+        <ul class="sitemap-list">
+          <li class="sitemap-item layer-1"><a href="study.html">勉強</a></li>
+          <li class="sitemap-item layer-2"><a href="japa.html">└ 国語</a></li>
+          <li class="sitemap-item layer-2"><a href="math.html">└ 数学</a></li>
+          <li class="sitemap-item layer-2"><a href="eng.html">└ 英語</a></li>
+          <li class="sitemap-item layer-2"><a href="sci.html">└ 理科</a></li>
+          <li class="sitemap-item layer-2"><a href="socia.html">└ 社会</a></li>
+          <li class="sitemap-item layer-2"><a href="econ.html">└ 経済</a></li>
+          <li class="sitemap-item layer-2"><a href="phi.html">└ 哲学</a></li>
+        </ul>
+      </div>
+
+      <div class="sitemap-col">
+        <h4>Other</h4>
+        <ul class="sitemap-list">
+          <li class="sitemap-item layer-1"><a href="mylife.html">年表</a></li>
+          <li class="sitemap-item layer-1"><a href="daily.html">日常</a></li>
+          <li class="sitemap-item layer-2"><a href="game.html">└ ゲーム</a></li>
+          <li class="sitemap-item layer-2"><a href="trip.html">└ 旅</a></li>
+          <li class="sitemap-item layer-2"><a href="work.html">└ 仕事</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-copy">&copy; 2026 EIKOU KINGDOM</div>
+    </div>
+  </footer>
+
+</body>
+</html>
